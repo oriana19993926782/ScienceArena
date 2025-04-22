@@ -1,0 +1,393 @@
+/* Custom CSS for ScienceArena */
+
+body {
+  font-family: 'Google Sans', sans-serif;
+  margin: 0;
+  padding: 0;
+  color: #202124;
+  line-height: 1.6;
+}
+
+/* Publication title */
+.publication-title {
+  font-family: 'Google Sans', sans-serif;
+  font-weight: 700;
+  font-size: 42px;
+  text-align: center;
+  color: #202124;
+  margin-bottom: 20px;
+  line-height: 1.2;
+}
+
+/* Publication authors section */
+.publication-authors {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+  margin: 20px auto;
+}
+
+.header-link {
+  margin: 0 15px;
+  text-decoration: none;
+}
+
+.header-image {
+  max-height: 60px;
+  max-width: 200px;
+}
+
+/* Section styling */
+.hero.is-light {
+  background-color: #f5f5f5;
+}
+
+.hero-body {
+  padding: 3rem 1.5rem;
+}
+
+.container.is-max-desktop {
+  max-width: 960px;
+}
+
+.column.is-ninety {
+  width: 90%;
+  max-width: 90%;
+}
+
+/* Table styling */
+.tableHeading {
+  margin-bottom: 1.5rem;
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.2rem;
+  color: #202124;
+}
+
+table.dataTable {
+  border-collapse: collapse !important;
+  width: 100%;
+  margin-bottom: 1em;
+  font-family: 'Google Sans', sans-serif;
+}
+
+table.dataTable thead th {
+  background-color: #f5f5f5;
+  color: #202124;
+  font-weight: bold;
+  text-align: center;
+  padding: 12px 10px;
+  border: 1px solid #ddd;
+  font-size: 14px;
+}
+
+table.dataTable tbody td {
+  padding: 12px 10px;
+  border: 1px solid #ddd;
+  text-align: center;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.2s;
+}
+
+table.dataTable tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+table.dataTable tbody tr:hover td {
+  background-color: #eaeaea;
+}
+
+/* Cell colors for accuracy */
+.cell-green {
+  background-color: #c8e6c9 !important;
+}
+
+.cell-yellow {
+  background-color: #fff9c4 !important;
+}
+
+.cell-orange {
+  background-color: #ffccbc !important;
+}
+
+.cell-red {
+  background-color: #ffcdd2 !important;
+}
+
+/* Competition selector */
+.competition-selector {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.competition-selector label {
+  margin-right: 10px;
+  font-weight: bold;
+}
+
+.competition-selector select {
+  padding: 8px 15px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: white;
+  font-family: 'Google Sans', sans-serif;
+  font-size: 14px;
+}
+
+/* Token info explanation */
+.token-info-explanation {
+  margin-top: 20px;
+  padding: 15px;
+  background-color: #f9f9f9;
+  border: 1px solid #eee;
+  border-radius: 4px;
+  font-size: 14px;
+  color: #666;
+}
+
+.token-info-explanation p {
+  margin-bottom: 10px;
+}
+
+/* Enhanced Traces section styling */
+#traces {
+  width: 100%;
+  padding: 0;
+  margin-top: 30px;
+  margin-bottom: 30px;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  display: none;
+  background-color: white;
+  border: 1px solid #ddd;
+}
+
+.model-output-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.model-output-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  background-color: #f5f5f5;
+  border-bottom: 1px solid #ddd;
+}
+
+.model-output-header h3 {
+  font-family: 'Google Sans', sans-serif;
+  margin: 0;
+  font-weight: bold;
+  color: #202124;
+  font-size: 18px;
+}
+
+.header-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.close-button, .copy-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 5px 10px;
+  font-size: 14px;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.close-button {
+  background-color: #f44336;
+  color: white;
+}
+
+.copy-button {
+  background-color: #2196F3;
+  color: white;
+}
+
+.close-button:hover {
+  background-color: #d32f2f;
+}
+
+.copy-button:hover {
+  background-color: #1976D2;
+}
+
+.contamination-warning {
+  padding: 10px 20px;
+  background-color: #fff3cd;
+  color: #856404;
+  border-bottom: 1px solid #ffeeba;
+  font-size: 14px;
+}
+
+.model-output-content {
+  padding: 20px;
+  overflow-x: auto;
+  background-color: white;
+}
+
+.model-output-content pre {
+  font-family: 'Consolas', 'Monaco', monospace;
+  font-size: 14px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  word-break: break-word;
+  color: #333;
+  margin: 0;
+}
+
+.model-output-content .highlight {
+  font-weight: bold;
+  color: #0d47a1;
+  background-color: #e3f2fd;
+  padding: 2px 5px;
+  border-radius: 3px;
+}
+
+.model-output-footer {
+  padding: 10px 20px;
+  background-color: #f5f5f5;
+  border-top: 1px solid #ddd;
+  font-size: 12px;
+  color: #666;
+  text-align: right;
+}
+
+/* Code and PDF section */
+.section-code-pdf {
+  display: flex;
+  justify-content: center;
+  gap: 60px;
+  margin: 30px 0;
+}
+
+.icon-code-pdf {
+  width: 40px;
+  height: 40px;
+  margin-bottom: 10px;
+  transition: transform 0.2s;
+}
+
+.icon-code-pdf:hover {
+  transform: scale(1.1);
+}
+
+/* FAQ section */
+.faq-container {
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+.faq-item {
+  margin-bottom: 15px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 15px;
+}
+
+.faq-question {
+  font-weight: bold;
+  cursor: pointer;
+  color: #202124;
+  padding: 10px 0;
+  position: relative;
+  font-family: 'Google Sans', sans-serif;
+}
+
+.faq-question:after {
+  content: '+';
+  position: absolute;
+  right: 0;
+  top: 10px;
+  font-size: 20px;
+  transition: transform 0.3s ease;
+}
+
+.faq-item.active .faq-question:after {
+  content: '-';
+  transform: rotate(180deg);
+}
+
+.faq-answer {
+  padding: 15px 0;
+  color: #5f6368;
+  line-height: 1.6;
+  font-size: 15px;
+}
+
+.faq-answer ul {
+  margin-left: 20px;
+  margin-top: 10px;
+  list-style-type: disc;
+}
+
+.faq-answer li {
+  margin-bottom: 5px;
+}
+
+.title.is-2 {
+  font-family: 'Google Sans', sans-serif;
+  font-weight: 700;
+  color: #202124;
+  margin-bottom: 30px;
+}
+
+/* Content styling */
+.content p {
+  margin-bottom: 1em;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.content a {
+  color: #1a73e8;
+  text-decoration: none;
+}
+
+.content a:hover {
+  text-decoration: underline;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .publication-title {
+    font-size: 32px;
+  }
+  
+  .header-image {
+    max-height: 40px;
+  }
+  
+  .section-code-pdf {
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+  }
+  
+  table.dataTable {
+    font-size: 12px;
+  }
+  
+  .faq-question {
+    padding-right: 30px;
+  }
+  
+  .model-output-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  
+  .header-actions {
+    align-self: flex-end;
+  }
+}
