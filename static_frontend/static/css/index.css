@@ -1,37 +1,23 @@
 /* Custom CSS for ScienceArena */
 
-body {
-  font-family: 'Google Sans', sans-serif;
-  margin: 0;
-  padding: 0;
-  color: #202124;
-  line-height: 1.6;
-}
-
-/* Publication title */
 .publication-title {
   font-family: 'Google Sans', sans-serif;
-  font-weight: 700;
+  font-weight: bold;
   font-size: 42px;
   text-align: center;
   color: #202124;
-  margin-bottom: 20px;
-  line-height: 1.2;
 }
 
-/* Publication authors section */
 .publication-authors {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
   gap: 30px;
-  margin: 20px auto;
 }
 
 .header-link {
   margin: 0 15px;
-  text-decoration: none;
 }
 
 .header-image {
@@ -39,17 +25,25 @@ body {
   max-width: 200px;
 }
 
-/* Section styling */
-.hero.is-light {
-  background-color: #f5f5f5;
+.icon-code-pdf {
+  width: 40px;
+  height: 40px;
+  margin-bottom: 10px;
 }
 
-.hero-body {
-  padding: 3rem 1.5rem;
+.section-code-pdf {
+  display: flex;
+  justify-content: center;
+  gap: 60px;
+  margin-top: 30px;
+  margin-bottom: 30px;
 }
 
-.container.is-max-desktop {
-  max-width: 960px;
+.center-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .column.is-ninety {
@@ -57,232 +51,121 @@ body {
   max-width: 90%;
 }
 
+/* Competition Tabs */
+.competition-tabs {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #dee2e6;
+  width: 100%;
+}
+
+.competition-tab {
+  padding: 10px 20px;
+  margin-right: 5px;
+  border: 1px solid #ddd;
+  border-bottom: none;
+  background: #f8f8f8;
+  cursor: pointer;
+  border-radius: 5px 5px 0 0;
+  position: relative;
+  bottom: -1px;
+  font-family: 'Helvetica';
+  font-size: 1rem;
+}
+
+.competition-tab:hover {
+  background: #f0f0f0;
+}
+
+.competition-tab.active {
+  background: #fff;
+  border-bottom: 1px solid #fff;
+  margin-bottom: -1px;
+  color: #276dff;
+  font-weight: bold;
+}
+
+.competition-container {
+  margin-bottom: 20px;
+}
+
+.nav-tabs {
+  border-bottom: 1px solid #dee2e6;
+  margin-bottom: 20px;
+}
+
+.nav-tabs .nav-link {
+  margin-bottom: -1px;
+  border: 1px solid transparent;
+  border-top-left-radius: 0.25rem;
+  border-top-right-radius: 0.25rem;
+  color: #495057;
+}
+
+.nav-tabs .nav-link:hover {
+  border-color: #e9ecef #e9ecef #dee2e6;
+}
+
+.nav-tabs .nav-link.active {
+  color: #276dff;
+  background-color: #fff;
+  border-color: #dee2e6 #dee2e6 #fff;
+  font-weight: bold;
+}
+
 /* Table styling */
 .tableHeading {
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
   text-align: center;
   font-weight: bold;
   font-size: 1.2rem;
-  color: #202124;
+  color: #276dff;
 }
 
 table.dataTable {
-  border-collapse: collapse !important;
+  border-collapse: collapse;
   width: 100%;
   margin-bottom: 1em;
-  font-family: 'Google Sans', sans-serif;
 }
 
 table.dataTable thead th {
   background-color: #f5f5f5;
-  color: #202124;
+  color: #333;
   font-weight: bold;
   text-align: center;
-  padding: 12px 10px;
+  padding: 10px;
   border: 1px solid #ddd;
-  font-size: 14px;
 }
 
 table.dataTable tbody td {
-  padding: 12px 10px;
+  padding: 10px;
   border: 1px solid #ddd;
   text-align: center;
   cursor: pointer;
-  font-size: 14px;
-  transition: background-color 0.2s;
 }
 
 table.dataTable tbody tr:nth-child(even) {
   background-color: #f9f9f9;
 }
 
-table.dataTable tbody tr:hover td {
-  background-color: #eaeaea;
-}
-
-/* Cell colors for accuracy */
 .cell-green {
-  background-color: #c8e6c9 !important;
+  background-color: #c8e6c9;
 }
 
 .cell-yellow {
-  background-color: #fff9c4 !important;
+  background-color: #fff9c4;
 }
 
 .cell-orange {
-  background-color: #ffccbc !important;
+  background-color: #ffccbc;
 }
 
 .cell-red {
-  background-color: #ffcdd2 !important;
+  background-color: #ffcdd2;
 }
 
-/* Competition selector */
-.competition-selector {
-  margin-bottom: 20px;
-  text-align: center;
-}
-
-.competition-selector label {
-  margin-right: 10px;
-  font-weight: bold;
-}
-
-.competition-selector select {
-  padding: 8px 15px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  background-color: white;
-  font-family: 'Google Sans', sans-serif;
-  font-size: 14px;
-}
-
-/* Token info explanation */
-.token-info-explanation {
-  margin-top: 20px;
-  padding: 15px;
-  background-color: #f9f9f9;
-  border: 1px solid #eee;
-  border-radius: 4px;
-  font-size: 14px;
-  color: #666;
-}
-
-.token-info-explanation p {
-  margin-bottom: 10px;
-}
-
-/* Enhanced Traces section styling */
-#traces {
-  width: 100%;
-  padding: 0;
-  margin-top: 30px;
-  margin-bottom: 30px;
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-  display: none;
-  background-color: white;
-  border: 1px solid #ddd;
-}
-
-.model-output-container {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-}
-
-.model-output-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 15px 20px;
-  background-color: #f5f5f5;
-  border-bottom: 1px solid #ddd;
-}
-
-.model-output-header h3 {
-  font-family: 'Google Sans', sans-serif;
-  margin: 0;
-  font-weight: bold;
-  color: #202124;
-  font-size: 18px;
-}
-
-.header-actions {
-  display: flex;
-  gap: 10px;
-}
-
-.close-button, .copy-button {
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 5px 10px;
-  font-size: 14px;
-  border-radius: 4px;
-  transition: background-color 0.2s;
-}
-
-.close-button {
-  background-color: #f44336;
-  color: white;
-}
-
-.copy-button {
-  background-color: #2196F3;
-  color: white;
-}
-
-.close-button:hover {
-  background-color: #d32f2f;
-}
-
-.copy-button:hover {
-  background-color: #1976D2;
-}
-
-.contamination-warning {
-  padding: 10px 20px;
-  background-color: #fff3cd;
-  color: #856404;
-  border-bottom: 1px solid #ffeeba;
-  font-size: 14px;
-}
-
-.model-output-content {
-  padding: 20px;
-  overflow-x: auto;
-  background-color: white;
-}
-
-.model-output-content pre {
-  font-family: 'Consolas', 'Monaco', monospace;
-  font-size: 14px;
-  line-height: 1.5;
-  white-space: pre-wrap;
-  word-break: break-word;
-  color: #333;
-  margin: 0;
-}
-
-.model-output-content .highlight {
-  font-weight: bold;
-  color: #0d47a1;
-  background-color: #e3f2fd;
-  padding: 2px 5px;
-  border-radius: 3px;
-}
-
-.model-output-footer {
-  padding: 10px 20px;
-  background-color: #f5f5f5;
-  border-top: 1px solid #ddd;
-  font-size: 12px;
-  color: #666;
-  text-align: right;
-}
-
-/* Code and PDF section */
-.section-code-pdf {
-  display: flex;
-  justify-content: center;
-  gap: 60px;
-  margin: 30px 0;
-}
-
-.icon-code-pdf {
-  width: 40px;
-  height: 40px;
-  margin-bottom: 10px;
-  transition: transform 0.2s;
-}
-
-.icon-code-pdf:hover {
-  transform: scale(1.1);
-}
-
-/* FAQ section */
+/* FAQ section styling */
 .faq-container {
   max-width: 100%;
   margin: 0 auto;
@@ -297,10 +180,9 @@ table.dataTable tbody tr:hover td {
 .faq-question {
   font-weight: bold;
   cursor: pointer;
-  color: #202124;
+  color: #4a4a4a;
   padding: 10px 0;
   position: relative;
-  font-family: 'Google Sans', sans-serif;
 }
 
 .faq-question:after {
@@ -318,43 +200,61 @@ table.dataTable tbody tr:hover td {
 }
 
 .faq-answer {
-  padding: 15px 0;
-  color: #5f6368;
+  padding: 10px 0;
+  color: #666;
   line-height: 1.6;
-  font-size: 15px;
 }
 
 .faq-answer ul {
   margin-left: 20px;
   margin-top: 10px;
-  list-style-type: disc;
 }
 
-.faq-answer li {
-  margin-bottom: 5px;
+/* Model trace styling */
+#traces {
+  width: 100%;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 5px;
+  margin-top: 20px;
+  border: 1px solid #ddd;
+  white-space: pre-wrap;
+  font-family: monospace;
+  display: none;
+  overflow-x: auto;
 }
 
-.title.is-2 {
-  font-family: 'Google Sans', sans-serif;
-  font-weight: 700;
-  color: #202124;
-  margin-bottom: 30px;
+.tracesHeading {
+  font-weight: bold;
+  font-size: 20px;
+  text-align: center;
+  margin: auto;
+  color: #276dff;
 }
 
-/* Content styling */
-.content p {
-  margin-bottom: 1em;
-  font-size: 16px;
-  line-height: 1.6;
+.model-output-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
 }
 
-.content a {
-  color: #1a73e8;
-  text-decoration: none;
+.model-name {
+  font-size: 1.2rem;
+  color: #276dff;
 }
 
-.content a:hover {
-  text-decoration: underline;
+.close-button {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #666;
+}
+
+.model-output-content {
+  max-height: 500px;
+  overflow-y: auto;
 }
 
 /* Responsive adjustments */
@@ -371,23 +271,5 @@ table.dataTable tbody tr:hover td {
     flex-direction: column;
     align-items: center;
     gap: 30px;
-  }
-  
-  table.dataTable {
-    font-size: 12px;
-  }
-  
-  .faq-question {
-    padding-right: 30px;
-  }
-  
-  .model-output-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
-  }
-  
-  .header-actions {
-    align-self: flex-end;
   }
 }

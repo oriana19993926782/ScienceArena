@@ -2,11 +2,10 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <!-- Meta tags for social media banners, these should be filled in appropriatly as they are your "business card" -->
-  <!-- Replace the content tag with appropriate information -->
+  <!-- Meta tags for social media banners -->
   <meta property="og:title" content="ScienceArena.ai"/>
-  <meta property="og:description" content="ScienceArena: Evaluating LLMs on Uncontaminated Science Competitions"/>
-  <meta property="description" content="ScienceArena: Evaluating LLMs on Uncontaminated Science Competitions"/>
+  <meta property="og:description" content="ScienceArena: Evaluating LLMs on Scientific Competitions"/>
+  <meta property="description" content="ScienceArena: Evaluating LLMs on Scientific Competitions"/>
 
   <meta property="og:url" content="https://sciencearena.ai/"/>
   <meta property="og:image:width" content="1200"/>
@@ -43,6 +42,7 @@
   <script src="static/js/model_answer.js"></script>
   <script src="static/js/primary_table.js"></script>
   <script src="static/js/secondary_table.js"></script>
+  <script src="static/js/competitions.js"></script>
   <script src="static/js/index.js"></script>
   
   <script>
@@ -63,15 +63,15 @@
 </head>
 <body>
 
-
   <section class="hero">
     <div class="hero-body">
       <div class="container is-max-desktop">
         <div class="columns is-centered">
           <div class="column has-text-centered">
-            <h1 class="title is-1 publication-title">ScienceArena:<br>Evaluating LLMs on Uncontaminated Science Competitions</h1>
+            <h1 class="title is-1 publication-title">ScienceArena:<br>Evaluating LLMs on Scientific Competitions</h1>
             <br>
             <div class="is-size-5 publication-authors">
+              <!-- These are placeholder logos, you should replace them with appropriate institution logos -->
               <a href="#" class="header-link" target="_blank">
                 <img src="static/images/placeholder-logo1.svg" alt="Institution Logo 1" class="header-image">
               </a>
@@ -92,40 +92,47 @@
 <section class="hero is-light">
   <div class="hero-body">
     <div class="container is-max-desktop">
+      <div class="competition-container">
+        <ul class="nav nav-tabs competition-tabs" id="competitionTabs" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button class="nav-link competition-tab active" id="overall-tab" data-competition="overall" type="button" role="tab">Overall</button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link competition-tab" id="icho-tab" data-competition="icho2025" type="button" role="tab">IChO 2025</button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link competition-tab" id="ipho-tab" data-competition="ipho2025" type="button" role="tab">IPhO 2025</button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link competition-tab" id="ibo-tab" data-competition="ibo2025" type="button" role="tab">IBO 2025</button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link competition-tab" id="igeo-tab" data-competition="igeo2025" type="button" role="tab">IGeO 2025</button>
+          </li>
+        </ul>
+      </div>
       <div>
         <h3 class="tableHeading">Click on a cell to see the raw model output.</h3>
       </div>
       <div class="columns is-centered">
-        
-        
         <div class="column has-text-justified" style="min-height: 400px"> 
-          <!-- <div class="table-info-box">
-            <b>Model scores on Science Competition 2025</b>
-          </div> -->
           <table id="myTopTable" class="display" style="width:100%;">
           </table>
           <p id="warning-contamination-table"></p>
           <p>*The cost of models was calculated based on their API pricing.</p>
-          
-          <!-- <p>
-            *Ran locally, we have not settled on a computation method for the cost yet.
-          </p> -->
         </div>
       </div>
     </div>
   </div>
 </section>
 
-
 <section class="hero">
   <div class="hero-body">
     <div class="container is-max-desktop">
       <div class="columns is-centered">
-
         <div id="traces">
-          
+          <!-- Model outputs will be displayed here when a cell is clicked -->
         </div>
-
       </div>
     </div>
   </div>
@@ -138,22 +145,17 @@
         <div class="column is-ninety">
           <h2 class="title is-2">What is ScienceArena?</h2>
           <div class="content has-text-justified">
-            <!-- <div class="caption">
-              We pit LLMs against each other and humans on recent science competitions and olympiads, providing the possibility for uncontaminated model evaluation. 
-              We hope that this will lead to better understanding of the capabilities and limitations of LLMs on science tasks.
-            </div> -->
             <p>
-              ScienceArena is a platform for evaluation of LLMs on the latest science competitions and olympiads.
-              Our mission is rigorous assessment of the reasoning and generalization capabilities of LLMs on new science problems which the models have not seen during training.
+              ScienceArena is a platform for evaluation of LLMs on the latest scientific competitions and olympiads.
+              Our mission is rigorous assessment of the reasoning and generalization capabilities of LLMs on new scientific problems which the models have not seen during training.
               To ensure a fair and uncontaminated evaluation, we exclusively test models on competitions that took place after their release, avoiding retroactive assessments on potentially leaked or pre-trained material.
               By performing standardized evaluation we ensure model scores are actually comparable and are not dependent on the specific evaluation setup of the model provider.
               <br><br>
-              To show the model performance, we publish a leaderboard for each competition showing the scores of different models individual problems.
-              Additionally, we will include a main table that includes model performance on all competitions.
+              To show the model performance, we publish a leaderboard for each competition showing the scores of different models on individual problems.
+              Additionally, we include a main table that presents model performance across all competitions.
               To evaluate performance, we run each model 4 times on each problem, computing the average score and the cost of the model (in USD) across all runs.
-              <!-- To make the results easier to interpret, we use a color-coded system in the table: green problems are solved more than 75% of the time, yellow problems are solved 25-75% of the time, and red problems are solved less than 25% of the time. -->
               <br><br>
-              We open sourced our evaluation code at: <a href="https://github.com/sci-arena/sciencearena">https://github.com/sci-arena/sciencearena</a>.
+              Our evaluation framework is open source and available at: <a href="https://github.com/sciencearena/sciencearena">https://github.com/sciencearena/sciencearena</a>.
             </p>
           </div>
         </div>
@@ -166,7 +168,7 @@
       <div class="column is-ninety section-code-pdf">
   
         <div style="text-align: center;">
-          <a href="https://github.com/sci-arena/sciencearena">
+          <a href="https://github.com/sciencearena/sciencearena">
             <img src="static/images/github-mark.svg" alt="GitHub" class="icon-code-pdf">
           </a>
           <div>Code</div>
@@ -189,7 +191,6 @@
     <div class="container is-max-desktop">
       <div class="columns is-centered has-text-centered center-content">
         <div class="column is-ninety">
-        <!-- Add FAQ section -->
           <h2 class="title is-2">Frequently Asked Questions</h2>
           <div class="content has-text-justified">
             <div class="faq-container">
@@ -228,7 +229,6 @@
                   <table id="secondaryTable" class="display" style="width:100%">
                   </table>
                 </div>
-                  
               </div>
 
               <div class="faq-item">
@@ -238,18 +238,6 @@
                 <div class="faq-answer" style="display: none;">
                   The cost shows the total cost of evaluating the model on the entire benchmark (all problems and all repetitions). It is calculated based on the API pricing for each model.
                   For open-source models, costs can vary significantly depending on the chosen API provider and our results may not always be achieved using the most cost-effective option.
-                  In particular, for DeepSeek models we use Together API as we found it to be the most reliable endpoint, but it is more expensive than DeepSeek's own API.
-                  For gemini-2.0-flash-thinking it was impossible to determine the cost since the pay-as-you-go pricing is not available, and the Google API does not return the number of thinking tokens.
-                </div>
-              </div>
-
-              <div class="faq-item">
-                <div class="faq-question">
-                  Why did you use the Together API for Deepseek models?
-                </div>
-                <div class="faq-answer" style="display: none;">
-                  The Deepseek API only allow answers up to 8000 tokens, which is not enough for most olympiad problems. Thus, using the Deepseek API would have led to a much lower (non-representative) performance of the Deepseek models.
-                  We verified that the Together API works well by reproducing the accuracy of Deepseek-R1 on Science Competition 2024 using our experimental setup.
                 </div>
               </div>
 
@@ -259,9 +247,8 @@
                 </div>
                 <div class="faq-answer" style="display: none;">
                   First, we always evaluate models on new competitions immediately as the problems are released, guaranteeing that the knowledge cutoff of the model is before the date of the competition. 
-                  While it is not impossible to rule out that evaluated problems or their variants are in the training data (e.g. because they appeared in another competition, see <a href="#" style="color: blue">here</a>), the organizers of competitions such as ISEF
-                  always try to ensure highest quality of their problem set. So we believe that the problems are sufficiently novel that it is possible to evaluate generalization capabilities of the models.
-                  Nevertheless, for every competition, we check for similar existing problems, and if any similar problem has been found we include this information next to the corresponding problem from the competition (can be found by clicking in the table).
+                  While it is not impossible to rule out that evaluated problems or their variants are in the training data, the organizers of competitions always try to ensure the highest quality of their problem sets.
+                  So we believe that the problems are sufficiently novel that it is possible to evaluate generalization capabilities of the models.
                   If you find any contamination (e.g. problems that have appeared before), feel free to contact us and we will add this information to the table.
                 </div>
               </div>
@@ -284,7 +271,6 @@
                   You can contact us via email at <a href="mailto:contact@sciencearena.ai">contact@sciencearena.ai</a>.
                 </div>
               </div>
-
             </div>
           </div>
         </div>
@@ -293,9 +279,6 @@
   </div>
 </section>
 
-<!-- Cloudflare Web Analytics -->
- <script defer src='https://static.cloudflareinsights.com/beacon.min.js' 
- data-cf-beacon='{"token": "68baeccd6f3e464aa6ad43275be4f8ca"}'>
-</script><!-- End Cloudflare Web Analytics -->
-  </body>
-  </html>
+<!-- Footer and analytics code could go here -->
+</body>
+</html>
