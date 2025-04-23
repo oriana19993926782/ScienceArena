@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import com.sciencearena.backend.service.DataService;
 import java.util.Map;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/data")
@@ -23,5 +24,10 @@ public class DataController {
     @GetMapping("/overall")
     public Map<String, Object> getOverallData() {
         return dataService.processOverallData();
+    }
+    
+    @GetMapping("/competitions")
+    public List<String> getAllCompetitions() {
+        return dataService.getAllCompetitionNames();
     }
 }

@@ -1,328 +1,108 @@
 // 竞赛数据管理与处理
-const competitionData = {
-  // 整体表现数据占位符 - 将动态加载
-  overall: {
-    title: "Overall Model Performance on Science Competitions",
-    models: [],
-    competitions: [],
-    tokens: []
-  },
-  
-  // 国际化学奥林匹克数据
-  icho2025: {
-    title: "IChO 2025 Competition Results",
-    models: [
-      {
-        model: "GPT-4o",
-        accuracy: 0.82,
-        cost: "$2.10",
-        problems: [
-          { id: "C1", accuracy: 1.0, trace: "这里是GPT-4o解答C1的详细过程..." },
-          { id: "C2", accuracy: 0.75, trace: "这里是GPT-4o解答C2的详细过程..." },
-          { id: "C3", accuracy: 0.5, trace: "这里是GPT-4o解答C3的详细过程..." },
-          { id: "C4", accuracy: 1.0, trace: "这里是GPT-4o解答C4的详细过程..." },
-          { id: "C5", accuracy: 0.75, trace: "这里是GPT-4o解答C5的详细过程..." }
-        ]
-      },
-      {
-        model: "Claude 3 Opus",
-        accuracy: 0.77,
-        cost: "$2.85",
-        problems: [
-          { id: "C1", accuracy: 1.0, trace: "这里是Claude 3 Opus解答C1的详细过程..." },
-          { id: "C2", accuracy: 1.0, trace: "这里是Claude 3 Opus解答C2的详细过程..." },
-          { id: "C3", accuracy: 0.25, trace: "这里是Claude 3 Opus解答C3的详细过程..." },
-          { id: "C4", accuracy: 0.75, trace: "这里是Claude 3 Opus解答C4的详细过程..." },
-          { id: "C5", accuracy: 0.75, trace: "这里是Claude 3 Opus解答C5的详细过程..." }
-        ]
-      },
-      {
-        model: "Gemini 1.5 Pro",
-        accuracy: 0.72,
-        cost: "$1.60",
-        problems: [
-          { id: "C1", accuracy: 1.0, trace: "这里是Gemini 1.5 Pro解答C1的详细过程..." },
-          { id: "C2", accuracy: 0.75, trace: "这里是Gemini 1.5 Pro解答C2的详细过程..." },
-          { id: "C3", accuracy: 0.25, trace: "这里是Gemini 1.5 Pro解答C3的详细过程..." },
-          { id: "C4", accuracy: 1.0, trace: "这里是Gemini 1.5 Pro解答C4的详细过程..." },
-          { id: "C5", accuracy: 0.5, trace: "这里是Gemini 1.5 Pro解答C5的详细过程..." }
-        ]
-      },
-      {
-        model: "Llama 3 70B",
-        accuracy: 0.62,
-        cost: "$0.52",
-        problems: [
-          { id: "C1", accuracy: 1.0, trace: "这里是Llama 3 70B解答C1的详细过程..." },
-          { id: "C2", accuracy: 0.5, trace: "这里是Llama 3 70B解答C2的详细过程..." },
-          { id: "C3", accuracy: 0.25, trace: "这里是Llama 3 70B解答C3的详细过程..." },
-          { id: "C4", accuracy: 0.75, trace: "这里是Llama 3 70B解答C4的详细过程..." },
-          { id: "C5", accuracy: 0.5, trace: "这里是Llama 3 70B解答C5的详细过程..." }
-        ]
-      },
-      {
-        model: "DeepSeek Coder",
-        accuracy: 0.50,
-        cost: "$0.40",
-        problems: [
-          { id: "C1", accuracy: 0.75, trace: "这里是DeepSeek Coder解答C1的详细过程..." },
-          { id: "C2", accuracy: 0.5, trace: "这里是DeepSeek Coder解答C2的详细过程..." },
-          { id: "C3", accuracy: 0, trace: "这里是DeepSeek Coder解答C3的详细过程..." },
-          { id: "C4", accuracy: 0.75, trace: "这里是DeepSeek Coder解答C4的详细过程..." },
-          { id: "C5", accuracy: 0.5, trace: "这里是DeepSeek Coder解答C5的详细过程..." }
-        ]
-      }
-    ],
-    tokens: []
-  },
-  
-  // 国际物理奥林匹克数据
-  ipho2025: {
-    title: "IPhO 2025 Competition Results",
-    models: [
-      {
-        model: "GPT-4o",
-        accuracy: 0.88,
-        cost: "$2.60",
-        problems: [
-          { id: "P1", accuracy: 1.0, trace: "这里是GPT-4o解答P1的详细过程..." },
-          { id: "P2", accuracy: 1.0, trace: "这里是GPT-4o解答P2的详细过程..." },
-          { id: "P3", accuracy: 0.75, trace: "这里是GPT-4o解答P3的详细过程..." },
-          { id: "P4", accuracy: 0.75, trace: "这里是GPT-4o解答P4的详细过程..." }
-        ]
-      },
-      {
-        model: "Claude 3 Opus",
-        accuracy: 0.81,
-        cost: "$3.40",
-        problems: [
-          { id: "P1", accuracy: 1.0, trace: "这里是Claude 3 Opus解答P1的详细过程..." },
-          { id: "P2", accuracy: 0.75, trace: "这里是Claude 3 Opus解答P2的详细过程..." },
-          { id: "P3", accuracy: 0.75, trace: "这里是Claude 3 Opus解答P3的详细过程..." },
-          { id: "P4", accuracy: 0.75, trace: "这里是Claude 3 Opus解答P4的详细过程..." }
-        ]
-      },
-      {
-        model: "Gemini 1.5 Pro",
-        accuracy: 0.81,
-        cost: "$1.95",
-        problems: [
-          { id: "P1", accuracy: 1.0, trace: "这里是Gemini 1.5 Pro解答P1的详细过程..." },
-          { id: "P2", accuracy: 1.0, trace: "这里是Gemini 1.5 Pro解答P2的详细过程..." },
-          { id: "P3", accuracy: 0.5, trace: "这里是Gemini 1.5 Pro解答P3的详细过程..." },
-          { id: "P4", accuracy: 0.75, trace: "这里是Gemini 1.5 Pro解答P4的详细过程..." }
-        ]
-      },
-      {
-        model: "Llama 3 70B",
-        accuracy: 0.69,
-        cost: "$0.65",
-        problems: [
-          { id: "P1", accuracy: 1.0, trace: "这里是Llama 3 70B解答P1的详细过程..." },
-          { id: "P2", accuracy: 0.75, trace: "这里是Llama 3 70B解答P2的详细过程..." },
-          { id: "P3", accuracy: 0.25, trace: "这里是Llama 3 70B解答P3的详细过程..." },
-          { id: "P4", accuracy: 0.75, trace: "这里是Llama 3 70B解答P4的详细过程..." }
-        ]
-      },
-      {
-        model: "DeepSeek Coder",
-        accuracy: 0.56,
-        cost: "$0.48",
-        problems: [
-          { id: "P1", accuracy: 0.75, trace: "这里是DeepSeek Coder解答P1的详细过程..." },
-          { id: "P2", accuracy: 0.75, trace: "这里是DeepSeek Coder解答P2的详细过程..." },
-          { id: "P3", accuracy: 0.25, trace: "这里是DeepSeek Coder解答P3的详细过程..." },
-          { id: "P4", accuracy: 0.5, trace: "这里是DeepSeek Coder解答P4的详细过程..." }
-        ]
-      }
-    ],
-    tokens: []
-  },
-  
-  // 国际生物奥林匹克数据
-  ibo2025: {
-    title: "IBO 2025 Competition Results",
-    models: [
-      {
-        model: "GPT-4o",
-        accuracy: 0.86,
-        cost: "$2.50",
-        problems: [
-          { id: "B1", accuracy: 1.0, trace: "这里是GPT-4o解答B1的详细过程..." },
-          { id: "B2", accuracy: 0.75, trace: "这里是GPT-4o解答B2的详细过程..." },
-          { id: "B3", accuracy: 1.0, trace: "这里是GPT-4o解答B3的详细过程..." },
-          { id: "B4", accuracy: 0.75, trace: "这里是GPT-4o解答B4的详细过程..." },
-          { id: "B5", accuracy: 0.75, trace: "这里是GPT-4o解答B5的详细过程..." }
-        ]
-      },
-      {
-        model: "Claude 3 Opus",
-        accuracy: 0.85,
-        cost: "$3.30",
-        problems: [
-          { id: "B1", accuracy: 1.0, trace: "这里是Claude 3 Opus解答B1的详细过程..." },
-          { id: "B2", accuracy: 1.0, trace: "这里是Claude 3 Opus解答B2的详细过程..." },
-          { id: "B3", accuracy: 0.75, trace: "这里是Claude 3 Opus解答B3的详细过程..." },
-          { id: "B4", accuracy: 0.75, trace: "这里是Claude 3 Opus解答B4的详细过程..." },
-          { id: "B5", accuracy: 0.75, trace: "这里是Claude 3 Opus解答B5的详细过程..." }
-        ]
-      },
-      {
-        model: "Gemini 1.5 Pro",
-        accuracy: 0.75,
-        cost: "$1.85",
-        problems: [
-          { id: "B1", accuracy: 1.0, trace: "这里是Gemini 1.5 Pro解答B1的详细过程..." },
-          { id: "B2", accuracy: 0.75, trace: "这里是Gemini 1.5 Pro解答B2的详细过程..." },
-          { id: "B3", accuracy: 0.75, trace: "这里是Gemini 1.5 Pro解答B3的详细过程..." },
-          { id: "B4", accuracy: 0.5, trace: "这里是Gemini 1.5 Pro解答B4的详细过程..." },
-          { id: "B5", accuracy: 0.75, trace: "这里是Gemini 1.5 Pro解答B5的详细过程..." }
-        ]
-      },
-      {
-        model: "Llama 3 70B",
-        accuracy: 0.65,
-        cost: "$0.58",
-        problems: [
-          { id: "B1", accuracy: 0.75, trace: "这里是Llama 3 70B解答B1的详细过程..." },
-          { id: "B2", accuracy: 0.75, trace: "这里是Llama 3 70B解答B2的详细过程..." },
-          { id: "B3", accuracy: 0.5, trace: "这里是Llama 3 70B解答B3的详细过程..." },
-          { id: "B4", accuracy: 0.5, trace: "这里是Llama 3 70B解答B4的详细过程..." },
-          { id: "B5", accuracy: 0.75, trace: "这里是Llama 3 70B解答B5的详细过程..." }
-        ]
-      },
-      {
-        model: "DeepSeek Coder",
-        accuracy: 0.60,
-        cost: "$0.50",
-        problems: [
-          { id: "B1", accuracy: 0.75, trace: "这里是DeepSeek Coder解答B1的详细过程..." },
-          { id: "B2", accuracy: 0.75, trace: "这里是DeepSeek Coder解答B2的详细过程..." },
-          { id: "B3", accuracy: 0.5, trace: "这里是DeepSeek Coder解答B3的详细过程..." },
-          { id: "B4", accuracy: 0.25, trace: "这里是DeepSeek Coder解答B4的详细过程..." },
-          { id: "B5", accuracy: 0.75, trace: "这里是DeepSeek Coder解答B5的详细过程..." }
-        ]
-      }
-    ],
-    tokens: []
-  },
-  
-  // 国际地理奥林匹克数据
-  igeo2025: {
-    title: "IGeO 2025 Competition Results",
-    models: [
-      {
-        model: "GPT-4o",
-        accuracy: 0.83,
-        cost: "$2.30",
-        problems: [
-          { id: "G1", accuracy: 1.0, trace: "这里是GPT-4o解答G1的详细过程..." },
-          { id: "G2", accuracy: 0.75, trace: "这里是GPT-4o解答G2的详细过程..." },
-          { id: "G3", accuracy: 1.0, trace: "这里是GPT-4o解答G3的详细过程..." },
-          { id: "G4", accuracy: 0.75, trace: "这里是GPT-4o解答G4的详细过程..." },
-          { id: "G5", accuracy: 0.75, trace: "这里是GPT-4o解答G5的详细过程..." },
-          { id: "G6", accuracy: 0.75, trace: "这里是GPT-4o解答G6的详细过程..." }
-        ]
-      },
-      {
-        model: "Claude 3 Opus",
-        accuracy: 0.79,
-        cost: "$3.10",
-        problems: [
-          { id: "G1", accuracy: 1.0, trace: "这里是Claude 3 Opus解答G1的详细过程..." },
-          { id: "G2", accuracy: 0.75, trace: "这里是Claude 3 Opus解答G2的详细过程..." },
-          { id: "G3", accuracy: 0.75, trace: "这里是Claude 3 Opus解答G3的详细过程..." },
-          { id: "G4", accuracy: 0.75, trace: "这里是Claude 3 Opus解答G4的详细过程..." },
-          { id: "G5", accuracy: 1.0, trace: "这里是Claude 3 Opus解答G5的详细过程..." },
-          { id: "G6", accuracy: 0.5, trace: "这里是Claude 3 Opus解答G6的详细过程..." }
-        ]
-      },
-      {
-        model: "Gemini 1.5 Pro",
-        accuracy: 0.71,
-        cost: "$1.75",
-        problems: [
-          { id: "G1", accuracy: 0.75, trace: "这里是Gemini 1.5 Pro解答G1的详细过程..." },
-          { id: "G2", accuracy: 0.75, trace: "这里是Gemini 1.5 Pro解答G2的详细过程..." },
-          { id: "G3", accuracy: 0.75, trace: "这里是Gemini 1.5 Pro解答G3的详细过程..." },
-          { id: "G4", accuracy: 0.5, trace: "这里是Gemini 1.5 Pro解答G4的详细过程..." },
-          { id: "G5", accuracy: 1.0, trace: "这里是Gemini 1.5 Pro解答G5的详细过程..." },
-          { id: "G6", accuracy: 0.5, trace: "这里是Gemini 1.5 Pro解答G6的详细过程..." }
-        ]
-      },
-      {
-        model: "Llama 3 70B",
-        accuracy: 0.63,
-        cost: "$0.55",
-        problems: [
-          { id: "G1", accuracy: 0.75, trace: "这里是Llama 3 70B解答G1的详细过程..." },
-          { id: "G2", accuracy: 0.5, trace: "这里是Llama 3 70B解答G2的详细过程..." },
-          { id: "G3", accuracy: 0.75, trace: "这里是Llama 3 70B解答G3的详细过程..." },
-          { id: "G4", accuracy: 0.5, trace: "这里是Llama 3 70B解答G4的详细过程..." },
-          { id: "G5", accuracy: 0.75, trace: "这里是Llama 3 70B解答G5的详细过程..." },
-          { id: "G6", accuracy: 0.5, trace: "这里是Llama 3 70B解答G6的详细过程..." }
-        ]
-      },
-      {
-        model: "DeepSeek Coder",
-        accuracy: 0.54,
-        cost: "$0.42",
-        problems: [
-          { id: "G1", accuracy: 0.5, trace: "这里是DeepSeek Coder解答G1的详细过程..." },
-          { id: "G2", accuracy: 0.5, trace: "这里是DeepSeek Coder解答G2的详细过程..." },
-          { id: "G3", accuracy: 0.75, trace: "这里是DeepSeek Coder解答G3的详细过程..." },
-          { id: "G4", accuracy: 0.25, trace: "这里是DeepSeek Coder解答G4的详细过程..." },
-          { id: "G5", accuracy: 0.75, trace: "这里是DeepSeek Coder解答G5的详细过程..." },
-          { id: "G6", accuracy: 0.5, trace: "这里是DeepSeek Coder解答G6的详细过程..." }
-        ]
-      }
-    ],
-    tokens: []
-  }
-};
+let competitionData = {};
 
 // 当前选择的竞赛ID
 let currentCompetition = 'overall';
 
-// 初始化竞赛选择器和表格
-function initializeCompetitionSelector() {
-  // 添加竞赛选择器的点击事件
-  $('.competition-tab').click(function() {
-    // 移除所有选项卡的active类
-    $('.competition-tab').removeClass('active');
-    
-    // 为当前点击的选项卡添加active类
-    $(this).addClass('active');
-    
-    // 获取选择的竞赛ID
-    const competitionId = $(this).data('competition');
-    
-    // 更新当前竞赛
-    currentCompetition = competitionId;
-    
-    // 如果是整体视图，需要先加载数据
-    if (competitionId === 'overall') {
-      loadOverallData();
-    } else {
-      // 重新加载表格数据
-      reloadTableData(competitionId);
-    }
-    
-    // 清除模型输出区域
-    $('#traces').hide();
-  });
-  
-  // 初始加载总体数据
-  loadOverallData();
+// DOM加载完成后初始化
+document.addEventListener('DOMContentLoaded', function() {
+  // 先获取所有比赛名称，然后初始化选择器
+  fetchCompetitions();
+});
+
+// 从后端获取所有比赛名称
+function fetchCompetitions() {
+  fetch('http://localhost:8090/api/data/competitions')
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .then(competitions => {
+      // 初始化竞赛选择器
+      initializeCompetitionSelector(competitions);
+      
+      // 默认选中"overall"
+      selectCompetition('overall');
+    })
+    .catch(error => {
+      console.error('获取比赛名称失败:', error);
+      // 如果API调用失败，使用默认的选择器选项
+      const defaultCompetitions = ['overall', 'IChO 2025', 'IPhO 2025', 'IBO 2025', 'IGeO 2025'];
+      initializeCompetitionSelector(defaultCompetitions);
+      selectCompetition('overall');
+    });
 }
 
-// 从后端API加载整体数据
-function loadOverallData() {
-  // 显示加载指示器
-  showLoading(true);
+// 初始化竞赛选择器
+function initializeCompetitionSelector(competitions) {
+  const container = document.querySelector('.competition-selector .selector-container');
   
-  // 从后端API获取数据
-  fetch('http://localhost:8090/api/data/overall')
+  // 清空现有的选择器选项
+  container.innerHTML = '';
+  
+  // 为每个比赛创建选择器选项
+  competitions.forEach(competition => {
+    // 格式化显示名称
+    let displayName = competition;
+    if (competition === 'overall') {
+      displayName = 'Overall';
+    }
+    
+    const button = document.createElement('button');
+    button.className = 'selector-item';
+    button.setAttribute('data-competition', competition);
+    button.textContent = displayName;
+    
+    // 添加点击事件处理程序
+    button.addEventListener('click', function() {
+      selectCompetition(competition);
+    });
+    
+    container.appendChild(button);
+  });
+}
+
+// 选中指定的竞赛
+function selectCompetition(competitionId) {
+  // 更新UI，高亮显示选中的竞赛
+  document.querySelectorAll('.selector-item').forEach(item => {
+    if (item.getAttribute('data-competition') === competitionId) {
+      item.classList.add('active');
+    } else {
+      item.classList.remove('active');
+    }
+  });
+  
+  // 更新当前竞赛ID
+  currentCompetition = competitionId;
+  
+  // 如果已经有该竞赛的数据，直接重新加载表格
+  if (competitionData[competitionId]) {
+    reloadTableData(competitionId);
+    return;
+  }
+  
+  // 否则，从后端获取数据
+  fetchCompetitionData(competitionId);
+}
+
+// 从后端获取指定竞赛的数据
+function fetchCompetitionData(competitionId) {
+  // 显示加载状态
+  document.getElementById('myTopTable').innerHTML = '<div class="loading-indicator">Loading data...</div>';
+  
+  // 构建API URL
+  let apiUrl = '';
+  if (competitionId === 'overall') {
+    apiUrl = 'http://localhost:8090/api/data/overall';
+  } else {
+    apiUrl = `http://localhost:8090/api/data/competition/${competitionId}`;
+  }
+  
+  // 获取数据
+  fetch(apiUrl)
     .then(response => {
       if (!response.ok) {
         throw new Error('Network response was not ok');
@@ -330,39 +110,19 @@ function loadOverallData() {
       return response.json();
     })
     .then(data => {
-      // 更新数据存储
-      competitionData.overall.models = data.models;
-      competitionData.overall.competitions = data.competitions;
-      
-      // 加载表格
-      reloadTableData('overall');
-      
-      // 隐藏加载指示器
-      showLoading(false);
+      // 存储数据并更新表格
+      competitionData[competitionId] = data;
+      reloadTableData(competitionId);
     })
     .catch(error => {
-      console.error('Error fetching overall data:', error);
-      // 显示错误消息
-      showError('Failed to load data from the server. Please try again later.');
-      // 隐藏加载指示器
-      showLoading(false);
+      console.error('获取数据失败:', error);
+      document.getElementById('myTopTable').innerHTML = '<div class="error-message">Failed to load data. Please try again later.</div>';
+      
+      // 如果是非overall视图，且API尚未实现，显示提示信息
+      if (competitionId !== 'overall') {
+        document.getElementById('myTopTable').innerHTML = '<div class="error-message">This competition data is not available yet.</div>';
+      }
     });
-}
-
-// 显示加载指示器
-function showLoading(show) {
-  if (show) {
-    // 如果有必要，可以添加加载指示器的HTML
-    $('.tableHeading').text('Loading data...');
-  } else {
-    // 恢复正常标题
-    $('.tableHeading').text('Click on a cell to see the raw model output.');
-  }
-}
-
-// 显示错误消息
-function showError(message) {
-  alert(message);
 }
 
 // 根据选择的竞赛重新加载表格数据
@@ -479,6 +239,52 @@ function reloadTableData(competitionId) {
   }
   
   $('#myTopTable').DataTable(tableConfig);
+}
+
+// 根据准确率格式化单元格颜色
+function formatCellColor(accuracy) {
+  if (accuracy >= 0.9) {
+    return 'correct';
+  } else if (accuracy >= 0.7) {
+    return 'partially-correct';
+  } else {
+    return 'incorrect';
+  }
+}
+
+// 显示模型输出
+function displayModelOutput(model, problemId, trace) {
+  // 显示模型输出区域
+  $('#traces').show();
+  
+  // 清除现有的模型输出
+  $('#traces').empty();
+  
+  // 添加模型输出标题
+  const title = document.createElement('h3');
+  title.textContent = `${model} on ${problemId}`;
+  $('#traces').append(title);
+  
+  // 添加模型输出内容
+  const content = document.createElement('pre');
+  content.textContent = trace;
+  $('#traces').append(content);
+}
+
+// 显示加载指示器
+function showLoading(show) {
+  if (show) {
+    // 如果有必要，可以添加加载指示器的HTML
+    $('.tableHeading').text('Loading data...');
+  } else {
+    // 恢复正常标题
+    $('.tableHeading').text('Click on a cell to see the raw model output.');
+  }
+}
+
+// 显示错误消息
+function showError(message) {
+  alert(message);
 }
 
 // 更新二级表格(token使用情况)

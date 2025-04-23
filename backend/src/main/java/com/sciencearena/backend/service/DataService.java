@@ -86,6 +86,49 @@ public class DataService {
     }
     
     /**
+     * 从JSON文件中提取所有比赛名称
+     * @return 比赛名称列表
+     */
+    public List<String> getAllCompetitionNames() {
+        try {
+            // 读取JSON文件
+            ClassPathResource resource = new ClassPathResource("data/overallPerformance.json");
+            InputStream inputStream = resource.getInputStream();
+            ObjectMapper mapper = new ObjectMapper();
+            JsonNode rootNode = mapper.readTree(inputStream);
+            
+            // 用于收集所有比赛名称的Set
+            Set<String> competitionsSet = new HashSet<>();
+            
+            // 遍历所有模型的performance字段，收集比赛名称
+            for (JsonNode modelNode : rootNode) {
+                if (modelNode.has("performance")) {
+                    JsonNode performanceNode = modelNode.get("performance");
+                    Iterator<String> fieldNames = performanceNode.fieldNames();
+                    while (fieldNames.hasNext()) {
+                        String competition = fieldNames.next();
+                        competitionsSet.add(competition);
+                    }
+                }
+            }
+            
+            // 将Set转换为List并排序
+            List<String> competitionsList = new ArrayList<>(competitionsSet);
+            Collections.sort(competitionsList); // 按字母顺序排序
+            
+            // 在列表开头添加"Overall"
+            List<String> result = new ArrayList<>();
+            result.add("overall");
+            result.addAll(competitionsList);
+            
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Collections.emptyList();
+        }
+    }
+    
+    /**
      * 格式化模型名称以更好地显示
      * 例如: "claude-3-opus" -> "Claude 3 Opus"
      */
