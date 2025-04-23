@@ -91,7 +91,7 @@ function selectCompetition(competitionId) {
 // 从后端获取指定竞赛的数据
 function fetchCompetitionData(competitionId) {
   // 显示加载状态
-  document.getElementById('myTopTable').innerHTML = '<div class="loading-indicator">Loading data...</div>';
+  $('#myTopTable').html('<div class="loading-indicator">Loading data...</div>');
   
   // 构建API URL
   let apiUrl = '';
@@ -112,15 +112,20 @@ function fetchCompetitionData(competitionId) {
     .then(data => {
       // 存储数据并更新表格
       competitionData[competitionId] = data;
+      
+      // 清除加载指示器
+      $('#myTopTable').empty();
+      
+      // 重新加载表格数据
       reloadTableData(competitionId);
     })
     .catch(error => {
       console.error('获取数据失败:', error);
-      document.getElementById('myTopTable').innerHTML = '<div class="error-message">Failed to load data. Please try again later.</div>';
+      $('#myTopTable').html('<div class="error-message">Failed to load data. Please try again later.</div>');
       
       // 如果是非overall视图，且API尚未实现，显示提示信息
       if (competitionId !== 'overall') {
-        document.getElementById('myTopTable').innerHTML = '<div class="error-message">This competition data is not available yet.</div>';
+        $('#myTopTable').html('<div class="error-message">This competition data is not available yet.</div>');
       }
     });
 }
