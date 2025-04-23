@@ -467,20 +467,18 @@ function reloadTableData(competitionId) {
     tableConfig.createdRow = function(row) {
       $(row).find('td').off('click');
     };
+    
+    // Overall视图显示描述性文本，但不显示点击提示
+    $('.tableHeading').text('Overall model performance on scientific competitions.');
   } else {
     // 非Overall表格移除特定类
     $('#myTopTable').removeClass('overall-table');
+    
+    // 非Overall视图显示提示文本
+    $('.tableHeading').text(`Click on a cell to see the raw model output. ${data.title ? '(' + data.title + ')' : ''}`);
   }
   
   $('#myTopTable').DataTable(tableConfig);
-  
-  // 更新表格标题
-  $('.tableHeading').text(`Click on a cell to see the raw model output. ${data.title ? '(' + data.title + ')' : ''}`);
-  
-  // 如果是Overall视图，更新提示文本
-  if (competitionId === 'overall') {
-    $('.tableHeading').text(`Overall model performance on scientific competitions.`);
-  }
 }
 
 // 更新二级表格(token使用情况)

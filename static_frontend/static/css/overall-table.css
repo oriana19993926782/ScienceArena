@@ -15,6 +15,7 @@
   border-bottom: 1px solid #ddd;
   border-left: none !important;
   border-right: none !important;
+  font-weight: 700 !important; /* 确保表头加粗显示 */
 }
 
 .overall-table tbody tr {
@@ -31,7 +32,7 @@
 
 .overall-table tbody td {
   padding: 10px 12px;
-  text-align: center;
+  text-align: center; /* 默认所有单元格居中 */
   border-bottom: 1px solid #f0f0f0;
   /* 移除列之间的分割线 */
   border-left: none !important;
@@ -70,11 +71,13 @@ table.dataTable.overall-table {
 .overall-table .avg-column {
   font-weight: 500;
   width: 100px;
+  text-align: center !important; /* 确保居中 */
 }
 
 /* 比赛列样式 */
 .overall-table .competition-column {
   width: 120px;
+  text-align: center !important; /* 确保居中 */
 }
 
 /* 整体表格响应式设计 */
