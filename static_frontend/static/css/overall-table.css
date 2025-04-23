@@ -1,0 +1,92 @@
+/* Overall表格特定样式 */
+.overall-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+  font-family: 'Helvetica', sans-serif;
+}
+
+.overall-table thead th {
+  background-color: #f2f2f2;
+  color: #333;
+  font-weight: bold;
+  text-align: center;
+  padding: 12px 15px;
+  border-bottom: 1px solid #ddd;
+  border-left: none !important;
+  border-right: none !important;
+}
+
+.overall-table tbody tr {
+  transition: background-color 0.3s;
+}
+
+.overall-table tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.overall-table tbody tr:hover {
+  background-color: #f1f1f1;
+}
+
+.overall-table tbody td {
+  padding: 10px 12px;
+  text-align: center;
+  border-bottom: 1px solid #f0f0f0;
+  /* 移除列之间的分割线 */
+  border-left: none !important;
+  border-right: none !important;
+}
+
+/* 覆盖DataTables的默认边框样式 */
+table.dataTable.overall-table thead th, 
+table.dataTable.overall-table thead td,
+table.dataTable.overall-table tbody td {
+  border-left: none !important;
+  border-right: none !important;
+}
+
+table.dataTable.overall-table {
+  border-collapse: collapse !important;
+}
+
+/* 移除DataTables添加的其他边框 */
+.dataTables_wrapper .dataTables_scroll,
+.dataTables_wrapper .dataTables_scrollBody,
+.dataTables_wrapper .dataTables_scrollHead {
+  border: none !important;
+}
+
+/* Model列左对齐，其他列居中 */
+.overall-table .model-names {
+  text-align: left;
+  font-weight: 500;
+  padding-left: 15px;
+  width: 230px;
+  min-width: 230px;
+}
+
+/* 平均值列样式 */
+.overall-table .avg-column {
+  font-weight: 500;
+  width: 100px;
+}
+
+/* 比赛列样式 */
+.overall-table .competition-column {
+  width: 120px;
+}
+
+/* 整体表格响应式设计 */
+@media (max-width: 900px) {
+  .overall-table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+}
+
+/* 确保表格底部没有边框线 */
+.overall-table tbody tr:last-child td {
+  border-bottom: none;
+}

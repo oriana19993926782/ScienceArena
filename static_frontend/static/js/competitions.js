@@ -381,12 +381,12 @@ function reloadTableData(competitionId) {
     { 
       title: "Model", 
       data: "model",
-      className: "dt-center model-names"
+      className: competitionId === 'overall' ? "model-names" : "dt-center model-names"
     },
     { 
       title: "Avg", 
       data: "avg",
-      className: "dt-center",
+      className: competitionId === 'overall' ? "avg-column" : "dt-center",
       render: function(data) {
         return (data * 100).toFixed(1) + "%";
       }
@@ -399,17 +399,12 @@ function reloadTableData(competitionId) {
       columns.push({
         title: competition,
         data: competition,
-        className: "dt-center",
+        className: "competition-column",
         render: function(data) {
           if (data === undefined || data === null) {
             return "N/A";
           }
           return (data * 100).toFixed(1) + "%";
-        },
-        createdCell: function(cell, cellData) {
-          if (cellData !== undefined && cellData !== null) {
-            $(cell).addClass(formatCellColor(cellData));
-          }
         }
       });
     });
@@ -450,7 +445,7 @@ function reloadTableData(competitionId) {
   }
   
   // 初始化数据表
-  $('#myTopTable').DataTable({
+  const tableConfig = {
     data: data.models,
     columns: columns,
     paging: false,
@@ -461,10 +456,31 @@ function reloadTableData(competitionId) {
     responsive: true,
     autoWidth: false,
     scrollX: true
-  });
+  };
+  
+  // 为Overall表格添加特定的类和配置
+  if (competitionId === 'overall') {
+    // 添加Overall表格的自定义类
+    $('#myTopTable').addClass('overall-table');
+    
+    // Overall表格不需要单元格点击事件
+    tableConfig.createdRow = function(row) {
+      $(row).find('td').off('click');
+    };
+  } else {
+    // 非Overall表格移除特定类
+    $('#myTopTable').removeClass('overall-table');
+  }
+  
+  $('#myTopTable').DataTable(tableConfig);
   
   // 更新表格标题
   $('.tableHeading').text(`Click on a cell to see the raw model output. ${data.title ? '(' + data.title + ')' : ''}`);
+  
+  // 如果是Overall视图，更新提示文本
+  if (competitionId === 'overall') {
+    $('.tableHeading').text(`Overall model performance on scientific competitions.`);
+  }
 }
 
 // 更新二级表格(token使用情况)
