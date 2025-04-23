@@ -1,40 +1,10 @@
 // 竞赛数据管理与处理
 const competitionData = {
-  // 整体表现数据
+  // 整体表现数据占位符 - 将动态加载
   overall: {
     title: "Overall Model Performance on Science Competitions",
-    models: [
-      {
-        model: "GPT-4o",
-        accuracy: 0.85,
-        cost: "$2.45",
-        problems: []
-      },
-      {
-        model: "Claude 3 Opus",
-        accuracy: 0.80,
-        cost: "$3.20",
-        problems: []
-      },
-      {
-        model: "Gemini 1.5 Pro",
-        accuracy: 0.75,
-        cost: "$1.80",
-        problems: []
-      },
-      {
-        model: "Llama 3 70B",
-        accuracy: 0.65,
-        cost: "$0.60",
-        problems: []
-      },
-      {
-        model: "DeepSeek Coder",
-        accuracy: 0.55,
-        cost: "$0.45",
-        problems: []
-      }
-    ],
+    models: [],
+    competitions: [],
     tokens: []
   },
   
@@ -330,12 +300,69 @@ function initializeCompetitionSelector() {
     // 更新当前竞赛
     currentCompetition = competitionId;
     
-    // 重新加载表格数据
-    reloadTableData(competitionId);
+    // 如果是整体视图，需要先加载数据
+    if (competitionId === 'overall') {
+      loadOverallData();
+    } else {
+      // 重新加载表格数据
+      reloadTableData(competitionId);
+    }
     
     // 清除模型输出区域
     $('#traces').hide();
   });
+  
+  // 初始加载总体数据
+  loadOverallData();
+}
+
+// 从后端API加载整体数据
+function loadOverallData() {
+  // 显示加载指示器
+  showLoading(true);
+  
+  // 从后端API获取数据
+  fetch('http://localhost:8090/api/data/overall')
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .then(data => {
+      // 更新数据存储
+      competitionData.overall.models = data.models;
+      competitionData.overall.competitions = data.competitions;
+      
+      // 加载表格
+      reloadTableData('overall');
+      
+      // 隐藏加载指示器
+      showLoading(false);
+    })
+    .catch(error => {
+      console.error('Error fetching overall data:', error);
+      // 显示错误消息
+      showError('Failed to load data from the server. Please try again later.');
+      // 隐藏加载指示器
+      showLoading(false);
+    });
+}
+
+// 显示加载指示器
+function showLoading(show) {
+  if (show) {
+    // 如果有必要，可以添加加载指示器的HTML
+    $('.tableHeading').text('Loading data...');
+  } else {
+    // 恢复正常标题
+    $('.tableHeading').text('Click on a cell to see the raw model output.');
+  }
+}
+
+// 显示错误消息
+function showError(message) {
+  alert(message);
 }
 
 // 根据选择的竞赛重新加载表格数据
@@ -357,22 +384,45 @@ function reloadTableData(competitionId) {
       className: "dt-center model-names"
     },
     { 
-      title: "Accuracy", 
-      data: "accuracy",
+      title: "Avg", 
+      data: "avg",
       className: "dt-center",
       render: function(data) {
         return (data * 100).toFixed(1) + "%";
       }
-    },
-    { 
-      title: "Cost", 
-      data: "cost",
-      className: "dt-center avg-cost"
     }
   ];
   
+  // 如果是overall视图，添加每个比赛列
+  if (competitionId === 'overall' && data.competitions && data.competitions.length > 0) {
+    data.competitions.forEach(competition => {
+      columns.push({
+        title: competition,
+        data: competition,
+        className: "dt-center",
+        render: function(data) {
+          if (data === undefined || data === null) {
+            return "N/A";
+          }
+          return (data * 100).toFixed(1) + "%";
+        },
+        createdCell: function(cell, cellData) {
+          if (cellData !== undefined && cellData !== null) {
+            $(cell).addClass(formatCellColor(cellData));
+          }
+        }
+      });
+    });
+  } 
   // 如果不是overall视图，添加问题列
-  if (competitionId !== 'overall' && data.models.length > 0 && data.models[0].problems) {
+  else if (competitionId !== 'overall' && data.models.length > 0 && data.models[0].problems) {
+    // 添加Cost列
+    columns.push({
+      title: "Cost",
+      data: "cost",
+      className: "dt-center avg-cost"
+    });
+    
     data.models[0].problems.forEach((problem, index) => {
       columns.push({
         title: problem.id,
