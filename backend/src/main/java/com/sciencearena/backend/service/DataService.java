@@ -129,18 +129,7 @@ public class DataService {
      * 例如: "claude-3-opus" -> "Claude 3 Opus"
      */
     private String formatModelName(String modelName) {
-        // 简单格式化：替换连字符为空格，首字母大写
-        String[] parts = modelName.split("-");
-        StringBuilder formatted = new StringBuilder();
-        
-        for (String part : parts) {
-            if (!part.isEmpty()) {
-                formatted.append(Character.toUpperCase(part.charAt(0)))
-                         .append(part.substring(1))
-                         .append(" ");
-            }
-        }
-        
-        return formatted.toString().trim();
+        // 直接返回原始模型名称，不进行任何格式化
+        return modelName;
     }
 }
