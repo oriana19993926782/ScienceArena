@@ -48,3 +48,51 @@ function formatCellColor(accuracy) {
     return 'cell-red';
   }
 }
+
+// 页面加载完成后执行
+document.addEventListener('DOMContentLoaded', function() {
+  // 初始化FAQ点击功能
+  initializeFAQs();
+  
+  // 更新二级表格的事件监听
+  addCompetitionChangeListeners();
+});
+
+// 添加竞赛变更的事件监听
+function addCompetitionChangeListeners() {
+  // 当竞赛选择器被点击时，更新二级表格
+  document.querySelectorAll('.selector-item').forEach(item => {
+    item.addEventListener('click', function() {
+      // 获取当前选中的竞赛ID
+      const competitionId = this.getAttribute('data-competition');
+      
+      // 如果当前显示了二级表格，更新它
+      if (document.getElementById('secondaryTable').offsetParent !== null) {
+        updateSecondaryTable(competitionId);
+      }
+    });
+  });
+}
+
+// 初始化FAQ点击功能
+function initializeFAQs() {
+  // 获取所有FAQ问题元素
+  const faqQuestions = document.querySelectorAll('.faq-question');
+  
+  // 为每个问题添加点击事件
+  faqQuestions.forEach(question => {
+    question.addEventListener('click', function() {
+      // 获取对应的答案元素
+      const answer = this.nextElementSibling;
+      
+      // 切换答案的显示状态
+      if (answer.style.display === 'none' || answer.style.display === '') {
+        answer.style.display = 'block';
+        this.classList.add('active');
+      } else {
+        answer.style.display = 'none';
+        this.classList.remove('active');
+      }
+    });
+  });
+}

@@ -165,49 +165,60 @@ table.dataTable tbody tr:nth-child(even) {
   background-color: #ffcdd2;
 }
 
-/* FAQ section styling */
+/* FAQ部分样式 */
 .faq-container {
-  max-width: 100%;
-  margin: 0 auto;
+  margin-top: 20px;
 }
 
 .faq-item {
   margin-bottom: 15px;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid #f0f0f0;
   padding-bottom: 15px;
 }
 
 .faq-question {
-  font-weight: bold;
+  font-weight: 600;
+  color: #333;
   cursor: pointer;
-  color: #4a4a4a;
   padding: 10px 0;
   position: relative;
+  padding-right: 30px;
 }
 
-.faq-question:after {
-  content: '+';
+.faq-question::after {
+  content: "+";
   position: absolute;
-  right: 0;
+  right: 10px;
   top: 10px;
-  font-size: 20px;
+  font-size: 18px;
+  color: #3273dc;
   transition: transform 0.3s ease;
 }
 
-.faq-item.active .faq-question:after {
-  content: '-';
-  transform: rotate(180deg);
+.faq-question.active::after {
+  content: "–";
+  transform: rotate(0deg);
 }
 
 .faq-answer {
   padding: 10px 0;
   color: #666;
   line-height: 1.6;
+  display: none;
 }
 
 .faq-answer ul {
-  margin-left: 20px;
-  margin-top: 10px;
+  padding-left: 20px;
+  margin: 10px 0;
+}
+
+.faq-answer a {
+  color: #3273dc;
+  text-decoration: none;
+}
+
+.faq-answer a:hover {
+  text-decoration: underline;
 }
 
 /* Model trace styling */
@@ -328,4 +339,22 @@ table.dataTable tbody tr:nth-child(even) {
     align-items: center;
     gap: 30px;
   }
+}
+
+/* 二级表格样式 */
+#secondaryTable {
+  margin-top: 15px;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#secondaryTable th, #secondaryTable td {
+  padding: 8px 12px;
+  text-align: center;
+  border-bottom: 1px solid #ddd;
+}
+
+#secondaryTable th {
+  background-color: #f2f2f2;
+  font-weight: bold;
 }

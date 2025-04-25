@@ -11,10 +11,6 @@ import java.util.*;
 @Service
 public class DataService {
 
-    /**
-     * 处理overall数据，从JSON文件中动态读取并处理
-     * @return 处理后的数据，包含模型、比赛和表现数据
-     */
     public Map<String, Object> processOverallData() {
         try {
             // 读取JSON文件
