@@ -1,12 +1,12 @@
 /* Overall表格特定样式 */
-.overall-table {
+.overall-table table {
   width: 100%;
   border-collapse: collapse;
   margin-bottom: 20px;
   font-family: 'Helvetica', sans-serif;
 }
 
-.overall-table thead th {
+.overall-table table thead th {
   background-color: #f2f2f2;
   color: #333;
   font-weight: bold;
@@ -18,19 +18,19 @@
   font-weight: 700 !important; /* 确保表头加粗显示 */
 }
 
-.overall-table tbody tr {
+.overall-table table tbody tr {
   transition: background-color 0.3s;
 }
 
-.overall-table tbody tr:nth-child(even) {
+.overall-table table tbody tr:nth-child(even) {
   background-color: #f9f9f9;
 }
 
-.overall-table tbody tr:hover {
+.overall-table table tbody tr:hover {
   background-color: #f1f1f1;
 }
 
-.overall-table tbody td {
+.overall-table table tbody td {
   padding: 10px 12px;
   text-align: center; /* 默认所有单元格居中 */
   border-bottom: 1px solid #f0f0f0;
@@ -40,21 +40,21 @@
 }
 
 /* 覆盖DataTables的默认边框样式 */
-table.dataTable.overall-table thead th, 
-table.dataTable.overall-table thead td,
-table.dataTable.overall-table tbody td {
+.overall-table table.dataTable thead th, 
+.overall-table table.dataTable thead td,
+.overall-table table.dataTable tbody td {
   border-left: none !important;
   border-right: none !important;
 }
 
-table.dataTable.overall-table {
+.overall-table table.dataTable {
   border-collapse: collapse !important;
 }
 
 /* 移除DataTables添加的其他边框 */
-.dataTables_wrapper .dataTables_scroll,
-.dataTables_wrapper .dataTables_scrollBody,
-.dataTables_wrapper .dataTables_scrollHead {
+.overall-table .dataTables_wrapper .dataTables_scroll,
+.overall-table .dataTables_wrapper .dataTables_scrollBody,
+.overall-table .dataTables_wrapper .dataTables_scrollHead {
   border: none !important;
 }
 
@@ -82,7 +82,7 @@ table.dataTable.overall-table {
 
 /* 整体表格响应式设计 */
 @media (max-width: 900px) {
-  .overall-table {
+  .overall-table table {
     display: block;
     overflow-x: auto;
     white-space: nowrap;
@@ -90,6 +90,81 @@ table.dataTable.overall-table {
 }
 
 /* 确保表格底部没有边框线 */
-.overall-table tbody tr:last-child td {
+.overall-table table tbody tr:last-child td {
   border-bottom: none;
+}
+
+/* 移除表格边框 */
+.overall-table table.dataTable {
+    border-collapse: collapse !important;
+    border-spacing: 0 !important;
+    border: none !important;
+}
+
+/* 调整表头样式 */
+.overall-table table.dataTable thead th {
+    border: none !important;
+    border-bottom: 1px solid #ddd !important;
+    font-weight: 700 !important; /* 加粗表头 */
+    padding: 10px 15px !important;
+    text-align: center !important;
+}
+
+/* 调整单元格样式 */
+.overall-table table.dataTable td {
+    border: none !important;
+    padding: 8px 15px !important;
+    text-align: center !important;
+}
+
+/* 移除单元格间的分隔线 */
+.overall-table table.dataTable td,
+.overall-table table.dataTable th {
+    border-left: none !important;
+    border-right: none !important;
+}
+
+/* 移除DataTables默认样式 */
+.overall-table .dataTables_wrapper .dataTables_scrollHead {
+    border: none !important;
+}
+
+.overall-table .dataTables_wrapper .dataTables_scrollBody {
+    border: none !important;
+}
+
+/* 确保表格内的所有内容都居中 */
+.overall-table table.dataTable td,
+.overall-table table.dataTable th {
+    text-align: center !important;
+}
+
+/* 模型名称列左对齐 */
+.overall-table table.dataTable td.model-names {
+    text-align: left !important;
+}
+
+/* 隐藏表格页脚 */
+.overall-table .dataTables_info,
+.overall-table .dataTables_paginate {
+    display: none !important;
+}
+
+/* 移除鼠标悬停效果 */
+.overall-table table.dataTable tbody tr:hover {
+    background-color: transparent !important;
+}
+
+.overall-table table.dataTable tbody tr td:hover {
+    cursor: default !important;
+    background-color: transparent !important;
+}
+
+/* 响应式设计调整 */
+@media screen and (max-width: 768px) {
+    .overall-table table.dataTable td,
+    .overall-table table.dataTable th {
+        padding: 5px 8px !important;
+        font-size: 14px !important;
+    }
 }

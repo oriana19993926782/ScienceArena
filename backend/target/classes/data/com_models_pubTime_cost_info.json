@@ -1,0 +1,132 @@
+{
+    "IBO 2021": {
+        "deepseek-r1": {
+            "is_published_after_competition": "true",
+            "cost": "0"
+        },
+        "gpt-4o": {
+            "is_published_after_competition": "true",
+            "cost": "0"
+        },
+        "o1": {
+            "is_published_after_competition": "true",
+            "cost": "0"
+        },
+        "o3-mini": {
+            "is_published_after_competition": "true",
+            "cost": "0"
+        },
+        "qwen-vl-max": {
+            "is_published_after_competition": "true",
+            "cost": "0"
+        },
+        "qwq-32b": {
+            "is_published_after_competition": "true",
+            "cost": "0"
+        }
+    },
+    "2024_F-ma": {
+        "deepseek-r1": {
+            "is_published_after_competition": "true",
+            "cost": "0"
+        },
+        "gpt-4o": {
+            "is_published_after_competition": "true",
+            "cost": "0"
+        },
+        "o1": {
+            "is_published_after_competition": "true",
+            "cost": "0"
+        },
+        "o3-mini": {
+            "is_published_after_competition": "true",
+            "cost": "0"
+        },
+        "qwen-vl-max": {
+            "is_published_after_competition": "true",
+            "cost": "0"
+        },
+        "qwq-32b": {
+            "is_published_after_competition": "true",
+            "cost": "0"
+        }
+    },
+    "2024_USNCO_exam": {
+        "deepseek-r1": {
+            "is_published_after_competition": "true",
+            "cost": "0"
+        },
+        "gpt-4o": {
+            "is_published_after_competition": "true",
+            "cost": "0"
+        },
+        "o1": {
+            "is_published_after_competition": "true",
+            "cost": "0"
+        },
+        "o3-mini": {
+            "is_published_after_competition": "true",
+            "cost": "0"
+        },
+        "qwen-vl-max": {
+            "is_published_after_competition": "true",
+            "cost": "0"
+        },
+        "qwq-32b": {
+            "is_published_after_competition": "true",
+            "cost": "0"
+        }
+    },
+    "2024_PhysicalBowl_exam": {
+        "deepseek-r1": {
+            "is_published_after_competition": "true",
+            "cost": "0"
+        },
+        "gpt-4o": {
+            "is_published_after_competition": "true",
+            "cost": "0"
+        },
+        "o1": {
+            "is_published_after_competition": "true",
+            "cost": "0"
+        },
+        "o3-mini": {
+            "is_published_after_competition": "true",
+            "cost": "0"
+        },
+        "qwen-vl-max": {
+            "is_published_after_competition": "true",
+            "cost": "0"
+        },
+        "qwq-32b": {
+            "is_published_after_competition": "true",
+            "cost": "0"
+        }
+    },
+    "2025_USAAAO_exam": {
+        "deepseek-r1": {
+            "is_published_after_competition": "true",
+            "cost": "0"
+        },
+        "gpt-4o": {
+            "is_published_after_competition": "true",
+            "cost": "0"
+        },
+        "o1": {
+            "is_published_after_competition": "true",
+            "cost": "0"
+        },
+        "o3-mini": {
+            "is_published_after_competition": "true",
+            "cost": "0"
+        },
+        "qwen-vl-max": {
+            "is_published_after_competition": "true",
+            "cost": "0"
+        },
+        "qwq-32b": {
+            "is_published_after_competition": "true",
+            "cost": "0"
+        }
+    }
+}

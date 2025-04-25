@@ -93,6 +93,9 @@ function fetchCompetitionData(competitionId) {
   // 显示加载状态
   $('#myTopTable').html('<div class="loading-indicator">Loading data...</div>');
   
+  // 确保先清除表格类
+  $('#myTopTable').removeClass('overall-table').removeClass('non-overall-table');
+  
   // 构建API URL
   let apiUrl = '';
   if (competitionId === 'overall') {
@@ -121,11 +124,24 @@ function fetchCompetitionData(competitionId) {
     })
     .catch(error => {
       console.error('获取数据失败:', error);
-      $('#myTopTable').html('<div class="error-message">Failed to load data. Please try again later.</div>');
       
-      // 如果是非overall视图，且API尚未实现，显示提示信息
-      if (competitionId !== 'overall') {
-        $('#myTopTable').html('<div class="error-message">This competition data is not available yet.</div>');
+      // 清除表格上的所有特定类，确保没有残留样式
+      $('#myTopTable').removeClass('overall-table').removeClass('non-overall-table');
+      
+      // 如果是overall视图，显示通用错误消息
+      if (competitionId === 'overall') {
+        $('#myTopTable').html('<div class="error-message">Failed to load overall data. Please try again later.</div>');
+        $('.tableHeading').html('<div style="text-align: center; font-weight: bold; font-size: 1.2rem; color: #276dff; margin-bottom: 1rem;">Overall model performance on scientific competitions.</div>');
+      } 
+      // 如果是非overall视图，创建一个模拟数据并应用非overall样式
+      else {
+        $('#myTopTable').html('<div class="error-message">The competition data could not be loaded. Please try again later.</div>');
+        
+        // 即使API失败，也确保添加非overall类
+        $('#myTopTable').addClass('non-overall-table');
+        
+        // 设置比赛特定的表格标题，保持与成功加载时相同的样式
+        $('.tableHeading').html(`<div style="text-align: center; font-weight: bold; font-size: 1.2rem; color: #276dff; margin-bottom: 1rem;">Click on a cell to see the raw model output. (${competitionId})</div>`);
       }
     });
 }
@@ -140,6 +156,9 @@ function reloadTableData(competitionId) {
     $('#myTopTable').DataTable().destroy();
     $('#myTopTable').empty();
   }
+  
+  // 先清除表格上的所有特定类，确保没有残留样式
+  $('#myTopTable').removeClass('overall-table').removeClass('non-overall-table');
   
   // 创建表格列
   const columns = [
@@ -158,6 +177,20 @@ function reloadTableData(competitionId) {
     }
   ];
   
+  // 初始化表格配置
+  const tableConfig = {
+    data: data.models,
+    columns: columns,
+    paging: false,
+    searching: false,
+    info: false,
+    ordering: true,
+    order: [[1, 'desc']], // 默认按准确率排序
+    responsive: true,
+    autoWidth: false,
+    scrollX: true
+  };
+  
   // 如果是overall视图，添加每个比赛列
   if (competitionId === 'overall' && data.competitions && data.competitions.length > 0) {
     data.competitions.forEach(competition => {
@@ -173,9 +206,23 @@ function reloadTableData(competitionId) {
         }
       });
     });
+    
+    // 添加Overall表格的自定义类
+    $('#myTopTable').addClass('overall-table');
+    
+    // Overall表格不需要单元格点击事件
+    tableConfig.createdRow = function(row) {
+      $(row).find('td').off('click');
+    };
+    
+    // Overall视图显示描述性文本，但不显示点击提示
+    $('.tableHeading').html('<div style="text-align: center; font-weight: bold; font-size: 1.2rem; color: #276dff; margin-bottom: 1rem;">Overall model performance on scientific competitions.</div>');
   } 
   // 如果不是overall视图，添加问题列
   else if (competitionId !== 'overall' && data.models.length > 0 && data.models[0].problems) {
+    // 非Overall表格要移除Overall特定类并添加non-overall-table类
+    $('#myTopTable').removeClass('overall-table').addClass('non-overall-table');
+    
     // 添加Cost列
     columns.push({
       title: "Cost",
@@ -207,42 +254,12 @@ function reloadTableData(competitionId) {
         }
       });
     });
+    
+    // 非Overall视图显示提示文本，使用与Overall视图相同的样式
+    $('.tableHeading').html(`<div style="text-align: center; font-weight: bold; font-size: 1.2rem; color: #276dff; margin-bottom: 1rem;">Click on a cell to see the raw model output. ${data.title ? '(' + data.title + ')' : ''}</div>`);
   }
   
-  // 初始化数据表
-  const tableConfig = {
-    data: data.models,
-    columns: columns,
-    paging: false,
-    searching: false,
-    info: false,
-    ordering: true,
-    order: [[1, 'desc']], // 默认按准确率排序
-    responsive: true,
-    autoWidth: false,
-    scrollX: true
-  };
-  
-  // 为Overall表格添加特定的类和配置
-  if (competitionId === 'overall') {
-    // 添加Overall表格的自定义类
-    $('#myTopTable').addClass('overall-table');
-    
-    // Overall表格不需要单元格点击事件
-    tableConfig.createdRow = function(row) {
-      $(row).find('td').off('click');
-    };
-    
-    // Overall视图显示描述性文本，但不显示点击提示
-    $('.tableHeading').text('Overall model performance on scientific competitions.');
-  } else {
-    // 非Overall表格移除特定类
-    $('#myTopTable').removeClass('overall-table');
-    
-    // 非Overall视图显示提示文本
-    $('.tableHeading').text(`Click on a cell to see the raw model output. ${data.title ? '(' + data.title + ')' : ''}`);
-  }
-  
+  // 初始化DataTable
   $('#myTopTable').DataTable(tableConfig);
 }
 
