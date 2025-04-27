@@ -234,15 +234,6 @@ function reloadTableData(competitionId) {
         createdCell: function(cell, cellData, rowData) {
           const accuracy = rowData.problems[index].accuracy;
           $(cell).addClass(formatCellColor(accuracy));
-          
-          // 添加点击处理程序以显示模型输出
-          $(cell).on('click', function() {
-            const trace = rowData.problems[index].trace;
-            const model = rowData.model;
-            const problemId = rowData.problems[index].id;
-            
-            displayModelOutput(model, problemId, trace);
-          });
         }
       });
     });
@@ -393,10 +384,6 @@ function handleCellClick(cell, table, competitionId) {
 
 // 获取模型对特定问题的回答详情
 function fetchModelAnswer(competitionId, modelName, questionId) {
-  // 显示加载状态
-  const detailPanel = getOrCreateDetailPanel();
-  detailPanel.html('<div class="loading-indicator">正在加载模型回答详情...</div>').show();
-  
   // 清理参数，移除可能的后缀
   const cleanQuestionId = questionId.replace(/_exam$/, '');
   
@@ -405,7 +392,7 @@ function fetchModelAnswer(competitionId, modelName, questionId) {
   
   console.log(`发送请求: ${url}`);
   
-  // 发送API请求
+  // 发送API请求，但不显示返回的数据
   fetch(url)
     .then(response => {
       if (!response.ok) {
@@ -414,197 +401,11 @@ function fetchModelAnswer(competitionId, modelName, questionId) {
       return response.json();
     })
     .then(data => {
-      displayModelAnswerDetail(data);
+      console.log('已成功获取模型回答详情数据，但不显示', data);
     })
     .catch(error => {
       console.error('获取模型回答详情失败:', error);
-      detailPanel.html(`
-        <div class="model-answer-detail">
-          <div class="detail-header">
-            <h3>获取模型回答详情失败</h3>
-            <button class="close-detail">关闭</button>
-          </div>
-          <div class="detail-content">
-            <div class="error-message">
-              ${error.message || '服务器连接失败，请稍后再试'}
-            </div>
-            <p>请求参数:</p>
-            <ul>
-              <li>比赛: ${competitionId}</li>
-              <li>模型: ${modelName}</li>
-              <li>问题: ${cleanQuestionId}</li>
-            </ul>
-          </div>
-        </div>
-      `);
-      
-      // 添加关闭按钮事件
-      $('.close-detail').on('click', function() {
-        detailPanel.hide();
-      });
     });
-}
-
-// 显示模型回答详情
-function displayModelAnswerDetail(data) {
-  const detailPanel = getOrCreateDetailPanel();
-  
-  // 构建HTML内容
-  let html = `
-    <div class="columns is-centered">
-      <div id="traces" style="display: inline-block;">
-        <h2 class="tracesHeading">Solution: Model ${data.modelName} for Problem #${data.questionId}</h2>
-        
-        <h4 style="font-weight: bold;">Problem</h4>
-        <div class="marked box problem-box" style="white-space: pre-wrap; tab-size: 4;">
-          ${formatContent(data.originalQuestion)}
-        </div>
-        
-        <h4 style="font-weight: bold;">Correct Answer</h4>
-        <div class="marked box solution-box">
-          ${formatContent(data.correctAnswer)}
-        </div>
-        
-        <!-- 标签导航 -->
-        <div class="tab">
-          ${data.details.map((detail, index) => 
-            `<button class="tablinks ${index === 0 ? 'active' : ''}" 
-             onclick="openTab(event, 'tab${index}')">${detail.run.replace('run_', 'Run ')}</button>`
-          ).join('')}
-        </div>
-        
-        <!-- 标签内容 -->
-        ${data.details.map((detail, index) => `
-          <div class="tabcontent" id="tab${index}" style="display: ${index === 0 ? 'block' : 'none'}">
-            <h4 style="font-weight: bold;">Parsed Answer</h4>
-            <div class="marked box parsed-answer-box ${detail.score === data.fullScore ? 'correct' : ''}" style="white-space: pre-wrap; tab-size: 4;">
-              ${formatContent(detail.parsedAnswer)}
-            </div>
-            
-            <h4 style="font-weight: bold;">Full Model Solution</h4>
-            <div class="marked box response-box" style="white-space: pre-wrap; tab-size: 4;">
-              ${formatContent(detail.fullSolution)}
-            </div>
-          </div>
-        `).join('')}
-      </div>
-    </div>`;
-  
-  detailPanel.html(html).show();
-  
-  // 添加关闭按钮
-  const closeButton = $('<button class="close-detail">关闭</button>');
-  detailPanel.find('.tracesHeading').after(closeButton);
-  
-  // 添加关闭按钮事件
-  closeButton.on('click', function() {
-    detailPanel.hide();
-  });
-  
-  // 渲染数学公式
-  setTimeout(() => {
-    if (window.MathJax) {
-      MathJax.typesetPromise().then(() => {
-        console.log('数学公式渲染完成');
-      }).catch(err => {
-        console.error('数学公式渲染失败:', err);
-      });
-    }
-    
-    if (window.renderMathInElement) {
-      try {
-        renderMathInElement(document.getElementById('modelAnswerDetail'), {
-          delimiters: [
-            {left: "$$", right: "$$", display: true},
-            {left: "$", right: "$", display: false},
-            {left: "\\(", right: "\\)", display: false},
-            {left: "\\[", right: "\\]", display: true}
-          ],
-          throwOnError: false
-        });
-      } catch (e) {
-        console.error('KaTeX渲染失败:', e);
-      }
-    }
-  }, 100);
-}
-
-// 切换标签页
-function openTab(evt, tabId) {
-  // 隐藏所有标签内容
-  $('.tabcontent').hide();
-  
-  // 移除所有标签按钮的active类
-  $('.tablinks').removeClass('active');
-  
-  // 显示当前标签内容并添加active类到按钮
-  $(`#${tabId}`).show();
-  $(evt.currentTarget).addClass('active');
-  
-  // 重新渲染数学公式
-  if (window.MathJax) {
-    MathJax.typesetPromise([document.getElementById(tabId)]).catch(function (err) {
-      console.log(err);
-    });
-  }
-}
-
-// 格式化内容，处理特殊字符、换行和数学公式
-function formatContent(content) {
-  if (!content) return '';
-  
-  // 转义HTML但保留数学公式语法 
-  let formatted = content
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;');
-  
-  // 将换行符转换为HTML换行
-  formatted = formatted.replace(/\n/g, '<br>');
-  
-  // 还原数学公式的转义，使其能够被MathJax/KaTeX正确解析
-  formatted = formatted
-    // 行内公式
-    .replace(/\$([^\$]+)\$/g, function(match, formula) {
-      return '$' + formula
-        .replace(/&lt;/g, '<')
-        .replace(/&gt;/g, '>')
-        .replace(/&amp;/g, '&')
-        .replace(/&quot;/g, '"')
-        .replace(/&#039;/g, "'") + '$';
-    })
-    // 行间公式
-    .replace(/\$\$([^\$]+)\$\$/g, function(match, formula) {
-      return '$$' + formula
-        .replace(/&lt;/g, '<')
-        .replace(/&gt;/g, '>')
-        .replace(/&amp;/g, '&')
-        .replace(/&quot;/g, '"')
-        .replace(/&#039;/g, "'") + '$$';
-    })
-    // LaTeX括号公式
-    .replace(/\\[\(\[]([^\\]+)\\[\)\]]/g, function(match, formula) {
-      return match
-        .replace(/&lt;/g, '<')
-        .replace(/&gt;/g, '>')
-        .replace(/&amp;/g, '&')
-        .replace(/&quot;/g, '"')
-        .replace(/&#039;/g, "'");
-    });
-  
-  return formatted;
-}
-
-// 获取或创建详情面板
-function getOrCreateDetailPanel() {
-  let detailPanel = $('#modelAnswerDetail');
-  if (detailPanel.length === 0) {
-    detailPanel = $('<div id="modelAnswerDetail" class="model-answer-detail-panel"></div>');
-    $('#myTopTable').after(detailPanel);
-  }
-  return detailPanel;
 }
 
 // 根据准确率格式化单元格颜色
