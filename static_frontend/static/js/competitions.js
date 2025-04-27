@@ -151,14 +151,18 @@ function reloadTableData(competitionId) {
   // 获取选定竞赛的数据
   const data = competitionData[competitionId];
   
-  // 如果表格已存在，销毁它
-  if ($.fn.dataTable.isDataTable('#myTopTable')) {
+  // 清除之前的表格
+  if ($.fn.DataTable.isDataTable('#myTopTable')) {
     $('#myTopTable').DataTable().destroy();
     $('#myTopTable').empty();
   }
   
-  // 先清除表格上的所有特定类，确保没有残留样式
-  $('#myTopTable').removeClass('overall-table').removeClass('non-overall-table');
+  // 为表格容器添加或移除类
+  if (competitionId === 'overall') {
+    $('#myTopTable').addClass('overall-table').removeClass('non-overall-table');
+  } else {
+    $('#myTopTable').removeClass('overall-table').addClass('non-overall-table');
+  }
   
   // 创建表格列
   const columns = [
@@ -196,7 +200,29 @@ function reloadTableData(competitionId) {
     order: [[1, 'desc']], // 默认按准确率排序
     responsive: true,
     autoWidth: false,
-    scrollX: true
+    scrollX: true,
+    scrollCollapse: true,
+    drawCallback: function() {
+      // 表格绘制完成后立即应用修复，强制消除间隙
+      $('.dataTables_scrollHead').css({
+        'margin-bottom': '-2px'
+      });
+      
+      // 直接给.dataTables_scroll添加边框包裹整个表格
+      $('.dataTables_scroll').css({
+        'border': competitionId === 'overall' ? 'none' : '1px solid #ddd',
+        'border-radius': '4px',
+        'overflow': 'hidden'
+      });
+      
+      // 移除表体第一行的顶部边框
+      $('.dataTables_scrollBody table tbody tr:first-child td').css('border-top', 'none');
+      
+      // 处理整体表格的滚动视图
+      if (competitionId === 'overall') {
+        $('.dataTables_scrollHead, .dataTables_scrollBody').css('border', 'none');
+      }
+    }
   };
   
   // 如果是overall视图，添加每个比赛列
@@ -214,9 +240,6 @@ function reloadTableData(competitionId) {
         }
       });
     });
-    
-    // 添加Overall表格的自定义类
-    $('#myTopTable').addClass('overall-table');
     
     // Overall表格不需要单元格点击事件
     tableConfig.createdRow = function(row) {

@@ -122,7 +122,8 @@
 }
 
 table.dataTable {
-  border-collapse: collapse;
+  border-collapse: collapse !important; /* 确保所有表格使用相同的边框模型 */
+  border-spacing: 0 !important; /* 消除单元格间距 */
   width: 100%;
   margin-bottom: 1em;
 }
@@ -248,6 +249,41 @@ table.dataTable tbody tr:nth-child(even) {
   text-align: center !important;
   display: block !important;
   width: 100% !important;
+}
+
+/* 直接修复表格头部和表体之间的间隙 */
+.dataTables_wrapper .dataTables_scrollHead,
+.dataTables_wrapper .dataTables_scrollBody {
+  border: none !important;
+  overflow: visible !important;
+}
+
+/* 强制所有表头单元格的底部边框直接与表体连接 */
+.dataTables_wrapper .dataTables_scrollHead table.dataTable thead th,
+.dataTables_wrapper .dataTables_scrollHead table.dataTable thead td {
+  border-bottom-width: 1px !important;
+}
+
+/* 移除表体第一行的顶部边框，避免双边框 */
+.dataTables_wrapper .dataTables_scrollBody table.dataTable tbody tr:first-child td {
+  border-top: none !important;
+}
+
+/* 确保整个表格容器没有不必要的内边距 */
+.dataTables_wrapper {
+  padding: 0 !important;
+}
+
+/* 直接操作滚动容器，确保无间隙 */
+.dataTables_wrapper .dataTables_scroll {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  overflow: hidden; /* 防止内容溢出 */
+}
+
+/* 为Overall表格提供特殊处理 */
+.overall-table .dataTables_wrapper .dataTables_scroll {
+  border: none;
 }
 
 /* FAQ部分样式 */
@@ -442,4 +478,58 @@ table.dataTable tbody tr:nth-child(even) {
 #secondaryTable th {
   background-color: #f2f2f2;
   font-weight: bold;
+}
+
+/* 专门针对DataTables 2.0的间隙修复 */
+table.dataTable {
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+/* 修复DataTables 2.0结构的特定问题 */
+.dataTables_wrapper .dt-layout-row {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* 处理表格容器的特定边距 */
+.dataTables_wrapper .dt-layout-cell {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+/* 处理表体的边框和边距 */
+.dataTables_wrapper .dt-layout-cell:nth-child(2) {
+  border-top: none !important;
+  margin-top: -1px !important; /* 关键修复 - 负边距拉近表头和表体 */
+}
+
+/* 确保表格头部和表体边框连续 */
+.non-overall-table thead th {
+  border-bottom: 1px solid #ddd !important;
+}
+
+.non-overall-table tbody tr:first-child td {
+  border-top: 1px solid #ddd !important;
+}
+
+/* 直接包装表格的容器样式 */
+#myTopTable {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.overall-table#myTopTable {
+  border: none;
+}
+
+/* 处理FixedColumns扩展的特殊情况 */
+.dtfc-fixed-left {
+  border-right: 1px solid #ddd !important;
+}
+
+/* 覆盖DataTables 2.0的特定样式 */
+.dataTables_wrapper .dt-layout-row:nth-child(1) {
+  border-bottom: none !important;
 }
