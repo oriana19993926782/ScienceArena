@@ -392,7 +392,15 @@ function fetchModelAnswer(competitionId, modelName, questionId) {
   
   console.log(`发送请求: ${url}`);
   
-  // 发送API请求，但不显示返回的数据
+  // 显示加载状态
+  const detailPanel = getOrCreateDetailPanel();
+  detailPanel.html('<div class="loading-indicator">正在加载模型回答详情...</div>');
+  
+  // 显示遮罩层和详情面板
+  $('#modalOverlay').show();
+  detailPanel.show();
+  
+  // 发送API请求
   fetch(url)
     .then(response => {
       if (!response.ok) {
@@ -401,22 +409,135 @@ function fetchModelAnswer(competitionId, modelName, questionId) {
       return response.json();
     })
     .then(data => {
-      console.log('已成功获取模型回答详情数据，但不显示', data);
+      displayModelAnswerDetail(data);
     })
     .catch(error => {
       console.error('获取模型回答详情失败:', error);
+      detailPanel.html(`
+        <div id="traces">
+          <h2 class="tracesHeading">获取模型回答详情失败</h2>
+          <div class="marked box response-box">
+            ${error.message || '服务器连接失败，请稍后再试'}
+            <br><br>
+            请求参数:<br>
+            - 比赛: ${competitionId}<br>
+            - 模型: ${modelName}<br>
+            - 问题: ${cleanQuestionId}
+          </div>
+        </div>
+        <button class="close-detail">关闭</button>
+      `);
+      
+      // 添加关闭按钮事件
+      $('.close-detail').on('click', function() {
+        hideModelAnswerDetail();
+      });
     });
 }
 
-// 根据准确率格式化单元格颜色
-function formatCellColor(accuracy) {
-  if (accuracy >= 0.9) {
-    return 'correct';
-  } else if (accuracy >= 0.7) {
-    return 'partially-correct';
-  } else {
-    return 'incorrect';
+// 显示模型回答详情 - matharena风格
+function displayModelAnswerDetail(data) {
+  const detailPanel = getOrCreateDetailPanel();
+  
+  // 创建标题
+  let html = `
+    <div id="traces">
+      <h2 class="tracesHeading">Solution: Model ${data.modelName} for Problem #${data.questionId}</h2>
+      <h4 style="font-weight: bold;">Problem</h4>
+      <div class="marked box problem-box">${escapeHtml(data.originalQuestion)}</div>
+      <h4 style="font-weight: bold;">Correct Answer</h4>
+      <div class="marked box solution-box">${escapeHtml(data.correctAnswer)}</div>
+  `;
+  
+  // 创建标签页
+  html += '<div class="tab">';
+  data.details.forEach((detail, index) => {
+    html += `<button class="tablinks${index === 0 ? ' active' : ''}" onclick="openTab(event, 'tab${index}')">${formatRunLabel(detail.run)}</button>`;
+  });
+  html += '</div>';
+  
+  // 创建每个标签页的内容
+  data.details.forEach((detail, index) => {
+    const isCorrect = detail.parsedAnswer === data.correctAnswer;
+    
+    html += `
+      <div class="tabcontent" id="tab${index}" style="display: ${index === 0 ? 'block' : 'none'}">
+        <h4 style="font-weight: bold;">Parsed Answer</h4>
+        <div class="marked box parsed-answer-box ${isCorrect ? 'correct' : 'incorrect'}">${escapeHtml(detail.parsedAnswer)}</div>
+        <h4 style="font-weight: bold;">Full Model Solution</h4>
+        <div class="marked box response-box">${escapeHtml(detail.fullSolution)}</div>
+      </div>
+    `;
+  });
+  
+  html += '</div>';
+  
+  // 添加关闭按钮
+  html += '<button class="close-detail">关闭</button>';
+  
+  detailPanel.html(html);
+  
+  // 显示遮罩层和详情面板
+  $('#modalOverlay').show();
+  detailPanel.show();
+  
+  // 初始化标签页功能
+  window.openTab = function(evt, tabId) {
+    // 隐藏所有标签页内容
+    document.querySelectorAll('.tabcontent').forEach(tab => {
+      tab.style.display = 'none';
+    });
+    
+    // 移除所有标签按钮的活动状态
+    document.querySelectorAll('.tablinks').forEach(button => {
+      button.className = button.className.replace(' active', '');
+    });
+    
+    // 显示当前标签页并设置活动状态
+    document.getElementById(tabId).style.display = 'block';
+    evt.currentTarget.className += ' active';
+  };
+  
+  // 如果页面使用了MathJax，重新渲染数学公式
+  if (window.MathJax) {
+    MathJax.typeset();
   }
+  
+  // 添加关闭按钮事件
+  $('.close-detail').on('click', function() {
+    hideModelAnswerDetail();
+  });
+}
+
+// 获取或创建详情面板
+function getOrCreateDetailPanel() {
+  let detailPanel = $('#modelAnswerDetail');
+  let overlay = $('#modalOverlay');
+  
+  // 创建遮罩层（如果不存在）
+  if (overlay.length === 0) {
+    overlay = $('<div id="modalOverlay" class="modal-overlay"></div>');
+    $('body').append(overlay);
+    
+    // 点击遮罩层关闭详情面板
+    overlay.on('click', function() {
+      hideModelAnswerDetail();
+    });
+  }
+  
+  // 创建详情面板（如果不存在）
+  if (detailPanel.length === 0) {
+    detailPanel = $('<div id="modelAnswerDetail" class="model-answer-detail-panel"></div>');
+    $('body').append(detailPanel);
+  }
+  
+  return detailPanel;
+}
+
+// 隐藏模型回答详情面板
+function hideModelAnswerDetail() {
+  $('#modelAnswerDetail').hide();
+  $('#modalOverlay').hide();
 }
 
 // 显示模型输出
@@ -460,5 +581,36 @@ function updateSecondaryTable(competitionId) {
   if ($('#secondaryTable').is(':visible')) {
     const data = competitionData[competitionId];
     // 二级表格更新逻辑...
+  }
+}
+
+// 格式化运行标签
+function formatRunLabel(runLabel) {
+  const match = runLabel.match(/run_(\d+)/);
+  return match ? `Run ${parseInt(match[1]) + 1}` : runLabel;
+}
+
+// 安全转义HTML
+function escapeHtml(text) {
+  if (!text) return '';
+  
+  // 保留换行，但转义HTML
+  return text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;')
+    .replace(/\n/g, '<br>');
+}
+
+// 根据准确率格式化单元格颜色
+function formatCellColor(accuracy) {
+  if (accuracy >= 0.9) {
+    return 'correct';
+  } else if (accuracy >= 0.7) {
+    return 'partially-correct';
+  } else {
+    return 'incorrect';
   }
 }

@@ -598,3 +598,144 @@ table.dataTable td[data-dt-column="1"] {
   background-color: #e3eeff !important;
   cursor: pointer;
 }
+
+/* 模型回答详情面板样式 - matharena风格 */
+.model-answer-detail-panel {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 20px;
+  background-color: #fff;
+  width: 90%;
+  max-width: 1000px;
+  max-height: 80vh;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-shadow: 0 3px 15px rgba(0, 0, 0, 0.2);
+  z-index: 1001;
+}
+
+/* 遮罩层样式 */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
+
+/* 关闭按钮样式 */
+.close-detail {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background-color: #f0f0f0;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 5px 10px;
+  cursor: pointer;
+  font-size: 14px;
+  z-index: 1002;
+  transition: background-color 0.2s;
+}
+
+.close-detail:hover {
+  background-color: #e0e0e0;
+}
+
+#traces {
+  display: inline-block;
+  width: 100%;
+}
+
+.tracesHeading {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  font-weight: bold;
+}
+
+.box {
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border-radius: 5px;
+  white-space: pre-wrap;
+  tab-size: 4;
+}
+
+.problem-box {
+  background-color: #f8f9fa;
+  border-left: 3px solid #276dff;
+}
+
+.solution-box {
+  background-color: #f0f7ff;
+  border-left: 3px solid #276dff;
+}
+
+.parsed-answer-box {
+  background-color: #f5f5f5;
+  padding: 0.75rem;
+  border-radius: 4px;
+}
+
+.parsed-answer-box.correct {
+  border-left: 3px solid #28a745;
+}
+
+.parsed-answer-box.incorrect {
+  border-left: 3px solid #dc3545;
+}
+
+.response-box {
+  background-color: #f8f9fa;
+  border-left: 3px solid #6c757d;
+}
+
+/* 标签样式 */
+.tab {
+  overflow: hidden;
+  border: 1px solid #ccc;
+  background-color: #f1f1f1;
+  border-radius: 5px 5px 0 0;
+}
+
+.tab button {
+  background-color: inherit;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 10px 16px;
+  transition: 0.3s;
+  font-size: 14px;
+}
+
+.tab button:hover {
+  background-color: #ddd;
+}
+
+.tab button.active {
+  background-color: #276dff;
+  color: white;
+}
+
+.tabcontent {
+  display: none;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-top: none;
+  border-radius: 0 0 5px 5px;
+  animation: fadeEffect 0.5s;
+}
+
+/* 淡入动画 */
+@keyframes fadeEffect {
+  from {opacity: 0;}
+  to {opacity: 1;}
+}
