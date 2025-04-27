@@ -47,4 +47,21 @@ public class DataController {
             throw e;
         }
     }
+    
+    @GetMapping("/modelAnswer")
+    public Map<String, Object> getModelAnswer(
+            @RequestParam String competitionId,
+            @RequestParam String modelName,
+            @RequestParam String questionId) {
+        logger.info("接收到模型回答详情请求: 比赛={}, 模型={}, 问题={}", competitionId, modelName, questionId);
+        try {
+            Map<String, Object> result = dataService.getModelAnswerDetail(competitionId, modelName, questionId);
+            logger.info("成功处理模型回答详情请求: 比赛={}, 模型={}, 问题={}", competitionId, modelName, questionId);
+            return result;
+        } catch (Exception e) {
+            logger.error("处理模型回答详情请求时发生错误: 比赛={}, 模型={}, 问题={}, 错误: {}", 
+                       competitionId, modelName, questionId, e.getMessage(), e);
+            throw e;
+        }
+    }
 }

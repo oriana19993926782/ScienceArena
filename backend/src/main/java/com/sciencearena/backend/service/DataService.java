@@ -313,4 +313,84 @@ public class DataService {
             return Collections.emptyMap();
         }
     }
+    
+    /**
+     * 获取模型对特定问题的回答详情
+     * @param competitionId 比赛ID
+     * @param modelName 模型名称
+     * @param questionId 问题ID
+     * @return 包含模型回答详情的Map
+     */
+    public Map<String, Object> getModelAnswerDetail(String competitionId, String modelName, String questionId) {
+        logger.info("正在获取模型回答详情: 比赛={}, 模型={}, 问题={}", competitionId, modelName, questionId);
+        
+        Map<String, Object> result = new HashMap<>();
+        result.put("competitionId", competitionId);
+        result.put("modelName", modelName);
+        result.put("questionId", questionId);
+        
+        try {
+            // 读取JSON文件
+            ClassPathResource resource = new ClassPathResource("data/com_models_questions_modelAnswer_perRun_details.json");
+            InputStream inputStream = resource.getInputStream();
+            ObjectMapper mapper = new ObjectMapper();
+            JsonNode rootNode = mapper.readTree(inputStream);
+            
+            // 检查是否存在请求的比赛
+            if (!rootNode.has(competitionId)) {
+                logger.error("找不到比赛: {}", competitionId);
+                throw new RuntimeException("比赛不存在: " + competitionId);
+            }
+            
+            JsonNode competitionNode = rootNode.get(competitionId);
+            
+            // 检查是否存在请求的模型
+            if (!competitionNode.has(modelName)) {
+                logger.error("在比赛{}中找不到模型: {}", competitionId, modelName);
+                throw new RuntimeException("在比赛 " + competitionId + " 中找不到模型: " + modelName);
+            }
+            
+            JsonNode modelNode = competitionNode.get(modelName);
+            
+            // 检查是否存在请求的问题
+            if (!modelNode.has(questionId)) {
+                logger.error("在比赛{}的模型{}中找不到问题: {}", competitionId, modelName, questionId);
+                throw new RuntimeException("在比赛 " + competitionId + " 的模型 " + modelName + " 中找不到问题: " + questionId);
+            }
+            
+            JsonNode questionNode = modelNode.get(questionId);
+            
+            // 提取问题详情
+            result.put("originalQuestion", questionNode.get("original_question").asText());
+            result.put("correctAnswer", questionNode.get("correct_answer").asText());
+            result.put("averageScore", questionNode.get("average_score").asDouble());
+            result.put("fullScore", questionNode.get("full_score").asDouble());
+            
+            // 提取每次运行的详情
+            JsonNode detailNode = questionNode.get("detail");
+            List<Map<String, Object>> details = new ArrayList<>();
+            
+            detailNode.fields().forEachRemaining(entry -> {
+                String runId = entry.getKey();
+                JsonNode runNode = entry.getValue();
+                
+                Map<String, Object> runDetail = new HashMap<>();
+                runDetail.put("run", runId);
+                runDetail.put("fullSolution", runNode.get("full_model_solution").asText());
+                runDetail.put("parsedAnswer", runNode.get("parsed_Answer").asText());
+                runDetail.put("score", runNode.get("score_of_this_time").asDouble());
+                
+                details.add(runDetail);
+            });
+            
+            result.put("details", details);
+            
+            logger.info("成功获取模型回答详情，共有{}次运行记录", details.size());
+            return result;
+            
+        } catch (Exception e) {
+            logger.error("获取模型回答详情时发生错误: {}", e.getMessage(), e);
+            throw new RuntimeException("获取模型回答详情失败: " + e.getMessage(), e);
+        }
+    }
 }
