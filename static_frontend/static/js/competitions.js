@@ -141,7 +141,7 @@ function fetchCompetitionData(competitionId) {
         $('#myTopTable').addClass('non-overall-table');
         
         // 设置比赛特定的表格标题，保持与成功加载时相同的样式
-        $('.tableHeading').html(`<div style="text-align: center; font-weight: bold; font-size: 1.2rem; color: #276dff; margin-bottom: 1rem;">Click on a cell to see the raw model output. (${competitionId})</div>`);
+        $('.tableHeading').html(`<div style="text-align: center; font-weight: bold; font-size: 1.2rem; color: #276dff; margin-bottom: 1rem;">(${competitionId})</div>`);
       }
     });
 }
@@ -248,7 +248,7 @@ function reloadTableData(competitionId) {
     });
     
     // 非Overall视图显示提示文本
-    $('.tableHeading').html('<div style="text-align: center; font-weight: bold; font-size: 1.2rem; color: #276dff; margin-bottom: 1rem;">' + competitionId + ' model performance.</div><div style="text-align: center; color: #666; margin-bottom: 1rem;">Click on a cell to see the raw model output.</div>');
+    $('.tableHeading').html('<div style="text-align: center; font-weight: bold; font-size: 1.2rem; color: #276dff; margin-bottom: 1rem;">' + competitionId + ' model performance.</div>');
   }
   
   // 构建表格配置
