@@ -165,7 +165,8 @@ function reloadTableData(competitionId) {
     { 
       title: "Model", 
       data: "model",
-      className: competitionId === 'overall' ? "model-names" : "dt-center model-names",
+      className: competitionId === 'overall' ? "model-names" : "dt-left model-names",
+      width: competitionId === 'overall' ? null : "180px", 
       render: function(data, type, row) {
         // 检查模型是否在比赛后发布，如果是则添加警告标记
         if (row.is_published_after_competition) {
@@ -234,7 +235,12 @@ function reloadTableData(competitionId) {
     columns.push({
       title: "Cost",
       data: "cost",
-      className: "dt-center avg-cost"
+      className: "dt-center avg-cost",
+      width: "100px", // 设置固定宽度
+      render: function(data) {
+        // 使用自定义渲染确保数据居中显示
+        return '<div style="text-align: center; width: 100%;">' + data + '</div>';
+      }
     });
     
     data.models[0].problems.forEach((problem, index) => {
@@ -264,6 +270,11 @@ function reloadTableData(competitionId) {
     
     // 非Overall视图显示提示文本，使用与Overall视图相同的样式
     $('.tableHeading').html(`<div style="text-align: center; font-weight: bold; font-size: 1.2rem; color: #276dff; margin-bottom: 1rem;">Click on a cell to see the raw model output. ${data.title ? '(' + data.title + ')' : ''}</div>`);
+    
+    // 为非overall视图添加固定列配置
+    tableConfig.fixedColumns = {
+      leftColumns: 3 
+    };
   }
   
   // 初始化DataTable

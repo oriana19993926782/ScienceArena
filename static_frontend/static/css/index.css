@@ -203,13 +203,51 @@ table.dataTable tbody tr:nth-child(even) {
   border-bottom: 1px solid #ddd !important;
 }
 
+.non-overall-table table.dataTable td.problem-column {
+  text-align: center !important;
+}
+
+.non-overall-table table.dataTable td.dt-left,
+.non-overall-table table.dataTable th.dt-left {
+  text-align: left !important;
+  padding-left: 10px !important;
+}
+
 .non-overall-table table.dataTable tbody tr td:hover {
   cursor: pointer;
   background-color: rgba(0, 0, 0, 0.05) !important;
 }
 
-.non-overall-table table.dataTable td.problem-column {
+.non-overall-table .dtfc-fixed-left {
+  border-right: 2px solid #ddd !important;
+  box-shadow: 5px 0 5px -5px rgba(0, 0, 0, 0.1) !important;
+}
+
+.non-overall-table .dtfc-fixed-left .dtfc-fixed-left-top-blocker,
+.non-overall-table .dtfc-fixed-left .dtfc-fixed-left-bottom-blocker {
+  background-color: white !important;
+}
+
+.non-overall-table .dtfc-fixed-left .dtfc-top-row th {
+  background-color: #f2f2f2 !important;
+  border-bottom: 2px solid #ddd !important;
+  font-weight: bold !important;
+}
+
+/* Cost列居中对齐 - 增强选择器特异性和优先级 */
+.non-overall-table table.dataTable td.avg-cost,
+.non-overall-table table.dataTable th.avg-cost,
+.non-overall-table .dtfc-fixed-left table.dataTable td.avg-cost,
+.non-overall-table .dtfc-fixed-left table.dataTable th.avg-cost {
   text-align: center !important;
+}
+
+/* 确保Cost列中的实际文本内容也居中 */
+.non-overall-table table.dataTable td.avg-cost *,
+.non-overall-table .dtfc-fixed-left table.dataTable td.avg-cost * {
+  text-align: center !important;
+  display: block !important;
+  width: 100% !important;
 }
 
 /* FAQ部分样式 */
