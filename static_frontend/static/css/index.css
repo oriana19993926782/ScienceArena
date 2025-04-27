@@ -480,56 +480,49 @@ table.dataTable tbody tr:nth-child(even) {
   font-weight: bold;
 }
 
-/* 专门针对DataTables 2.0的间隙修复 */
+/* 清除之前可能影响fixedColumns功能的样式 */
+.dataTables_wrapper .dt-layout-row,
+.dataTables_wrapper .dt-layout-cell,
+.dataTables_wrapper .dataTables_scrollHead,
+.dataTables_wrapper .dataTables_scrollBody,
+.dataTables_wrapper .dtfc-fixed-left,
+.dataTables_wrapper .dtfc-fixed-left-top,
+.dataTables_wrapper .dtfc-fixed-left-bottom {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* 确保表格的整体结构正确 */
 table.dataTable {
-  margin-top: 0 !important;
-  margin-bottom: 0 !important;
-}
-
-/* 修复DataTables 2.0结构的特定问题 */
-.dataTables_wrapper .dt-layout-row {
-  margin: 0 !important;
-  padding: 0 !important;
-}
-
-/* 处理表格容器的特定边距 */
-.dataTables_wrapper .dt-layout-cell {
-  padding: 0 !important;
+  border-collapse: collapse !important;
+  border-spacing: 0 !important;
   margin: 0 !important;
 }
 
-/* 处理表体的边框和边距 */
-.dataTables_wrapper .dt-layout-cell:nth-child(2) {
-  border-top: none !important;
-  margin-top: -1px !important; /* 关键修复 - 负边距拉近表头和表体 */
+/* 简化固定列样式 */
+.dtfc-fixed-left {
+  border-right: 2px solid #ddd;
+  background-color: white;
 }
 
-/* 确保表格头部和表体边框连续 */
-.non-overall-table thead th {
-  border-bottom: 1px solid #ddd !important;
+/* 重置所有可能的负边距 */
+.dataTables_wrapper * {
+  margin-top: initial !important;
+  margin-bottom: initial !important;
 }
 
-.non-overall-table tbody tr:first-child td {
-  border-top: 1px solid #ddd !important;
+/* 保持Overall表格无边框 */
+.overall-table#myTopTable {
+  border: none !important;
 }
 
-/* 直接包装表格的容器样式 */
+/* 确保固定列正确显示 */
+.non-overall-table .dtfc-fixed-left-top th,
+.non-overall-table .dtfc-fixed-left-bottom td {
+  background-color: white !important;
+}
+
+/* 移除所有先前的特定选择器，回到基础设置 */
 #myTopTable {
   border: 1px solid #ddd;
-  border-radius: 4px;
-  overflow: hidden;
-}
-
-.overall-table#myTopTable {
-  border: none;
-}
-
-/* 处理FixedColumns扩展的特殊情况 */
-.dtfc-fixed-left {
-  border-right: 1px solid #ddd !important;
-}
-
-/* 覆盖DataTables 2.0的特定样式 */
-.dataTables_wrapper .dt-layout-row:nth-child(1) {
-  border-bottom: none !important;
 }

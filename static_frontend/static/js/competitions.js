@@ -164,7 +164,7 @@ function reloadTableData(competitionId) {
     $('#myTopTable').removeClass('overall-table').addClass('non-overall-table');
   }
   
-  // 创建表格列
+  // 准备列定义
   const columns = [
     { 
       title: "Model", 
@@ -189,42 +189,6 @@ function reloadTableData(competitionId) {
     }
   ];
   
-  // 初始化表格配置
-  const tableConfig = {
-    data: data.models,
-    columns: columns,
-    paging: false,
-    searching: false,
-    info: false,
-    ordering: true,
-    order: [[1, 'desc']], // 默认按准确率排序
-    responsive: true,
-    autoWidth: false,
-    scrollX: true,
-    scrollCollapse: true,
-    drawCallback: function() {
-      // 表格绘制完成后立即应用修复，强制消除间隙
-      $('.dataTables_scrollHead').css({
-        'margin-bottom': '-2px'
-      });
-      
-      // 直接给.dataTables_scroll添加边框包裹整个表格
-      $('.dataTables_scroll').css({
-        'border': competitionId === 'overall' ? 'none' : '1px solid #ddd',
-        'border-radius': '4px',
-        'overflow': 'hidden'
-      });
-      
-      // 移除表体第一行的顶部边框
-      $('.dataTables_scrollBody table tbody tr:first-child td').css('border-top', 'none');
-      
-      // 处理整体表格的滚动视图
-      if (competitionId === 'overall') {
-        $('.dataTables_scrollHead, .dataTables_scrollBody').css('border', 'none');
-      }
-    }
-  };
-  
   // 如果是overall视图，添加每个比赛列
   if (competitionId === 'overall' && data.competitions && data.competitions.length > 0) {
     data.competitions.forEach(competition => {
@@ -241,19 +205,11 @@ function reloadTableData(competitionId) {
       });
     });
     
-    // Overall表格不需要单元格点击事件
-    tableConfig.createdRow = function(row) {
-      $(row).find('td').off('click');
-    };
-    
     // Overall视图显示描述性文本，但不显示点击提示
     $('.tableHeading').html('<div style="text-align: center; font-weight: bold; font-size: 1.2rem; color: #276dff; margin-bottom: 1rem;">Overall model performance on scientific competitions.</div>');
   } 
   // 如果不是overall视图，添加问题列
   else if (competitionId !== 'overall' && data.models.length > 0 && data.models[0].problems) {
-    // 非Overall表格要移除Overall特定类并添加non-overall-table类
-    $('#myTopTable').removeClass('overall-table').addClass('non-overall-table');
-    
     // 添加Cost列
     columns.push({
       title: "Cost",
@@ -291,17 +247,74 @@ function reloadTableData(competitionId) {
       });
     });
     
-    // 非Overall视图显示提示文本，使用与Overall视图相同的样式
-    $('.tableHeading').html(`<div style="text-align: center; font-weight: bold; font-size: 1.2rem; color: #276dff; margin-bottom: 1rem;">Click on a cell to see the raw model output. ${data.title ? '(' + data.title + ')' : ''}</div>`);
-    
-    // 为非overall视图添加固定列配置
+    // 非Overall视图显示提示文本
+    $('.tableHeading').html('<div style="text-align: center; font-weight: bold; font-size: 1.2rem; color: #276dff; margin-bottom: 1rem;">' + competitionId + ' model performance.</div><div style="text-align: center; color: #666; margin-bottom: 1rem;">Click on a cell to see the raw model output.</div>');
+  }
+  
+  // 构建表格配置
+  const tableConfig = {
+    data: data.models,
+    columns: columns,
+    paging: false,
+    searching: false,
+    info: false,
+    ordering: true,
+    order: [[1, 'desc']], // 默认按准确率排序
+    responsive: false, // 禁用响应式功能以获得更好的固定列体验
+    autoWidth: false,
+    scrollX: true,
+    scrollCollapse: true
+  };
+  
+  // 如果不是Overall视图，添加固定列配置
+  if (competitionId !== 'overall') {
     tableConfig.fixedColumns = {
-      leftColumns: 3 
+      left: 3 // 固定左侧3列
     };
   }
   
-  // 初始化DataTable
-  $('#myTopTable').DataTable(tableConfig);
+  // 如果是Overall视图，禁用单元格点击事件
+  if (competitionId === 'overall') {
+    tableConfig.createdRow = function(row) {
+      $(row).find('td').off('click');
+    };
+  }
+  
+  // 初始化表格
+  const table = $('#myTopTable').DataTable(tableConfig);
+  
+  // 修复表格样式问题
+  if (competitionId !== 'overall') {
+    // 使用setTimeout确保DOM已完全渲染
+    setTimeout(function() {
+      // 关键修复 - 应用样式调整
+      $('.dataTables_scrollHead').css({
+        'margin-bottom': '0',
+        'border-bottom': 'none'
+      });
+      
+      $('.dataTables_scrollBody').css({
+        'border-top': 'none'
+      });
+      
+      // 修复固定列样式
+      $('.dtfc-fixed-left-top, .dtfc-fixed-left-bottom').css({
+        'background-color': 'white'
+      });
+      
+      $('.dtfc-fixed-left').css({
+        'border-right': '2px solid #ddd',
+        'box-shadow': '5px 0 5px -5px rgba(0, 0, 0, 0.1)'
+      });
+      
+      // 确保表格边框一致
+      $('#myTopTable').closest('.dataTables_wrapper').css({
+        'border': '1px solid #ddd',
+        'border-radius': '4px',
+        'overflow': 'hidden'
+      });
+    }, 100); // 短延迟确保DOM已更新
+  }
 }
 
 // 根据准确率格式化单元格颜色
