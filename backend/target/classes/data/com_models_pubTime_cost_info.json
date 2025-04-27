@@ -1,23 +1,23 @@
 {
     "IBO 2021": {
         "deepseek-r1": {
-            "is_published_after_competition": "true",
-            "cost": "0"
+            "is_published_after_competition": "false",
+            "cost": "23"
         },
         "gpt-4o": {
             "is_published_after_competition": "true",
             "cost": "0"
         },
         "o1": {
-            "is_published_after_competition": "true",
-            "cost": "0"
+            "is_published_after_competition": "false",
+            "cost": "57"
         },
         "o3-mini": {
-            "is_published_after_competition": "true",
+            "is_published_after_competition": "false",
             "cost": "0"
         },
         "qwen-vl-max": {
-            "is_published_after_competition": "true",
+            "is_published_after_competition": "false",
             "cost": "0"
         },
         "qwq-32b": {

@@ -165,7 +165,14 @@ function reloadTableData(competitionId) {
     { 
       title: "Model", 
       data: "model",
-      className: competitionId === 'overall' ? "model-names" : "dt-center model-names"
+      className: competitionId === 'overall' ? "model-names" : "dt-center model-names",
+      render: function(data, type, row) {
+        // 检查模型是否在比赛后发布，如果是则添加警告标记
+        if (row.is_published_after_competition) {
+          return data + ' ⚠️';
+        }
+        return data;
+      }
     },
     { 
       title: "Avg", 

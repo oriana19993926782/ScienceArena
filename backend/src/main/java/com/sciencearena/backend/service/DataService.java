@@ -144,18 +144,24 @@ public class DataService {
     public Map<String, Object> getCompetitionData(String competitionId) {
         logger.info("开始获取比赛数据: {}", competitionId);
         try {
-            // 读取JSON文件
-            logger.debug("尝试读取JSON文件");
-            ClassPathResource resource = new ClassPathResource("data/com_models_score_perQuestion.json");
-            InputStream inputStream = resource.getInputStream();
+            // 读取分数JSON文件
+            logger.debug("尝试读取分数JSON文件");
+            ClassPathResource scoreResource = new ClassPathResource("data/com_models_score_perQuestion.json");
+            InputStream scoreInputStream = scoreResource.getInputStream();
             ObjectMapper mapper = new ObjectMapper();
-            JsonNode rootNode = mapper.readTree(inputStream);
+            JsonNode scoreRootNode = mapper.readTree(scoreInputStream);
             
-            logger.debug("JSON文件读取成功，根节点类型: {}", rootNode.getNodeType());
+            // 读取成本和发布时间JSON文件
+            logger.debug("尝试读取成本和发布时间JSON文件");
+            ClassPathResource costInfoResource = new ClassPathResource("data/com_models_pubTime_cost_info.json");
+            InputStream costInfoInputStream = costInfoResource.getInputStream();
+            JsonNode costInfoRootNode = mapper.readTree(costInfoInputStream);
+            
+            logger.debug("JSON文件读取成功，根节点类型: {}", scoreRootNode.getNodeType());
             
             // 打印根节点的所有字段名
             StringBuilder rootFields = new StringBuilder("根节点字段: ");
-            Iterator<String> fieldNames = rootNode.fieldNames();
+            Iterator<String> fieldNames = scoreRootNode.fieldNames();
             while (fieldNames.hasNext()) {
                 rootFields.append(fieldNames.next()).append(", ");
             }
@@ -163,13 +169,13 @@ public class DataService {
             
             // 检查请求的比赛是否存在
             logger.debug("检查比赛ID是否存在: {}", competitionId);
-            if (!rootNode.has(competitionId)) {
+            if (!scoreRootNode.has(competitionId)) {
                 logger.warn("比赛ID不存在: {}", competitionId);
                 return Collections.emptyMap();
             }
             
             // 获取该比赛的所有数据
-            JsonNode competitionNode = rootNode.get(competitionId);
+            JsonNode competitionNode = scoreRootNode.get(competitionId);
             logger.debug("获取到比赛节点，类型: {}", competitionNode.getNodeType());
             
             // 结果Map
@@ -190,8 +196,34 @@ public class DataService {
                 logger.debug("处理模型: {}", modelName);
                 JsonNode modelNode = competitionNode.get(modelName);
                 
+                // 获取成本和发布信息
+                JsonNode modelCostInfo = null;
+                if (costInfoRootNode.has(competitionId) && 
+                    costInfoRootNode.get(competitionId).has(modelName)) {
+                    modelCostInfo = costInfoRootNode.get(competitionId).get(modelName);
+                    logger.debug("找到模型 {} 的成本和发布信息", modelName);
+                } else {
+                    logger.debug("未找到模型 {} 的成本和发布信息", modelName);
+                }
+                
+                // 检查模型是否在比赛后发布
+                boolean isPublishedAfter = false;
+                if (modelCostInfo != null && modelCostInfo.has("is_published_after_competition")) {
+                    isPublishedAfter = "true".equals(modelCostInfo.get("is_published_after_competition").asText());
+                    logger.debug("模型 {} 在比赛后发布: {}", modelName, isPublishedAfter);
+                }
+                
+                // 获取实际成本
+                String cost = "0";
+                if (modelCostInfo != null && modelCostInfo.has("cost")) {
+                    cost = modelCostInfo.get("cost").asText();
+                    logger.debug("模型 {} 的成本: {}", modelName, cost);
+                }
+                
                 Map<String, Object> modelData = new HashMap<>();
+                // 保持模型名称不变，但添加一个标志指示是否在比赛后发布
                 modelData.put("model", modelName);
+                modelData.put("is_published_after_competition", isPublishedAfter);
                 
                 // 计算该模型在该比赛中的平均分
                 double totalAccuracy = 0;
@@ -260,8 +292,8 @@ public class DataService {
                 modelData.put("avg", avgAccuracy);
                 modelData.put("problems", problemsList);
                 
-                // 添加模型成本（示例值，实际应该从配置或其他地方获取）
-                modelData.put("cost", 0.5); // 示例值
+                // 添加模型成本
+                modelData.put("cost", cost);
                 
                 // 将模型数据添加到结果列表
                 modelsList.add(modelData);
