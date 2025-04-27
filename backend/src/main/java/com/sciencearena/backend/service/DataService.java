@@ -222,12 +222,10 @@ public class DataService {
                     }
                 });
                 
-                // 只取前15个问题
-                int limit = Math.min(15, questionIds.size());
-                logger.debug("将处理模型 {} 的前 {} 个问题", modelName, limit);
+                // 处理所有问题，不再限制数量
+                logger.debug("将处理模型 {} 的所有 {} 个问题", modelName, questionIds.size());
                 
-                for (int i = 0; i < limit; i++) {
-                    String questionId = questionIds.get(i);
+                for (String questionId : questionIds) {
                     JsonNode questionNode = modelNode.get(questionId);
                     
                     if (questionNode.has("score") && questionNode.has("total_score")) {
