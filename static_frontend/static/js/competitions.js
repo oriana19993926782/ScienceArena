@@ -6,8 +6,29 @@ let currentCompetition = 'overall';
 
 // DOM加载完成后初始化
 document.addEventListener('DOMContentLoaded', function() {
+  // 设置Marked.js配置
+  setupMarkedConfig();
+  
   // 先获取所有比赛名称，然后初始化选择器
   fetchCompetitions();
+  
+  // 绑定按钮点击事件
+  $('#competitionLoadBtn').click(function() {
+    const competitionId = $('#competitionSelect').val();
+    if (competitionId) {
+      loadCompetitionData(competitionId);
+    }
+  });
+  
+  $('#top10Btn').click(function() {
+    loadOverallData();
+  });
+  
+  // 展示加载页面
+  showLoading();
+  
+  // 默认加载整体数据
+  loadOverallData();
 });
 
 // 从后端获取所有比赛名称
@@ -444,9 +465,9 @@ function displayModelAnswerDetail(data) {
     <div id="traces">
       <h2 class="tracesHeading">Solution: Model ${data.modelName} for Problem #${data.questionId}</h2>
       <h4 style="font-weight: bold;">Problem</h4>
-      <div class="marked box problem-box">${escapeHtml(data.originalQuestion)}</div>
+      <div class="marked box problem-box">${processContent(data.originalQuestion)}</div>
       <h4 style="font-weight: bold;">Correct Answer</h4>
-      <div class="marked box solution-box">${escapeHtml(data.correctAnswer)}</div>
+      <div class="marked box solution-box">${processContent(data.correctAnswer)}</div>
   `;
   
   // 创建标签页
@@ -463,9 +484,9 @@ function displayModelAnswerDetail(data) {
     html += `
       <div class="tabcontent" id="tab${index}" style="display: ${index === 0 ? 'block' : 'none'}">
         <h4 style="font-weight: bold;">Parsed Answer</h4>
-        <div class="marked box parsed-answer-box ${isCorrect ? 'correct' : 'incorrect'}">${escapeHtml(detail.parsedAnswer)}</div>
+        <div class="marked box parsed-answer-box ${isCorrect ? 'correct' : 'incorrect'}">${processContent(detail.parsedAnswer)}</div>
         <h4 style="font-weight: bold;">Full Model Solution</h4>
-        <div class="marked box response-box">${escapeHtml(detail.fullSolution)}</div>
+        <div class="marked box response-box">${processContent(detail.fullSolution)}</div>
       </div>
     `;
   });
@@ -496,11 +517,24 @@ function displayModelAnswerDetail(data) {
     // 显示当前标签页并设置活动状态
     document.getElementById(tabId).style.display = 'block';
     evt.currentTarget.className += ' active';
+    
+    // 当切换标签页时重新渲染数学公式
+    if (window.MathJax) {
+      MathJax.typesetPromise([document.getElementById(tabId)]).catch(function (err) {
+        console.log('MathJax typeset failed: ' + err.message);
+      });
+    }
   };
   
-  // 如果页面使用了MathJax，重新渲染数学公式
+  // 渲染数学公式
   if (window.MathJax) {
-    MathJax.typeset();
+    try {
+      MathJax.typesetPromise([detailPanel[0]]).catch(function (err) {
+        console.log('MathJax渲染失败:', err);
+      });
+    } catch (e) {
+      console.error('MathJax渲染失败:', e);
+    }
   }
   
   // 添加关闭按钮事件
@@ -590,11 +624,137 @@ function formatRunLabel(runLabel) {
   return match ? `Run ${parseInt(match[1]) + 1}` : runLabel;
 }
 
-// 安全转义HTML
-function escapeHtml(text) {
+// 处理HTML和Markdown内容
+function processContent(text) {
   if (!text) return '';
   
-  // 保留换行，但转义HTML
+  let processed = '';
+  
+  // 预处理文本，清理不规范的LaTeX格式
+  text = cleanupLatexFormat(text);
+  
+  // 判断内容类型
+  if (text.includes('<table') || (text.includes('<') && text.includes('>') && !text.includes('##') && !text.includes('**'))) {
+    // 已经是HTML格式，使用DOMPurify清洁
+    processed = DOMPurify.sanitize(text, {
+      ALLOWED_TAGS: ['table', 'thead', 'tbody', 'tr', 'th', 'td', 'br', 'p', 'div', 'span', 'b', 'i', 'strong', 'em', 'sup', 'sub', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'ul', 'ol', 'li', 'blockquote', 'code', 'pre'],
+      ALLOWED_ATTR: ['style', 'class', 'id', 'colspan', 'rowspan', 'align']
+    });
+  } else if (text.includes('##') || text.includes('**') || text.includes('- ') || text.includes('* ') || (text.includes('[') && text.includes(']('))) {
+    // 看起来是Markdown格式，使用Marked解析
+    try {
+      // 首先用DOMPurify清洁原始文本，防止XML注入
+      const cleanText = DOMPurify.sanitize(text, { ALLOWED_TAGS: [] });
+      // 然后使用Marked解析Markdown
+      processed = marked.parse(cleanText);
+      // 最后再次用DOMPurify清洁生成的HTML
+      processed = DOMPurify.sanitize(processed, {
+        ALLOWED_TAGS: ['table', 'thead', 'tbody', 'tr', 'th', 'td', 'br', 'p', 'div', 'span', 'b', 'i', 'strong', 'em', 'sup', 'sub', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'ul', 'ol', 'li', 'blockquote', 'code', 'pre', 'a', 'img'],
+        ALLOWED_ATTR: ['style', 'class', 'id', 'colspan', 'rowspan', 'align', 'href', 'src', 'alt', 'title']
+      });
+    } catch (e) {
+      console.error('Markdown解析错误:', e);
+      // 解析失败，回退到普通HTML转义
+      processed = escapeHtmlBasic(text);
+    }
+  } else {
+    // 普通文本，执行基本HTML转义但保留换行
+    processed = escapeHtmlBasic(text);
+  }
+  
+  return processed;
+}
+
+// 清理不规范的LaTeX格式
+function cleanupLatexFormat(text) {
+  if (!text) return '';
+  
+  // 临时变量，用于跟踪我们是否在LaTeX环境内
+  let inLatexBlock = false;
+  let latexContent = '';
+  let result = '';
+  let lines = text.split('\n');
+  
+  // 如果只有一行文本，且包含不完整的LaTeX标签，则直接返回
+  if (lines.length === 1) {
+    return text;
+  }
+  
+  // 处理多行LaTeX
+  for (let i = 0; i < lines.length; i++) {
+    let line = lines[i].trim();
+    
+    // 检测LaTeX块的开始
+    if (line.includes('$$') && !inLatexBlock) {
+      // 找到第一个 $$ 的位置
+      const startPos = line.indexOf('$$');
+      
+      // 把 $$ 之前的内容添加到结果中
+      if (startPos > 0) {
+        result += line.substring(0, startPos) + ' ';
+      }
+      
+      inLatexBlock = true;
+      
+      // 从这一行的 $$ 后面开始收集LaTeX内容
+      latexContent = line.substring(startPos + 2) + ' ';
+    } 
+    // 检测LaTeX块的结束
+    else if (line.includes('$$') && inLatexBlock) {
+      // 找到最后一个 $$ 的位置
+      const endPos = line.lastIndexOf('$$');
+      
+      // 把这一行直到 $$ 的内容添加到LaTeX内容中
+      latexContent += line.substring(0, endPos);
+      
+      // 清理LaTeX内容，删除多余的空格和换行
+      latexContent = latexContent.replace(/\s+/g, ' ').trim();
+      
+      // 添加清理后的LaTeX块到结果中
+      result += '$$' + latexContent + '$$';
+      
+      // 把 $$ 之后的内容添加到结果中
+      if (endPos + 2 < line.length) {
+        result += ' ' + line.substring(endPos + 2);
+      }
+      
+      inLatexBlock = false;
+      latexContent = '';
+    }
+    // 继续收集LaTeX块内容
+    else if (inLatexBlock) {
+      latexContent += line + ' ';
+    }
+    // 普通行，直接添加到结果中
+    else {
+      result += line + '\n';
+    }
+  }
+  
+  // 如果处理完所有行后，还在LaTeX环境内，则关闭它
+  if (inLatexBlock) {
+    // 清理LaTeX内容，删除多余的空格
+    latexContent = latexContent.replace(/\s+/g, ' ').trim();
+    result += '$$' + latexContent + '$$';
+  }
+  
+  // 清理最终结果中的一些常见问题
+  result = result
+    // 修复一些常见的LaTeX公式错误
+    .replace(/\$\$\s+/g, '$$')
+    .replace(/\s+\$\$/g, '$$')
+    // 修复不匹配的大括号
+    .replace(/\{(\d+)\}/g, '{$1}')
+    // 确保化学符号格式正确
+    .replace(/(\w+)\_(\d+)/g, '$1_{$2}')
+    // 清理多余空格
+    .replace(/  +/g, ' ');
+  
+  return result;
+}
+
+// 基本HTML转义（不处理Markdown，仅转义HTML特殊字符并保留换行）
+function escapeHtmlBasic(text) {
   return text
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
@@ -614,3 +774,27 @@ function formatCellColor(accuracy) {
     return 'incorrect';
   }
 }
+
+// 设置Marked.js配置
+function setupMarkedConfig() {
+  if (typeof marked !== 'undefined') {
+    // 配置Marked
+    marked.setOptions({
+      gfm: true, // 启用GitHub风格的Markdown
+      breaks: true, // 转换回车符为<br>
+      headerIds: false, // 不生成标题ID
+      mangle: false, // 不转义HTML实体
+      sanitize: false, // 不进行内置的消毒，我们将使用DOMPurify
+      smartLists: true, // 使用更智能的列表行为
+      smartypants: true, // 使用更智能的标点符号
+      xhtml: false // 不关闭没有结束标签的HTML标签
+    });
+    
+    console.log('Marked.js已配置完成');
+  } else {
+    console.error('Marked.js尚未加载');
+  }
+}
+
+// 其他初始化代码
+console.log('准备加载比赛数据...');
