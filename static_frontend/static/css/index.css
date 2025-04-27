@@ -530,3 +530,41 @@ table.dataTable {
 #myTopTable {
   border: 1px solid #ddd;
 }
+
+/* 确保表头和表体列宽一致 */
+.dataTables_scrollHeadInner,
+.dataTables_scrollHeadInner table,
+.dataTables_scrollBody,
+.dataTables_scrollBody table {
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+/* 确保表格单元格具有相同的盒模型 */
+.dataTables_scrollHead table,
+.dataTables_scrollBody table,
+.dataTables_scrollHead th,
+.dataTables_scrollHead td,
+.dataTables_scrollBody th,
+.dataTables_scrollBody td {
+  box-sizing: border-box !important;
+}
+
+/* 对列宽进行强制统一 */
+.dataTables_scrollHead col,
+.dataTables_scrollBody col {
+  width: auto !important;
+}
+
+/* Avg列的特殊处理 */
+table.dataTable th[data-dt-column="1"],
+table.dataTable td[data-dt-column="1"] {
+  width: 80px !important;
+  min-width: 80px !important;
+  max-width: 80px !important;
+}
+
+/* 确保所有DataTables生成的内容具有一致的盒模型 */
+.dataTables_wrapper * {
+  box-sizing: border-box !important;
+}

@@ -263,7 +263,12 @@ function reloadTableData(competitionId) {
     responsive: false, // 禁用响应式功能以获得更好的固定列体验
     autoWidth: false,
     scrollX: true,
-    scrollCollapse: true
+    scrollCollapse: true,
+    columnDefs: [
+      { targets: 0, width: "180px" }, // Model列宽度
+      { targets: 1, width: "80px" },  // Avg列宽度
+      { targets: 2, width: "80px" }   // Cost列宽度（如果存在）
+    ]
   };
   
   // 如果不是Overall视图，添加固定列配置
