@@ -568,3 +568,17 @@ table.dataTable td[data-dt-column="1"] {
 .dataTables_wrapper * {
   box-sizing: border-box !important;
 }
+
+/* 全局表格奇偶行样式 - 使用最高优先级 */
+.overall-table table.dataTable > tbody > tr:nth-of-type(odd) {
+  background-color: #ffffff !important;
+}
+
+.overall-table table.dataTable > tbody > tr:nth-of-type(even) {
+  background-color: #f5f5f5 !important;
+}
+
+/* 确保悬停状态覆盖奇偶行样式 */
+.overall-table table.dataTable > tbody > tr:hover {
+  background-color: #eef2f8 !important;
+}

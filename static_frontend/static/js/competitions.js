@@ -264,6 +264,7 @@ function reloadTableData(competitionId) {
     autoWidth: false,
     scrollX: true,
     scrollCollapse: true,
+    stripeClasses: competitionId === 'overall' ? ['odd', 'even'] : [], // 为Overall视图启用条带化
     columnDefs: [
       { targets: 0, width: "180px" }, // Model列宽度
       { targets: 1, width: "80px" },  // Avg列宽度
@@ -278,10 +279,18 @@ function reloadTableData(competitionId) {
     };
   }
   
-  // 如果是Overall视图，禁用单元格点击事件
+  // 如果是Overall视图，禁用单元格点击事件并添加奇偶行样式
   if (competitionId === 'overall') {
-    tableConfig.createdRow = function(row) {
+    tableConfig.createdRow = function(row, data, index) {
+      // 禁用单元格点击事件
       $(row).find('td').off('click');
+      
+      // 添加奇偶行类
+      if (index % 2 === 0) {
+        $(row).addClass('dt-row-odd');
+      } else {
+        $(row).addClass('dt-row-even');
+      }
     };
   }
   
@@ -299,6 +308,7 @@ function reloadTableData(competitionId) {
       });
       
       $('.dataTables_scrollBody').css({
+        'margin-top': '0',
         'border-top': 'none'
       });
       
@@ -319,6 +329,26 @@ function reloadTableData(competitionId) {
         'overflow': 'hidden'
       });
     }, 100); // 短延迟确保DOM已更新
+  } else {
+    // 在Overall视图中直接设置奇偶行背景色
+    setTimeout(function() {
+      // 使用nth-child选择器而不是:odd/:even
+      $('#myTopTable tbody tr:nth-child(odd)').css('background-color', '#ffffff');
+      $('#myTopTable tbody tr:nth-child(even)').css('background-color', '#f5f5f5');
+      
+      // 添加悬停效果
+      $('#myTopTable tbody tr').hover(
+        function() { $(this).css('background-color', '#eef2f8'); },
+        function() { 
+          // 恢复原来的背景色
+          if ($(this).index() % 2 === 0) {
+            $(this).css('background-color', '#ffffff');
+          } else {
+            $(this).css('background-color', '#f5f5f5');
+          }
+        }
+      );
+    }, 100); // 增加延迟确保DOM完全加载
   }
 }
 

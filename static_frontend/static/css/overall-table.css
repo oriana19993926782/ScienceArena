@@ -168,3 +168,18 @@
         font-size: 14px !important;
     }
 }
+
+/* 为Overall表格添加奇偶行交替背景色 */
+.overall-table table.dataTable tbody tr.dt-row-odd {
+  background-color: #ffffff !important; /* 奇数行白色 */
+}
+
+.overall-table table.dataTable tbody tr.dt-row-even {
+  background-color: #f5f5f5 !important; /* 偶数行浅灰色 */
+}
+
+/* 鼠标悬停时的背景色 */
+.overall-table table.dataTable tbody tr:hover {
+  background-color: #eef2f8 !important; /* 浅蓝灰色，突出显示当前行 */
+  transition: background-color 0.2s ease;
+}
