@@ -474,20 +474,23 @@ function displayModelAnswerDetail(data) {
       </div>
   `;
   
-  // 创建标签页
-  html += '<div class="tab">';
+  // 创建一个紧凑的标签页容器
+  html += '<div style="display:flex; flex-direction:column; gap:0; margin-top:10px;">';
+  
+  // 创建标签按钮
+  html += '<div class="tab" style="margin:0 !important; padding:0 !important; margin-bottom:0 !important;">';
   data.details.forEach((detail, index) => {
-    html += `<button class="tablinks${index === 0 ? ' active' : ''}" onclick="openTab(event, 'tab${index}')">${formatRunLabel(detail.run)}</button>`;
+    html += `<button class="tablinks${index === 0 ? ' active' : ''}" onclick="openTab(event, 'tab${index}')" style="margin-bottom:0 !important;">${formatRunLabel(detail.run)}</button>`;
   });
   html += '</div>';
   
-  // 创建每个标签页的内容
+  // 创建紧凑的标签内容
   data.details.forEach((detail, index) => {
     const isCorrect = detail.parsedAnswer === data.correctAnswer;
     
     html += `
-      <div class="tabcontent" id="tab${index}" style="display: ${index === 0 ? 'block' : 'none'}">
-        <div style="display:flex; flex-direction:column; gap:0;">
+      <div class="tabcontent" id="tab${index}" style="display:${index === 0 ? 'block' : 'none'}; margin:0 !important; padding:0 !important; border:none !important;">
+        <div style="display:flex; flex-direction:column; gap:0; margin-top:0 !important; padding-top:0 !important;">
           <h4 class="detail-section-title" style="margin:0 !important; padding:0 !important;">Parsed Answer</h4>
           <div class="marked box parsed-answer-box ${isCorrect ? 'correct' : 'incorrect'}" style="margin:0 !important; padding:8px !important;">${processContent(detail.parsedAnswer)}</div>
         </div>
@@ -499,7 +502,8 @@ function displayModelAnswerDetail(data) {
     `;
   });
   
-  html += '</div>';
+  html += '</div>'; // 关闭标签页容器
+  html += '</div>'; // 关闭detail-container
   
   // 添加关闭按钮
   html += '<button class="close-detail">关闭</button>';
@@ -545,25 +549,35 @@ function displayModelAnswerDetail(data) {
     }
   }
   
-  // 更彻底的间距修复 - 使用Flexbox和父容器控制
+  // 更彻底的间距修复 - 使用DOM操作直接处理
   setTimeout(function() {
-    // 调试 - 查找隐藏元素
-    console.log('检查间距问题:');
-    const titles = document.querySelectorAll('.detail-section-title');
-    titles.forEach((title, index) => {
-      console.log(`标题 ${index+1} 的下一个兄弟元素:`, title.nextElementSibling);
-      console.log(`标题 ${index+1} 和下一个元素之间的节点:`, title.nextSibling);
-    });
-    
-    // 手动清除中间可能存在的文本节点
-    titles.forEach(title => {
-      let next = title.nextSibling;
-      while (next && next.nodeType === 3) { // 文本节点
-        const toRemove = next;
-        next = next.nextSibling;
-        toRemove.parentNode.removeChild(toRemove);
+    // 移除标签内容顶部的空白
+    document.querySelectorAll('.tabcontent').forEach(content => {
+      content.style.margin = '0';
+      content.style.padding = '0';
+      content.style.border = 'none';
+      
+      // 确保第一个子元素没有顶部边距
+      if (content.firstElementChild) {
+        content.firstElementChild.style.marginTop = '0';
+        content.firstElementChild.style.paddingTop = '0';
       }
     });
+    
+    // 移除任何可能存在的空文本节点
+    const cleanWhitespace = (node) => {
+      for (let i = 0; i < node.childNodes.length; i++) {
+        const child = node.childNodes[i];
+        if (child.nodeType === 3 && child.nodeValue.trim() === '') { // 文本节点且为空白
+          node.removeChild(child);
+          i--;
+        } else if (child.nodeType === 1) { // 元素节点
+          cleanWhitespace(child);
+        }
+      }
+    };
+    
+    cleanWhitespace(detailPanel[0]);
     
     // 强制刷新布局
     detailPanel[0].offsetHeight;

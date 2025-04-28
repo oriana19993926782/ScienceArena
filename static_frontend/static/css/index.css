@@ -837,8 +837,9 @@ table.dataTable td[data-dt-column="1"] {
 
 .tabcontent {
   display: none;
-  padding: 10px;
-  border: 1px solid #ccc;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: none;
   border-top: none;
   border-radius: 0 0 5px 5px;
   animation: fadeEffect 0.5s;
@@ -1159,4 +1160,66 @@ table.dataTable td[data-dt-column="1"] {
 .parsed-answer-box p:first-of-type {
   margin-top: 0 !important;
   padding-top: 0 !important;
+}
+
+.tab {
+  margin: 0 !important;
+  padding: 0 !important; 
+  overflow: hidden;
+  border-bottom: 1px solid #ccc;
+  margin-top: 15px !important;
+  margin-bottom: 0 !important;
+}
+
+.tablinks {
+  background-color: #f8f8f8;
+  border: 1px solid #ccc;
+  border-bottom: none;
+  float: left;
+  outline: none;
+  cursor: pointer;
+  padding: 5px 10px;
+  transition: 0.3s;
+  margin-right: 2px;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  margin-bottom: 0 !important;
+}
+
+.tablinks:hover {
+  background-color: #ddd;
+}
+
+.tablinks.active {
+  background-color: #fff;
+  border-bottom-color: #fff;
+  position: relative;
+  bottom: -1px;
+}
+
+.tabcontent {
+  display: none;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: none;
+  border-top: none;
+}
+
+.tabcontent > div {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+.tabcontent > div:first-child {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+.animate-top {
+  animation: animatetop 0.4s;
+}
+
+@keyframes animatetop {
+  from {opacity: 0;}
+  to {opacity: 1;}
 }
