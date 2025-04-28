@@ -599,23 +599,80 @@ table.dataTable td[data-dt-column="1"] {
   cursor: pointer;
 }
 
-/* 模型回答详情面板样式 - matharena风格 */
+/* 详情面板样式 */
 .model-answer-detail-panel {
   display: none;
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  padding: 20px;
-  background-color: #fff;
-  width: 90%;
-  max-width: 1000px;
+  width: 80%;
+  max-width: 900px;
   max-height: 80vh;
   overflow-y: auto;
-  border: 1px solid #ddd;
+  background-color: white;
+  padding: 20px;
   border-radius: 5px;
-  box-shadow: 0 3px 15px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
   z-index: 1001;
+  line-height: 1.6;
+}
+
+/* 减少标题与内容之间的垂直间距 */
+.model-answer-detail-panel h4 {
+  margin-top: 14px;  /* 减小顶部边距 */
+  margin-bottom: 4px; /* 进一步减小底部边距 */
+  font-weight: 600;
+}
+
+/* 减少内容盒子的边距和内边距 */
+.model-answer-detail-panel .box {
+  margin-top: 0;
+  margin-bottom: 12px;
+  padding: 8px 12px; /* 减小内边距 */
+}
+
+/* 确保MathJax公式不添加额外间距 */
+.model-answer-detail-panel mjx-container {
+  margin-top: 3px !important;
+  margin-bottom: 3px !important;
+}
+
+/* 避免嵌套元素中的边距合并 */
+.problem-box > p:first-child,
+.solution-box > p:first-child,
+.response-box > p:first-child,
+.parsed-answer-box > p:first-child {
+  margin-top: 3px;
+  margin-bottom: 8px;
+}
+
+.problem-box > p:last-child,
+.solution-box > p:last-child,
+.response-box > p:last-child,
+.parsed-answer-box > p:last-child {
+  margin-bottom: 3px;
+}
+
+/* 确保第一个元素不添加顶部边距 */
+.problem-box > *:first-child,
+.solution-box > *:first-child,
+.response-box > *:first-child,
+.parsed-answer-box > *:first-child {
+  margin-top: 0 !important;
+}
+
+/* 表格单元格悬停效果 */
+.dataTable td:hover {
+  background-color: #f5f5f5;
+  cursor: pointer;
+}
+
+/* 标题样式优化 */
+.tracesHeading {
+  margin-bottom: 8px;
+  font-size: 18px;
+  font-weight: 600;
 }
 
 /* 遮罩层样式 */
@@ -843,6 +900,7 @@ table.dataTable td[data-dt-column="1"] {
 .response-box p,
 .parsed-answer-box p {
   margin-bottom: 0.8em;
+  line-height: 1.5;
 }
 
 .problem-box ul,
@@ -1007,25 +1065,98 @@ table.dataTable td[data-dt-column="1"] {
   margin-right: 10px;
 }
 
-/* 添加适当的间距 */
-.model-answer-detail-panel {
-  line-height: 1.6;
+/* 详情面板容器样式 */
+.detail-container {
+  display: flex;
+  flex-direction: column;
 }
 
-.model-answer-detail-panel h4 {
-  margin-top: 25px;
-  margin-bottom: 15px;
+/* 详情面板标题样式 - 强制移除底部间距 */
+.detail-section-title {
+  margin-top: 12px !important;
+  margin-bottom: 2px !important;
+  padding: 0 !important;
+  font-weight: 600 !important;
+  line-height: 1.2 !important;
 }
 
-/* 响应式设计优化 */
-@media (max-width: 768px) {
-  .model-answer-detail-panel {
-    padding: 15px;
-    width: 90%;
-    max-height: 85vh;
-  }
-  
-  .figure-placeholder {
-    padding: 10px;
-  }
+/* 直接相邻选择器 - 移除内容盒子顶部边距 */
+.detail-section-title + .box {
+  margin-top: 0 !important;
+  padding-top: 8px !important;
+  padding-bottom: 8px !important;
+}
+
+/* 内部元素样式 - 移除内部元素的边距 */
+.problem-box > *,
+.solution-box > *,
+.response-box > *,
+.parsed-answer-box > * {
+  margin-top: 0 !important;
+  margin-bottom: 8px !important;
+}
+
+.problem-box > *:last-child,
+.solution-box > *:last-child,
+.response-box > *:last-child,
+.parsed-answer-box > *:last-child {
+  margin-bottom: 0 !important;
+}
+
+/* 强制覆盖任何可能的边距 */
+#traces h4 {
+  margin-top: 10px !important;
+  margin-bottom: 2px !important;
+}
+
+#traces .box {
+  margin-top: 0 !important;
+  padding-top: 6px !important;
+  padding-bottom: 6px !important;
+}
+
+/* 表格单元格居中显示 */
+.centered {
+  text-align: center;
+  width: 100%;
+}
+
+/* 表格标题样式 */
+.table-heading {
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.2rem;
+  color: #276dff;
+  margin-bottom: 1rem;
+}
+
+/* 确保Markdown内容中的标题没有额外边距 */
+.problem-box h1, .problem-box h2, .problem-box h3, .problem-box h4, .problem-box h5, .problem-box h6,
+.solution-box h1, .solution-box h2, .solution-box h3, .solution-box h4, .solution-box h5, .solution-box h6,
+.response-box h1, .response-box h2, .response-box h3, .response-box h4, .response-box h5, .response-box h6,
+.parsed-answer-box h1, .parsed-answer-box h2, .parsed-answer-box h3, .parsed-answer-box h4, .parsed-answer-box h5, .parsed-answer-box h6 {
+  margin-top: 0.5em !important;
+  margin-bottom: 0.3em !important;
+}
+
+/* 强制MathJax容器的边距 */
+.model-answer-detail-panel mjx-container,
+#traces mjx-container,
+.problem-box mjx-container,
+.solution-box mjx-container,
+.response-box mjx-container,
+.parsed-answer-box mjx-container {
+  margin-top: 2px !important;
+  margin-bottom: 2px !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+/* 移除段落上方的额外间距 */
+.problem-box p:first-of-type,
+.solution-box p:first-of-type,
+.response-box p:first-of-type,
+.parsed-answer-box p:first-of-type {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
 }

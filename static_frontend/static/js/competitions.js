@@ -227,7 +227,7 @@ function reloadTableData(competitionId) {
     });
     
     // Overall视图显示描述性文本，但不显示点击提示
-    $('.tableHeading').html('<div style="text-align: center; font-weight: bold; font-size: 1.2rem; color: #276dff; margin-bottom: 1rem;">Overall model performance on scientific competitions.</div>');
+    $('.tableHeading').html('<div class="table-heading">Overall model performance on scientific competitions.</div>');
   } 
   // 如果不是overall视图，添加问题列
   else if (competitionId !== 'overall' && data.models.length > 0 && data.models[0].problems) {
@@ -239,7 +239,7 @@ function reloadTableData(competitionId) {
       width: "100px", // 设置固定宽度
       render: function(data) {
         // 使用自定义渲染确保数据居中显示
-        return '<div style="text-align: center; width: 100%;">' + data + '</div>';
+        return '<div class="centered">' + data + '</div>';
       }
     });
     
@@ -260,7 +260,7 @@ function reloadTableData(competitionId) {
     });
     
     // 非Overall视图显示提示文本
-    $('.tableHeading').html('<div style="text-align: center; font-weight: bold; font-size: 1.2rem; color: #276dff; margin-bottom: 1rem;">' + competitionId + ' model performance.</div>');
+    $('.tableHeading').html(`<div class="table-heading">${competitionId} model performance.</div>`);
   }
   
   // 构建表格配置
@@ -462,12 +462,16 @@ function displayModelAnswerDetail(data) {
   
   // 创建标题
   let html = `
-    <div id="traces">
+    <div id="traces" class="detail-container" style="margin:0; padding:0;">
       <h2 class="tracesHeading">Solution: Model ${data.modelName} for Problem #${data.questionId}</h2>
-      <h4 style="font-weight: bold;">Problem</h4>
-      <div class="marked box problem-box">${processContent(data.originalQuestion)}</div>
-      <h4 style="font-weight: bold;">Correct Answer</h4>
-      <div class="marked box solution-box">${processContent(data.correctAnswer)}</div>
+      <div style="display:flex; flex-direction:column; gap:0;">
+        <h4 class="detail-section-title" style="margin:0 !important; padding:0 !important;">Problem</h4>
+        <div class="marked box problem-box" style="margin:0 !important; padding:8px !important;">${processContent(data.originalQuestion)}</div>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:0; margin-top:10px;">
+        <h4 class="detail-section-title" style="margin:0 !important; padding:0 !important;">Correct Answer</h4>
+        <div class="marked box solution-box" style="margin:0 !important; padding:8px !important;">${processContent(data.correctAnswer)}</div>
+      </div>
   `;
   
   // 创建标签页
@@ -483,10 +487,14 @@ function displayModelAnswerDetail(data) {
     
     html += `
       <div class="tabcontent" id="tab${index}" style="display: ${index === 0 ? 'block' : 'none'}">
-        <h4 style="font-weight: bold;">Parsed Answer</h4>
-        <div class="marked box parsed-answer-box ${isCorrect ? 'correct' : 'incorrect'}">${processContent(detail.parsedAnswer)}</div>
-        <h4 style="font-weight: bold;">Full Model Solution</h4>
-        <div class="marked box response-box">${processContent(detail.fullSolution)}</div>
+        <div style="display:flex; flex-direction:column; gap:0;">
+          <h4 class="detail-section-title" style="margin:0 !important; padding:0 !important;">Parsed Answer</h4>
+          <div class="marked box parsed-answer-box ${isCorrect ? 'correct' : 'incorrect'}" style="margin:0 !important; padding:8px !important;">${processContent(detail.parsedAnswer)}</div>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:0; margin-top:10px;">
+          <h4 class="detail-section-title" style="margin:0 !important; padding:0 !important;">Full Model Solution</h4>
+          <div class="marked box response-box" style="margin:0 !important; padding:8px !important;">${processContent(detail.fullSolution)}</div>
+        </div>
       </div>
     `;
   });
@@ -536,6 +544,30 @@ function displayModelAnswerDetail(data) {
       console.error('MathJax渲染失败:', e);
     }
   }
+  
+  // 更彻底的间距修复 - 使用Flexbox和父容器控制
+  setTimeout(function() {
+    // 调试 - 查找隐藏元素
+    console.log('检查间距问题:');
+    const titles = document.querySelectorAll('.detail-section-title');
+    titles.forEach((title, index) => {
+      console.log(`标题 ${index+1} 的下一个兄弟元素:`, title.nextElementSibling);
+      console.log(`标题 ${index+1} 和下一个元素之间的节点:`, title.nextSibling);
+    });
+    
+    // 手动清除中间可能存在的文本节点
+    titles.forEach(title => {
+      let next = title.nextSibling;
+      while (next && next.nodeType === 3) { // 文本节点
+        const toRemove = next;
+        next = next.nextSibling;
+        toRemove.parentNode.removeChild(toRemove);
+      }
+    });
+    
+    // 强制刷新布局
+    detailPanel[0].offsetHeight;
+  }, 100);
   
   // 添加关闭按钮事件
   $('.close-detail').on('click', function() {
