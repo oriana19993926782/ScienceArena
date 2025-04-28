@@ -521,7 +521,7 @@ function displayModelAnswerDetail(data) {
     // 当切换标签页时重新渲染数学公式
     if (window.MathJax) {
       MathJax.typesetPromise([document.getElementById(tabId)]).catch(function (err) {
-        console.log('MathJax typeset failed: ' + err.message);
+        console.log('MathJax渲染失败:', err);
       });
     }
   };
@@ -630,42 +630,138 @@ function processContent(text) {
   
   let processed = '';
   
-  // 预处理文本，清理不规范的LaTeX格式
-  text = cleanupLatexFormat(text);
+  // 检查是否包含Markdown格式的标题，需要在其他预处理前进行
+  const containsMarkdownHeading = /^#{1,6}\s+.+$/m.test(text);
   
-  // 判断内容类型
-  if (text.includes('<table') || (text.includes('<') && text.includes('>') && !text.includes('##') && !text.includes('**'))) {
-    // 已经是HTML格式，使用DOMPurify清洁
-    processed = DOMPurify.sanitize(text, {
-      ALLOWED_TAGS: ['table', 'thead', 'tbody', 'tr', 'th', 'td', 'br', 'p', 'div', 'span', 'b', 'i', 'strong', 'em', 'sup', 'sub', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'ul', 'ol', 'li', 'blockquote', 'code', 'pre'],
-      ALLOWED_ATTR: ['style', 'class', 'id', 'colspan', 'rowspan', 'align']
-    });
-  } else if (text.includes('##') || text.includes('**') || text.includes('- ') || text.includes('* ') || (text.includes('[') && text.includes(']('))) {
-    // 看起来是Markdown格式，使用Marked解析
+  // 先进行内容类型判断
+  let contentType = determineContentType(text);
+  
+  // 基于内容类型选择处理方式
+  if (contentType === 'markdown' || containsMarkdownHeading) {
+    // Markdown内容处理
     try {
-      // 首先用DOMPurify清洁原始文本，防止XML注入
+      // 首先用DOMPurify清洁原始文本，防止XSS
       const cleanText = DOMPurify.sanitize(text, { ALLOWED_TAGS: [] });
-      // 然后使用Marked解析Markdown
+      
+      // 配置marked选项，确保正确处理Markdown标题
+      marked.use({
+        headerIds: false,
+        mangle: false
+      });
+      
+      // 使用marked解析Markdown
       processed = marked.parse(cleanText);
-      // 最后再次用DOMPurify清洁生成的HTML
+      
+      // 再次用DOMPurify清洁生成的HTML
       processed = DOMPurify.sanitize(processed, {
-        ALLOWED_TAGS: ['table', 'thead', 'tbody', 'tr', 'th', 'td', 'br', 'p', 'div', 'span', 'b', 'i', 'strong', 'em', 'sup', 'sub', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'ul', 'ol', 'li', 'blockquote', 'code', 'pre', 'a', 'img'],
+        ALLOWED_TAGS: ['table', 'thead', 'tbody', 'tr', 'th', 'td', 'br', 'p', 'div', 'span', 'b', 'i', 'strong', 'em', 'sup', 'sub', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'ul', 'ol', 'li', 'blockquote', 'code', 'pre', 'a', 'img', 'figure', 'figcaption'],
         ALLOWED_ATTR: ['style', 'class', 'id', 'colspan', 'rowspan', 'align', 'href', 'src', 'alt', 'title']
       });
     } catch (e) {
       console.error('Markdown解析错误:', e);
-      // 解析失败，回退到普通HTML转义
-      processed = escapeHtmlBasic(text);
+      // 解析失败，回退到基本处理
+      processed = preprocessComplexContent(text);
     }
+  } else if (contentType === 'html') {
+    // HTML内容，使用DOMPurify清洁
+    processed = DOMPurify.sanitize(text, {
+      ALLOWED_TAGS: ['table', 'thead', 'tbody', 'tr', 'th', 'td', 'br', 'p', 'div', 'span', 'b', 'i', 'strong', 'em', 'sup', 'sub', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'ul', 'ol', 'li', 'blockquote', 'code', 'pre', 'figure', 'figcaption', 'img'],
+      ALLOWED_ATTR: ['style', 'class', 'id', 'colspan', 'rowspan', 'align', 'src', 'alt', 'title']
+    });
   } else {
-    // 普通文本，执行基本HTML转义但保留换行
-    processed = escapeHtmlBasic(text);
+    // 复杂文本内容，进行预处理后显示
+    processed = preprocessComplexContent(text);
   }
   
   return processed;
 }
 
-// 清理不规范的LaTeX格式
+// 确定内容类型
+function determineContentType(text) {
+  if (!text) return 'plain';
+  
+  // 检查是否包含HTML标签
+  if (text.includes('<table') || 
+      (text.includes('<') && text.includes('>') && 
+       !text.includes('##') && !text.includes('**'))) {
+    return 'html';
+  }
+  
+  // 检查是否包含Markdown格式
+  const markdownPatterns = [
+    /^#{1,6}\s+.+$/m,         // 标题: # Heading
+    /\*\*[\s\S]+?\*\*/,       // 粗体: **bold**
+    /\*[\s\S]+?\*/,           // 斜体: *italic*
+    /^>\s+.+$/m,              // 引用: > quote
+    /^-\s+.+$/m,              // 无序列表: - item
+    /^[0-9]+\.\s+.+$/m,       // 有序列表: 1. item
+    /\[.+?\]\(.+?\)/,         // 链接: [text](url)
+    /!\[.+?\]\(.+?\)/,        // 图片: ![alt](src)
+    /^```[\s\S]*?```$/m,      // 代码块: ```code```
+    /`[^`]+`/                 // 行内代码: `code`
+  ];
+  
+  for (const pattern of markdownPatterns) {
+    if (pattern.test(text)) {
+      return 'markdown';
+    }
+  }
+  
+  // 检查关键字或短语
+  if (text.includes('## ') || 
+      text.includes('**') || 
+      text.includes('- ') || 
+      text.includes('* ') || 
+      (text.includes('[') && text.includes('](')) ||
+      /Mark the statements as true \(T\) or false \(F\)/.test(text)) {
+    return 'markdown';
+  }
+  
+  return 'complex';
+}
+
+// 预处理复杂内容，包括LaTeX公式、图表引用和列表结构
+function preprocessComplexContent(text) {
+  if (!text) return '';
+  
+  // 标题处理 (处理 ## 风格的标题)
+  text = text.replace(/^##\s+(.*?)$/gm, '<h2>$1</h2>');
+  text = text.replace(/^###\s+(.*?)$/gm, '<h3>$1</h3>');
+  text = text.replace(/^####\s+(.*?)$/gm, '<h4>$1</h4>');
+  
+  // 1. 清理双重转义的反斜杠
+  text = text.replace(/\\\\/g, '\\');
+  
+  // 2. 处理LaTeX公式
+  text = cleanupLatexFormat(text);
+  
+  // 3. 处理图表引用
+  text = processImageReferences(text);
+  
+  // 4. 处理列表结构
+  text = processLists(text);
+  
+  // 5. 处理段落结构
+  text = processParagraphs(text);
+  
+  // 6. 处理True/False选项
+  text = processTrueFalseOptions(text);
+  
+  return text;
+}
+
+// 处理True/False选项
+function processTrueFalseOptions(text) {
+  // 识别以字母加点开头的True/False题选项
+  const optionPattern = /([A-Z])\.\s+(.*?(?:true|false|True|False|TRUE|FALSE).*?)(?=\s*[A-Z]\.|$)/gs;
+  
+  return text.replace(optionPattern, function(match, letter, content) {
+    // 转换为带样式的选项
+    return `<div class="answer-option"><span class="answer-option-label">${letter}.</span>${content}</div>`;
+  });
+}
+
+// 清理LaTeX公式格式
 function cleanupLatexFormat(text) {
   if (!text) return '';
   
@@ -675,48 +771,84 @@ function cleanupLatexFormat(text) {
   let result = '';
   let lines = text.split('\n');
   
-  // 如果只有一行文本，且包含不完整的LaTeX标签，则直接返回
-  if (lines.length === 1) {
+  // 如果只有一行文本且包含完整的LaTeX标记，直接返回
+  if (lines.length === 1 && 
+      ((text.match(/\$\$/g) || []).length % 2 === 0)) {
     return text;
+  }
+  
+  // 首先修复不完整的LaTeX分隔符
+  for (let i = 0; i < lines.length; i++) {
+    // 如果一行中有奇数个$$，在行尾添加一个$$
+    const dollarCount = (lines[i].match(/\$\$/g) || []).length;
+    if (dollarCount % 2 !== 0) {
+      if (i < lines.length - 1 && lines[i+1].includes('$$')) {
+        // 如果下一行有$$，则不添加
+      } else {
+        lines[i] += ' $$';
+      }
+    }
   }
   
   // 处理多行LaTeX
   for (let i = 0; i < lines.length; i++) {
     let line = lines[i].trim();
     
+    // 跳过空行
+    if (line === '') {
+      result += '\n';
+      continue;
+    }
+    
     // 检测LaTeX块的开始
     if (line.includes('$$') && !inLatexBlock) {
-      // 找到第一个 $$ 的位置
-      const startPos = line.indexOf('$$');
+      // 寻找所有$$出现的位置
+      let positions = [];
+      let pos = line.indexOf('$$');
+      while (pos !== -1) {
+        positions.push(pos);
+        pos = line.indexOf('$$', pos + 2);
+      }
       
-      // 把 $$ 之前的内容添加到结果中
+      // 如果有偶数个$$，表示这一行包含完整的LaTeX块
+      if (positions.length % 2 === 0) {
+        result += line + '\n';
+        continue;
+      }
+      
+      // 找到第一个$$的位置
+      const startPos = positions[0];
+      
+      // 把$$之前的内容添加到结果中
       if (startPos > 0) {
-        result += line.substring(0, startPos) + ' ';
+        result += line.substring(0, startPos);
       }
       
       inLatexBlock = true;
       
-      // 从这一行的 $$ 后面开始收集LaTeX内容
+      // 从这一行的$$后面开始收集LaTeX内容
       latexContent = line.substring(startPos + 2) + ' ';
     } 
     // 检测LaTeX块的结束
     else if (line.includes('$$') && inLatexBlock) {
-      // 找到最后一个 $$ 的位置
-      const endPos = line.lastIndexOf('$$');
+      // 找到最后一个$$的位置
+      const endPos = line.indexOf('$$');
       
-      // 把这一行直到 $$ 的内容添加到LaTeX内容中
+      // 把这一行直到$$的内容添加到LaTeX内容中
       latexContent += line.substring(0, endPos);
       
       // 清理LaTeX内容，删除多余的空格和换行
-      latexContent = latexContent.replace(/\s+/g, ' ').trim();
+      latexContent = cleanupMathExpression(latexContent);
       
       // 添加清理后的LaTeX块到结果中
       result += '$$' + latexContent + '$$';
       
-      // 把 $$ 之后的内容添加到结果中
+      // 把$$之后的内容添加到结果中
       if (endPos + 2 < line.length) {
-        result += ' ' + line.substring(endPos + 2);
+        result += line.substring(endPos + 2);
       }
+      
+      result += '\n';
       
       inLatexBlock = false;
       latexContent = '';
@@ -724,6 +856,24 @@ function cleanupLatexFormat(text) {
     // 继续收集LaTeX块内容
     else if (inLatexBlock) {
       latexContent += line + ' ';
+    }
+    // 处理包含LaTeX块和文本混合的行
+    else if (line.includes('$$')) {
+      // 将所有连续的$$对之间的内容进行清理
+      let parts = line.split('$$');
+      let newLine = '';
+      
+      for (let j = 0; j < parts.length; j++) {
+        if (j % 2 === 0) {
+          // 文本部分
+          newLine += parts[j];
+        } else {
+          // LaTeX部分
+          newLine += '$$' + cleanupMathExpression(parts[j]) + '$$';
+        }
+      }
+      
+      result += newLine + '\n';
     }
     // 普通行，直接添加到结果中
     else {
@@ -734,23 +884,84 @@ function cleanupLatexFormat(text) {
   // 如果处理完所有行后，还在LaTeX环境内，则关闭它
   if (inLatexBlock) {
     // 清理LaTeX内容，删除多余的空格
-    latexContent = latexContent.replace(/\s+/g, ' ').trim();
-    result += '$$' + latexContent + '$$';
+    latexContent = cleanupMathExpression(latexContent);
+    result += '$$' + latexContent + '$$\n';
   }
   
-  // 清理最终结果中的一些常见问题
-  result = result
-    // 修复一些常见的LaTeX公式错误
-    .replace(/\$\$\s+/g, '$$')
-    .replace(/\s+\$\$/g, '$$')
-    // 修复不匹配的大括号
-    .replace(/\{(\d+)\}/g, '{$1}')
-    // 确保化学符号格式正确
-    .replace(/(\w+)\_(\d+)/g, '$1_{$2}')
-    // 清理多余空格
-    .replace(/  +/g, ' ');
+  return result;
+}
+
+// 清理数学表达式
+function cleanupMathExpression(expr) {
+  if (!expr) return '';
+  
+  // 删除多余的空格和换行
+  expr = expr.replace(/\s+/g, ' ').trim();
+  
+  // 修复常见的LaTeX错误
+  expr = expr
+    // 修复化学式下标
+    .replace(/\_(\d+)/g, '_{$1}')
+    // 修复不成对的大括号
+    .replace(/(\{)([^{}]*)(?!\})/g, '$1$2}')
+    .replace(/(?<!\{)([^{}]*)(\})/g, '{$1$2')
+    // 修复mathrm命令
+    .replace(/\\mathrm\{\{([^}]*)\}\}/g, '\\mathrm{$1}')
+    // 删除连续的分号和空格
+    .replace(/;\s*;/g, ';')
+    // 修复意外中断的命令
+    .replace(/\\([a-zA-Z]+)$/g, '\\$1 ')
+    // 简化连续空格
+    .replace(/\s{2,}/g, ' ');
+  
+  return expr;
+}
+
+// 处理图表引用
+function processImageReferences(text) {
+  // 将[figureX]格式转换为HTML图形占位符
+  return text.replace(/\[figure(\d+)\]/g, 
+    '<div class="figure-placeholder"><span class="figure-label">Figure $1 Placeholder</span></div>');
+}
+
+// 处理列表结构
+function processLists(text) {
+  // 1. 处理分号分隔的编号列表
+  let result = text;
+  
+  // 寻找类似 "1. item; 2. item; 3. item" 这样的模式
+  const listPattern = /(\d+\.\s*[^;.]+)((?:;\s*\d+\.\s*[^;.]+)+)(?:[;.]|$)/g;
+  
+  // 用于匹配单个列表项
+  const itemPattern = /;\s*(\d+)\.\s*([^;.]+)/g;
+  
+  result = result.replace(listPattern, function(match, firstItem, otherItems) {
+    // 提取第一个列表项的编号和内容
+    const firstNumber = firstItem.match(/(\d+)\./)[1];
+    const firstContent = firstItem.replace(/\d+\.\s*/, '');
+    
+    // 开始构建HTML列表
+    let listHTML = '<ol class="structured-list" start="' + firstNumber + '">\n';
+    listHTML += '<li>' + firstContent.trim() + '</li>\n';
+    
+    // 处理其他列表项
+    let item;
+    while ((item = itemPattern.exec(otherItems)) !== null) {
+      listHTML += '<li>' + item[2].trim() + '</li>\n';
+    }
+    
+    listHTML += '</ol>';
+    return listHTML;
+  });
   
   return result;
+}
+
+// 处理段落结构
+function processParagraphs(text) {
+  // 将连续的换行符转换为段落分隔
+  return text.replace(/\n{2,}/g, '\n\n')
+             .replace(/([^\n])\n([^\n])/g, '$1<br>$2');
 }
 
 // 基本HTML转义（不处理Markdown，仅转义HTML特殊字符并保留换行）

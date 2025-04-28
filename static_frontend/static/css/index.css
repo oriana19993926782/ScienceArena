@@ -912,3 +912,120 @@ table.dataTable td[data-dt-column="1"] {
 .parsed-answer-box em {
   font-style: italic;
 }
+
+/* 复杂科学内容样式 */
+
+/* 图表占位符样式 */
+.figure-placeholder {
+  background-color: #f8f8f8;
+  border: 1px dashed #ccc;
+  border-radius: 5px;
+  padding: 15px;
+  margin: 15px 0;
+  text-align: center;
+  position: relative;
+}
+
+.figure-label {
+  font-style: italic;
+  color: #666;
+  display: block;
+  padding: 5px;
+}
+
+/* 结构化列表样式 */
+.structured-list {
+  padding-left: 30px;
+  margin: 10px 0;
+  list-style-position: outside;
+}
+
+.structured-list li {
+  padding: 5px 0;
+  margin-bottom: 5px;
+}
+
+/* 增强LaTeX公式显示 */
+.problem-box .mjx-chtml,
+.solution-box .mjx-chtml,
+.response-box .mjx-chtml,
+.parsed-answer-box .mjx-chtml {
+  margin: 5px 0 !important;
+  display: inline-block !important;
+}
+
+/* 行内公式与文本对齐 */
+.mjx-chtml.MJXc-display {
+  margin: 15px 0 !important;
+  padding: 10px 0;
+  border-top: 1px solid #eee;
+  border-bottom: 1px solid #eee;
+  background-color: #fcfcfc;
+}
+
+/* 段落样式增强 */
+.problem-box p,
+.solution-box p,
+.response-box p,
+.parsed-answer-box p {
+  margin-bottom: 1em;
+  line-height: 1.5;
+}
+
+/* 表格样式优化 */
+.problem-box table,
+.solution-box table,
+.response-box table,
+.parsed-answer-box table {
+  margin: 15px 0;
+  border-collapse: collapse;
+  width: 100%;
+  overflow-x: auto;
+  display: block;
+}
+
+@media (min-width: 768px) {
+  .problem-box table,
+  .solution-box table,
+  .response-box table,
+  .parsed-answer-box table {
+    display: table;
+    width: 100%;
+  }
+}
+
+/* 答案选项样式 */
+.answer-option {
+  padding: 10px;
+  margin: 5px 0;
+  border-left: 3px solid #ddd;
+  background-color: #f9f9f9;
+}
+
+.answer-option-label {
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+/* 添加适当的间距 */
+.model-answer-detail-panel {
+  line-height: 1.6;
+}
+
+.model-answer-detail-panel h4 {
+  margin-top: 25px;
+  margin-bottom: 15px;
+}
+
+/* 响应式设计优化 */
+@media (max-width: 768px) {
+  .model-answer-detail-panel {
+    padding: 15px;
+    width: 90%;
+    max-height: 85vh;
+  }
+  
+  .figure-placeholder {
+    padding: 10px;
+  }
+}
