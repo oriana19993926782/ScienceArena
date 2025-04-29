@@ -662,460 +662,6 @@ table.dataTable td[data-dt-column="1"] {
   margin-top: 0 !important;
 }
 
-/* 表格单元格悬停效果 */
-.dataTable td:hover {
-  background-color: #f5f5f5;
-  cursor: pointer;
-}
-
-/* 标题样式优化 */
-.tracesHeading {
-  margin-bottom: 8px;
-  font-size: 18px;
-  font-weight: 600;
-}
-
-/* 遮罩层样式 */
-.modal-overlay {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: 1000;
-}
-
-/* 关闭按钮样式 */
-.close-detail {
-  position: absolute;
-  top: 15px;
-  right: 15px;
-  background-color: #f0f0f0;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  padding: 5px 10px;
-  cursor: pointer;
-  font-size: 14px;
-  z-index: 1002;
-  transition: background-color 0.2s;
-}
-
-.close-detail:hover {
-  background-color: #e0e0e0;
-}
-
-#traces {
-  display: inline-block;
-  width: 100%;
-}
-
-.tracesHeading {
-  font-size: 1.5rem;
-  margin-bottom: 1rem;
-  font-weight: bold;
-}
-
-.box {
-  padding: 1rem;
-  margin-bottom: 1rem;
-  border-radius: 5px;
-  white-space: pre-wrap;
-  tab-size: 4;
-}
-
-.problem-box {
-  background-color: #f8f9fa;
-  border-left: 3px solid #276dff;
-}
-
-.solution-box {
-  background-color: #f0f7ff;
-  border-left: 3px solid #276dff;
-}
-
-.parsed-answer-box {
-  background-color: #f5f5f5;
-  padding: 0.75rem;
-  border-radius: 4px;
-}
-
-.parsed-answer-box.correct {
-  border-left: 3px solid #28a745;
-}
-
-.parsed-answer-box.incorrect {
-  border-left: 3px solid #dc3545;
-}
-
-.response-box {
-  background-color: #f8f9fa;
-  border-left: 3px solid #6c757d;
-}
-
-/* 表格样式 - matharena风格 */
-.problem-box table,
-.solution-box table,
-.response-box table,
-.parsed-answer-box table {
-  width: 100%;
-  border-collapse: collapse;
-  margin: 10px 0;
-  font-size: 14px;
-}
-
-.problem-box table th,
-.solution-box table th,
-.response-box table th,
-.parsed-answer-box table th {
-  background-color: #f5f5f5;
-  padding: 8px;
-  text-align: left;
-  font-weight: bold;
-  border: 1px solid #ddd;
-}
-
-.problem-box table td,
-.solution-box table td,
-.response-box table td,
-.parsed-answer-box table td {
-  padding: 8px;
-  border: 1px solid #ddd;
-  vertical-align: top;
-}
-
-/* 数学公式样式 */
-.mjx-chtml {
-  margin: 0 !important;
-  display: inline-block !important;
-}
-
-/* 增强表格可读性 */
-.problem-box table tr:nth-child(even),
-.solution-box table tr:nth-child(even),
-.response-box table tr:nth-child(even),
-.parsed-answer-box table tr:nth-child(even) {
-  background-color: #f9f9f9;
-}
-
-/* 空单元格样式 */
-.problem-box table td:empty,
-.solution-box table td:empty,
-.response-box table td:empty,
-.parsed-answer-box table td:empty {
-  height: 24px;
-}
-
-/* 标签样式 */
-.tab {
-  overflow: hidden;
-  border: 1px solid #ccc;
-  background-color: #f1f1f1;
-  border-radius: 5px 5px 0 0;
-}
-
-.tab button {
-  background-color: inherit;
-  float: left;
-  border: none;
-  outline: none;
-  cursor: pointer;
-  padding: 10px 16px;
-  transition: 0.3s;
-  font-size: 14px;
-}
-
-.tab button:hover {
-  background-color: #ddd;
-}
-
-.tab button.active {
-  background-color: #276dff;
-  color: white;
-}
-
-.tabcontent {
-  display: none;
-  padding: 0 !important;
-  margin: 0 !important;
-  border: none;
-  border-top: none;
-  border-radius: 0 0 5px 5px;
-  animation: fadeEffect 0.5s;
-}
-
-/* 淡入动画 */
-@keyframes fadeEffect {
-  from {opacity: 0;}
-  to {opacity: 1;}
-}
-
-/* Markdown样式 - matharena风格 */
-.problem-box h1,
-.solution-box h1,
-.response-box h1,
-.parsed-answer-box h1 {
-  font-size: 1.8em;
-  margin-top: 1em;
-  margin-bottom: 0.5em;
-  font-weight: 600;
-  border-bottom: 1px solid #eee;
-  padding-bottom: 0.2em;
-}
-
-.problem-box h2,
-.solution-box h2,
-.response-box h2,
-.parsed-answer-box h2 {
-  font-size: 1.5em;
-  margin-top: 1em;
-  margin-bottom: 0.5em;
-  font-weight: 600;
-  border-bottom: 1px solid #eee;
-  padding-bottom: 0.2em;
-}
-
-.problem-box h3,
-.solution-box h3,
-.response-box h3,
-.parsed-answer-box h3 {
-  font-size: 1.2em;
-  margin-top: 0.8em;
-  margin-bottom: 0.4em;
-  font-weight: 600;
-}
-
-.problem-box h4,
-.solution-box h4,
-.response-box h4,
-.parsed-answer-box h4 {
-  font-size: 1.1em;
-  margin-top: 0.6em;
-  margin-bottom: 0.3em;
-  font-weight: 600;
-}
-
-.problem-box p,
-.solution-box p,
-.response-box p,
-.parsed-answer-box p {
-  margin-bottom: 0.8em;
-  line-height: 1.5;
-}
-
-.problem-box ul,
-.solution-box ul,
-.response-box ul,
-.parsed-answer-box ul,
-.problem-box ol,
-.solution-box ol,
-.response-box ol,
-.parsed-answer-box ol {
-  padding-left: 2em;
-  margin-bottom: 0.8em;
-}
-
-.problem-box ul li,
-.solution-box ul li,
-.response-box ul li,
-.parsed-answer-box ul li,
-.problem-box ol li,
-.solution-box ol li,
-.response-box ol li,
-.parsed-answer-box ol li {
-  margin-bottom: 0.3em;
-}
-
-.problem-box blockquote,
-.solution-box blockquote,
-.response-box blockquote,
-.parsed-answer-box blockquote {
-  padding: 0.5em 1em;
-  margin: 0.8em 0;
-  border-left: 4px solid #ddd;
-  background-color: #f9f9f9;
-}
-
-.problem-box pre,
-.solution-box pre,
-.response-box pre,
-.parsed-answer-box pre {
-  background-color: #f6f8fa;
-  padding: 1em;
-  overflow: auto;
-  border-radius: 3px;
-  margin: 0.8em 0;
-}
-
-.problem-box code,
-.solution-box code,
-.response-box code,
-.parsed-answer-box code {
-  background-color: #f6f8fa;
-  padding: 0.2em 0.4em;
-  border-radius: 3px;
-  font-family: monospace;
-}
-
-.problem-box strong,
-.solution-box strong,
-.response-box strong,
-.parsed-answer-box strong {
-  font-weight: 600;
-}
-
-.problem-box em,
-.solution-box em,
-.response-box em,
-.parsed-answer-box em {
-  font-style: italic;
-}
-
-/* 复杂科学内容样式 */
-
-/* 图表占位符样式 */
-.figure-placeholder {
-  background-color: #f8f8f8;
-  border: 1px dashed #ccc;
-  border-radius: 5px;
-  padding: 15px;
-  margin: 15px 0;
-  text-align: center;
-  position: relative;
-}
-
-.figure-label {
-  font-style: italic;
-  color: #666;
-  display: block;
-  padding: 5px;
-}
-
-/* 结构化列表样式 */
-.structured-list {
-  padding-left: 30px;
-  margin: 10px 0;
-  list-style-position: outside;
-}
-
-.structured-list li {
-  padding: 5px 0;
-  margin-bottom: 5px;
-}
-
-/* 增强LaTeX公式显示 */
-.problem-box .mjx-chtml,
-.solution-box .mjx-chtml,
-.response-box .mjx-chtml,
-.parsed-answer-box .mjx-chtml {
-  margin: 5px 0 !important;
-  display: inline-block !important;
-}
-
-/* 行内公式与文本对齐 */
-.mjx-chtml.MJXc-display {
-  margin: 15px 0 !important;
-  padding: 10px 0;
-  border-top: 1px solid #eee;
-  border-bottom: 1px solid #eee;
-  background-color: #fcfcfc;
-}
-
-/* 段落样式增强 */
-.problem-box p,
-.solution-box p,
-.response-box p,
-.parsed-answer-box p {
-  margin-bottom: 1em;
-  line-height: 1.5;
-}
-
-/* 表格样式优化 */
-.problem-box table,
-.solution-box table,
-.response-box table,
-.parsed-answer-box table {
-  margin: 15px 0;
-  border-collapse: collapse;
-  width: 100%;
-  overflow-x: auto;
-  display: block;
-}
-
-@media (min-width: 768px) {
-  .problem-box table,
-  .solution-box table,
-  .response-box table,
-  .parsed-answer-box table {
-    display: table;
-    width: 100%;
-  }
-}
-
-/* 答案选项样式 */
-.answer-option {
-  padding: 10px;
-  margin: 5px 0;
-  border-left: 3px solid #ddd;
-  background-color: #f9f9f9;
-}
-
-.answer-option-label {
-  font-weight: bold;
-  margin-right: 10px;
-}
-
-/* 详情面板容器样式 */
-.detail-container {
-  display: flex;
-  flex-direction: column;
-}
-
-/* 详情面板标题样式 - 强制移除底部间距 */
-.detail-section-title {
-  margin-top: 12px !important;
-  margin-bottom: 2px !important;
-  padding: 0 !important;
-  font-weight: 600 !important;
-  line-height: 1.2 !important;
-}
-
-/* 直接相邻选择器 - 移除内容盒子顶部边距 */
-.detail-section-title + .box {
-  margin-top: 0 !important;
-  padding-top: 8px !important;
-  padding-bottom: 8px !important;
-}
-
-/* 内部元素样式 - 移除内部元素的边距 */
-.problem-box > *,
-.solution-box > *,
-.response-box > *,
-.parsed-answer-box > * {
-  margin-top: 0 !important;
-  margin-bottom: 8px !important;
-}
-
-.problem-box > *:last-child,
-.solution-box > *:last-child,
-.response-box > *:last-child,
-.parsed-answer-box > *:last-child {
-  margin-bottom: 0 !important;
-}
-
-/* 强制覆盖任何可能的边距 */
-#traces h4 {
-  margin-top: 10px !important;
-  margin-bottom: 2px !important;
-}
-
-#traces .box {
-  margin-top: 0 !important;
-  padding-top: 6px !important;
-  padding-bottom: 6px !important;
-}
-
 /* 表格单元格居中显示 */
 .centered {
   text-align: center;
@@ -1163,27 +709,24 @@ table.dataTable td[data-dt-column="1"] {
 }
 
 .tab {
-  margin: 0 !important;
-  padding: 0 !important; 
   overflow: hidden;
-  border-bottom: 1px solid #ccc;
-  margin-top: 15px !important;
-  margin-bottom: 0 !important;
+  border: 1px solid #ccc;
+  background-color: #f1f1f1;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 .tablinks {
-  background-color: #f8f8f8;
-  border: 1px solid #ccc;
-  border-bottom: none;
+  background-color: inherit;
   float: left;
+  border: none;
   outline: none;
   cursor: pointer;
-  padding: 5px 10px;
+  padding: 10px 16px;
   transition: 0.3s;
-  margin-right: 2px;
-  border-top-left-radius: 4px;
-  border-top-right-radius: 4px;
-  margin-bottom: 0 !important;
+  font-size: 14px;
+  box-sizing: inherit;
 }
 
 .tablinks:hover {
@@ -1191,35 +734,149 @@ table.dataTable td[data-dt-column="1"] {
 }
 
 .tablinks.active {
-  background-color: #fff;
-  border-bottom-color: #fff;
-  position: relative;
-  bottom: -1px;
+  background-color: #ccc;
 }
 
 .tabcontent {
   display: none;
-  padding: 0 !important;
-  margin: 0 !important;
+  padding: 0;
+  margin: 0;
   border: none;
   border-top: none;
+  box-sizing: border-box;
 }
 
-.tabcontent > div {
+/* 紧凑布局专用 - 防止任何形式的空白间隔 */
+h4 {
+  margin: 0;
+  padding: 0;
+  line-height: 1.5;
+}
+
+/* 消除标题和内容之间的空白 */
+.box {
   margin-top: 0 !important;
-  padding-top: 0 !important;
 }
 
-.tabcontent > div:first-child {
+/* 强制移除任何默认边距和内边距 */
+#traces * {
+  margin-top: 0;
+  padding-top: 0;
+}
+
+/* 通用盒子样式 - 确保紧凑布局同时满足matharena风格 */
+.box {
+  width: 100%;
+  margin: 0;
+  padding: 2rem 2rem 1.5rem 2rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  max-height: none;
+  position: relative;
+  overflow-y: visible;
+  box-sizing: border-box;
+}
+
+/* 确保相邻元素之间没有间隔 */
+h4 + .box {
   margin-top: 0 !important;
-  padding-top: 0 !important;
 }
 
-.animate-top {
-  animation: animatetop 0.4s;
+.box + h4 {
+  margin-top: 10px !important;
 }
 
-@keyframes animatetop {
-  from {opacity: 0;}
-  to {opacity: 1;}
+/* 问题框样式 - 精确匹配matharena蓝色背景 */
+.problem-box {
+  background-color: #c7d9ff;
+  white-space: pre-wrap;
+  tab-size: 4;
+  overflow: visible !important;
+}
+
+/* 加强solution-box的matharena风格 */
+.solution-box {
+  background-color: rgb(255, 215, 0); /* 金色背景 */
+  white-space: pre-wrap;
+  tab-size: 4;
+  overflow: visible !important;
+  max-height: none !important;
+}
+
+/* 解析答案容器 */
+.parsed-answer-box {
+  white-space: pre-wrap;
+  tab-size: 4;
+  overflow: visible !important;
+}
+
+.parsed-answer-box.correct {
+  background-color: rgb(232, 245, 233); /* 浅绿色背景 */
+}
+
+.parsed-answer-box.incorrect {
+  background-color: rgb(253, 236, 234); /* 浅红色背景 */
+}
+
+/* 完整解答容器 */
+.response-box {
+  background-color: #ffe4c8; /* 浅橙色背景 */
+  white-space: pre-wrap;
+  tab-size: 4;
+  border: 1px solid #e0e0e0;
+  overflow: visible !important;
+}
+
+/* 标签区域包装容器 - 添加灰色边框 */
+.tab-wrapper {
+  border: 2px solid #cccccc;
+  border-radius: 4px;
+  padding: 10px;
+  margin: 15px 0;
+  background-color: #f9f9f9;
+}
+
+/* 调整标签容器上边距，因为现在它在包装容器内 */
+.tab {
+  margin-top: 0 !important;
+}
+
+/* 标签内容区域调整，确保与包装容器配合良好 */
+.tabcontent {
+  padding: 10px 0;
+}
+
+/* 改进页面模块间距 */
+.model-answer-section {
+  margin-bottom: 15px !important; /* 模块之间的间隔 */
+}
+
+/* 模块内的标题与内容保持紧凑 */
+.model-answer-section h4 {
+  margin-bottom: 5px !important;
+}
+
+/* 标签容器上下间距 */
+.tab-wrapper {
+  margin: 15px 0 !important;
+}
+
+/* 标签内容之间的间距 */
+.tabcontent h4 {
+  margin-top: 10px !important;
+}
+
+/* 第一个标题不需要上边距 */
+.tabcontent h4:first-of-type {
+  margin-top: 5px !important;
+}
+
+/* 确保内容框之间有间距 */
+.box {
+  margin-bottom: 10px !important;
+}
+
+/* 解答框内部内容增加间距提高可读性 */
+.problem-box, .solution-box, .parsed-answer-box, .response-box {
+  padding: 15px !important;
 }

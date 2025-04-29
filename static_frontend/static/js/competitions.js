@@ -460,50 +460,54 @@ function fetchModelAnswer(competitionId, modelName, questionId) {
 function displayModelAnswerDetail(data) {
   const detailPanel = getOrCreateDetailPanel();
   
-  // 创建标题
+  // 创建HTML结构 - 精确匹配matharena风格并添加适当间距
   let html = `
-    <div id="traces" class="detail-container" style="margin:0; padding:0;">
-      <h2 class="tracesHeading">Solution: Model ${data.modelName} for Problem #${data.questionId}</h2>
-      <div style="display:flex; flex-direction:column; gap:0;">
-        <h4 class="detail-section-title" style="margin:0 !important; padding:0 !important;">Problem</h4>
-        <div class="marked box problem-box" style="margin:0 !important; padding:8px !important;">${processContent(data.originalQuestion)}</div>
+    <div id="traces" style="display: inline-block; margin:0; padding:0;">
+      <h2 class="tracesHeading" style="margin-bottom:15px;">Solution: Model ${data.modelName} for Problem #${data.questionId}</h2>
+      <div class="model-answer-section">
+        <h4 style="font-weight: bold; margin:0; padding:0;">Problem</h4>
+        <div style="position: relative; margin:0; padding:0;">
+          <div class="marked box problem-box" style="white-space: pre-wrap; tab-size: 4;">${processContent(data.originalQuestion)}</div>
+        </div>
       </div>
-      <div style="display:flex; flex-direction:column; gap:0; margin-top:10px;">
-        <h4 class="detail-section-title" style="margin:0 !important; padding:0 !important;">Correct Answer</h4>
-        <div class="marked box solution-box" style="margin:0 !important; padding:8px !important;">${processContent(data.correctAnswer)}</div>
+      <div class="model-answer-section">
+        <h4 style="font-weight: bold; margin:0; padding:0;">Correct Answer</h4>
+        <div class="marked box solution-box">${processContent(data.correctAnswer)}</div>
       </div>
   `;
   
-  // 创建一个紧凑的标签页容器
-  html += '<div style="display:flex; flex-direction:column; gap:0; margin-top:10px;">';
+  // 创建包含标签和内容的包装容器
+  html += '<div class="tab-wrapper">';
   
-  // 创建标签按钮
-  html += '<div class="tab" style="margin:0 !important; padding:0 !important; margin-bottom:0 !important;">';
+  // 创建标签页
+  html += '<div class="tab">';
   data.details.forEach((detail, index) => {
-    html += `<button class="tablinks${index === 0 ? ' active' : ''}" onclick="openTab(event, 'tab${index}')" style="margin-bottom:0 !important;">${formatRunLabel(detail.run)}</button>`;
+    html += `<button class="tablinks${index === 0 ? ' active' : ''}" onclick="openTab(event, 'tab${index}')">${formatRunLabel(detail.run)}</button>`;
   });
   html += '</div>';
   
-  // 创建紧凑的标签内容
+  // 创建每个标签页的内容
   data.details.forEach((detail, index) => {
     const isCorrect = detail.parsedAnswer === data.correctAnswer;
     
     html += `
-      <div class="tabcontent" id="tab${index}" style="display:${index === 0 ? 'block' : 'none'}; margin:0 !important; padding:0 !important; border:none !important;">
-        <div style="display:flex; flex-direction:column; gap:0; margin-top:0 !important; padding-top:0 !important;">
-          <h4 class="detail-section-title" style="margin:0 !important; padding:0 !important;">Parsed Answer</h4>
-          <div class="marked box parsed-answer-box ${isCorrect ? 'correct' : 'incorrect'}" style="margin:0 !important; padding:8px !important;">${processContent(detail.parsedAnswer)}</div>
+      <div class="tabcontent" id="tab${index}" style="display:${index === 0 ? 'block' : 'none'};">
+        <div class="model-answer-section">
+          <h4 style="font-weight: bold;">Parsed Answer</h4>
+          <div class="marked box parsed-answer-box ${isCorrect ? 'correct' : 'incorrect'}" style="white-space: pre-wrap; tab-size: 4;">${processContent(detail.parsedAnswer)}</div>
         </div>
-        <div style="display:flex; flex-direction:column; gap:0; margin-top:10px;">
-          <h4 class="detail-section-title" style="margin:0 !important; padding:0 !important;">Full Model Solution</h4>
-          <div class="marked box response-box" style="margin:0 !important; padding:8px !important;">${processContent(detail.fullSolution)}</div>
+        <div class="model-answer-section">
+          <h4 style="font-weight: bold;">Full Model Solution</h4>
+          <div class="marked box response-box" style="white-space: pre-wrap; tab-size: 4;">${processContent(detail.fullSolution)}</div>
         </div>
       </div>
     `;
   });
   
-  html += '</div>'; // 关闭标签页容器
-  html += '</div>'; // 关闭detail-container
+  // 关闭tab-wrapper容器
+  html += '</div>';
+  
+  html += '</div>'; // 关闭traces容器
   
   // 添加关闭按钮
   html += '<button class="close-detail">关闭</button>';
