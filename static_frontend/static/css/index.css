@@ -880,3 +880,13 @@ h4 + .box {
 .problem-box, .solution-box, .parsed-answer-box, .response-box {
   padding: 15px !important;
 }
+
+/* 内容框底部间距增加 */
+.problem-box, .solution-box, .parsed-answer-box, .response-box {
+  margin-bottom: 40px !important;
+}
+
+/* 确保最后一个内容框不需要底部间距 */
+.model-answer-section:last-child .box {
+  margin-bottom: 0 !important;
+}
