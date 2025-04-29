@@ -463,7 +463,7 @@ function displayModelAnswerDetail(data) {
   // 创建HTML结构 - 精确匹配matharena风格并添加适当间距
   let html = `
     <div id="traces" style="display: inline-block; margin:0; padding:0;">
-      <h2 class="tracesHeading" style="margin-bottom:15px;">Solution: Model ${data.modelName} for Problem #${data.questionId}</h2>
+      <h1 id="model-answer-header-title" style="font-size:30px !important; font-weight:bold !important; color:#276dff !important; text-align:center !important; margin-bottom:20px !important;">Solution: Model ${data.modelName} for Problem #${data.questionId}</h1>
       <div class="model-answer-section">
         <h4 style="font-weight: bold; margin:0; padding:0;">Problem</h4>
         <div style="position: relative; margin:0; padding:0;">
@@ -513,6 +513,26 @@ function displayModelAnswerDetail(data) {
   html += '<button class="close-detail">关闭</button>';
   
   detailPanel.html(html);
+  
+  // 使用setTimeout确保DOM已完全加载
+  setTimeout(function() {
+    try {
+      const headerElement = document.getElementById('model-answer-header-title');
+      if (headerElement) {
+        headerElement.style.fontSize = '30px';
+        headerElement.style.fontWeight = 'bold';
+        headerElement.style.color = '#276dff';
+        headerElement.style.textAlign = 'center';
+        headerElement.style.marginBottom = '20px';
+        headerElement.style.display = 'block';
+        console.log('标题样式已应用!');
+      } else {
+        console.error('找不到标题元素!');
+      }
+    } catch (e) {
+      console.error('应用标题样式时出错:', e);
+    }
+  }, 100);
   
   // 显示遮罩层和详情面板
   $('#modalOverlay').show();

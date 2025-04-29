@@ -360,14 +360,7 @@ table.dataTable tbody tr:nth-child(even) {
   overflow-x: auto;
 }
 
-.tracesHeading {
-  font-weight: bold;
-  font-size: 20px;
-  text-align: center;
-  margin: auto;
-  color: #276dff;
-}
-
+/* 移除重复的tracesHeading样式定义 */
 .model-output-header {
   display: flex;
   justify-content: space-between;
@@ -889,4 +882,31 @@ h4 + .box {
 /* 确保最后一个内容框不需要底部间距 */
 .model-answer-section:last-child .box {
   margin-bottom: 0 !important;
+}
+
+/* Parsed Answer标题上方间距 */
+.tabcontent .model-answer-section:first-child h4 {
+  margin-top: 15px !important;
+}
+
+/* 模型答案详情标题样式 */
+#answer-title {
+  font-weight: bold !important;
+  font-size: 20px !important;
+  text-align: center !important;
+  width: 100% !important;
+  color: #276dff !important;
+  margin: 0 auto 20px auto !important;
+  display: block !important;
+}
+
+/* 标题样式 - 匹配matharena */
+#detail-panel .tracesHeading {
+  font-weight: bold !important;
+  font-size: 20px !important;
+  text-align: center !important;
+  margin: auto !important;
+  color: #276dff !important;
+  margin-bottom: 20px !important;
+  display: block !important;
 }
