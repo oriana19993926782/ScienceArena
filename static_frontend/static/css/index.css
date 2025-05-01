@@ -735,7 +735,7 @@ table.dataTable td[data-dt-column="1"] {
 
 .tabcontent {
   display: none;
-  padding-left: 2px !important; /* 增加内边距，特别是左侧 */
+  padding-left: 5px !important; /* 增加内边距，特别是左侧 */
   margin: 0;
   border: none;
   box-sizing: border-box;
