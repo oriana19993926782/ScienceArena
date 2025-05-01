@@ -446,7 +446,7 @@ function fetchModelAnswer(competitionId, modelName, questionId) {
             - 问题: ${cleanQuestionId}
           </div>
         </div>
-        <button class="close-detail">关闭</button>
+        <button class="close-detail" style="position:absolute; top:10px; right:10px; background: #bdc3c7; color: white; border: none; border-radius: 50%; width: 30px; height: 30px; font-size: 18px; cursor: pointer; z-index: 1000; display: flex; align-items: center; justify-content: center;">✕</button>
       `);
       
       // 添加关闭按钮事件
@@ -459,21 +459,24 @@ function fetchModelAnswer(competitionId, modelName, questionId) {
 // 显示模型回答详情 - matharena风格
 function displayModelAnswerDetail(data) {
   const detailPanel = getOrCreateDetailPanel();
+  const modalOverlay = getOrCreateModalOverlay();
   
   // 创建HTML结构 - 精确匹配matharena风格并添加适当间距
   let html = `
-    <div id="traces" style="display: inline-block; margin:0; padding:0;">
-      <h1 id="model-answer-header-title" style="font-size:30px !important; font-weight:bold !important; color:#276dff !important; text-align:center !important; margin-bottom:20px !important;">Solution: Model ${data.modelName} for Problem #${data.questionId}</h1>
-      <div class="model-answer-section">
-        <h4 style="font-weight: bold; font-size: 26px;">Problem</h4>
-        <div style="position: relative; margin:0; padding:0;">
-          <div class="marked box problem-box" style="white-space: pre-wrap; tab-size: 4;">${processContent(data.originalQuestion)}</div>
+    <div class="detail-panel-wrapper" style="position:relative; width:100%;">
+      <button class="close-detail" style="position:absolute; top:10px; right:10px; background: #bdc3c7; color: white; border: none; border-radius: 50%; width: 30px; height: 30px; font-size: 18px; cursor: pointer; z-index: 1000; display: flex; align-items: center; justify-content: center;">✕</button>
+      <div id="traces" style="display: inline-block; margin:0; padding:0;">
+        <h1 id="model-answer-header-title" style="font-size:30px !important; font-weight:bold !important; color:#276dff !important; text-align:center !important; margin-bottom:20px !important;">Solution: Model ${data.modelName} for Problem #${data.questionId}</h1>
+        <div class="model-answer-section">
+          <h4 style="font-weight: bold; font-size: 26px;">Problem</h4>
+          <div style="position: relative; margin:0; padding:0;">
+            <div class="marked box problem-box" style="white-space: pre-wrap; tab-size: 4;">${processContent(data.originalQuestion)}</div>
+          </div>
         </div>
-      </div>
-      <div class="model-answer-section">
-        <h4 style="font-weight: bold; font-size: 26px;">Correct Answer</h4>
-        <div class="marked box solution-box">${processContent(data.correctAnswer)}</div>
-      </div>
+        <div class="model-answer-section">
+          <h4 style="font-weight: bold; font-size: 26px;">Correct Answer</h4>
+          <div class="marked box solution-box">${processContent(data.correctAnswer)}</div>
+        </div>
   `;
   
   // 创建包含标签和内容的包装容器
@@ -509,8 +512,7 @@ function displayModelAnswerDetail(data) {
   
   html += '</div>'; // 关闭traces容器
   
-  // 添加关闭按钮
-  html += '<button class="close-detail">关闭</button>';
+  html += '</div>'; // 关闭detail-panel-wrapper容器
   
   detailPanel.html(html);
   
@@ -535,7 +537,7 @@ function displayModelAnswerDetail(data) {
   }, 100);
   
   // 显示遮罩层和详情面板
-  $('#modalOverlay').show();
+  modalOverlay.show();
   detailPanel.show();
   
   // 初始化标签页功能
@@ -611,36 +613,51 @@ function displayModelAnswerDetail(data) {
   $('.close-detail').on('click', function() {
     hideModelAnswerDetail();
   });
+  
+  // 确保点击遮罩层关闭功能在所有情况下都能正常工作
+  modalOverlay.on('click', function(event) {
+    if (event.target === this) {
+      detailPanel.hide();
+      $(this).hide();
+    }
+  });
 }
 
 // 获取或创建详情面板
 function getOrCreateDetailPanel() {
-  let detailPanel = $('#modelAnswerDetail');
-  let overlay = $('#modalOverlay');
+  let detailPanel = $('#detail-panel');
   
-  // 创建遮罩层（如果不存在）
-  if (overlay.length === 0) {
-    overlay = $('<div id="modalOverlay" class="modal-overlay"></div>');
-    $('body').append(overlay);
-    
-    // 点击遮罩层关闭详情面板
-    overlay.on('click', function() {
-      hideModelAnswerDetail();
-    });
-  }
-  
-  // 创建详情面板（如果不存在）
   if (detailPanel.length === 0) {
-    detailPanel = $('<div id="modelAnswerDetail" class="model-answer-detail-panel"></div>');
+    detailPanel = $('<div id="detail-panel" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); z-index: 1000; max-width: 90%; max-height: 90%; overflow: auto; display: none;"></div>');
     $('body').append(detailPanel);
   }
   
   return detailPanel;
 }
 
+// 获取或创建模态遮罩层
+function getOrCreateModalOverlay() {
+  // 每次都删除旧的遮罩层，重新创建
+  $('#modalOverlay').remove();
+  
+  // 创建新遮罩层
+  const overlay = $('<div id="modalOverlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 999; display: none;"></div>');
+  $('body').append(overlay);
+  
+  // 点击遮罩层关闭面板
+  overlay.on('click', function(e) {
+    // 确保点击的是遮罩层本身，而不是内部元素
+    if (e.target === this) {
+      hideModelAnswerDetail();
+    }
+  });
+  
+  return overlay;
+}
+
 // 隐藏模型回答详情面板
 function hideModelAnswerDetail() {
-  $('#modelAnswerDetail').hide();
+  $('#detail-panel').hide();
   $('#modalOverlay').hide();
 }
 
@@ -1079,3 +1096,49 @@ function setupMarkedConfig() {
 
 // 其他初始化代码
 console.log('准备加载比赛数据...');
+
+// 显示模型回答详情面板 - 点击表格单元格时调用
+function viewModelAnswerDetail(data) {
+  if (!data) {
+    console.error("没有提供数据");
+    return;
+  }
+  
+  if (data.modelId && data.questionId) {
+    // 请求模型回答的详细信息
+    fetch(`/model-answer/${data.modelId}/${data.questionId}`)
+      .then(response => response.json())
+      .then(data => {
+        displayModelAnswerDetail(data);
+      })
+      .catch(error => {
+        console.error('加载模型回答详情失败:', error);
+        
+        // 创建错误提示面板
+        const detailPanel = getOrCreateDetailPanel();
+        detailPanel.html(`
+          <div style="color: red; text-align: center;">
+            <h3>加载失败</h3>
+            <p>无法加载模型 ${data.modelId} 对问题 ${data.questionId} 的回答详情。</p>
+            <p>错误信息: ${error.message}</p>
+            <p>请尝试刷新页面或联系管理员。</p>
+            - 问题: ${data.questionId}
+          </div>
+        `);
+        
+        // 显示遮罩层和详情面板
+        $('#modalOverlay').show();
+        detailPanel.show();
+        
+        // 添加关闭按钮
+        detailPanel.append('<button class="close-detail" style="position:absolute; top:10px; right:10px; background: #bdc3c7; color: white; border: none; border-radius: 50%; width: 30px; height: 30px; font-size: 18px; cursor: pointer; z-index: 1000; display: flex; align-items: center; justify-content: center;">✕</button>');
+        
+        // 添加关闭按钮事件
+        $('.close-detail').on('click', function() {
+          hideModelAnswerDetail();
+        });
+      });
+  } else {
+    console.error("模型ID或问题ID缺失", data);
+  }
+}
