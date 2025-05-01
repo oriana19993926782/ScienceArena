@@ -708,6 +708,8 @@ table.dataTable td[data-dt-column="1"] {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  margin-left: -10px !important; /* 向左移动选择器，抵消包装容器的内边距 */
+  padding-left: 0 !important;
 }
 
 .tablinks {
@@ -733,18 +735,191 @@ table.dataTable td[data-dt-column="1"] {
 
 .tabcontent {
   display: none;
-  padding: 0;
+  padding-left: 2px !important; /* 增加内边距，特别是左侧 */
   margin: 0;
   border: none;
-  border-top: none;
   box-sizing: border-box;
 }
 
-/* 紧凑布局专用 - 防止任何形式的空白间隔 */
-h4 {
+.tab-wrapper {
+  border: 2px solid #cccccc;
+  border-radius: 4px;
+  padding: 10px 0 10px 0; /* 移除左右内边距 */
+  margin: 15px 0;
+  background-color: #f9f9f9;
+  overflow: hidden; /* 防止内容溢出 */
+}
+
+/* 标签容器上边距调整 */
+.tab {
+  margin-top: 0 !important;
+  margin-left: 0 !important; /* 确保没有左边距 */
+  padding-left: 10px; /* 为按钮添加左侧内边距 */
+}
+
+/* 标签内容区域调整 */
+.tabcontent {
+  padding: 10px 20px; /* 保持内容区域有适当间距 */
   margin: 0;
-  padding: 0;
-  line-height: 1.5;
+  border: none;
+  box-sizing: border-box;
+}
+
+/* 模块内的标题与内容保持紧凑 */
+.model-answer-section h4 {
+  margin-bottom: 5px !important;
+}
+
+/* 标签容器上下间距 */
+.tab-wrapper {
+  margin: 15px 0 !important;
+}
+
+/* 标签内容之间的间距 */
+.tabcontent h4 {
+  margin-top: 10px !important;
+}
+
+/* 第一个标题不需要上边距 */
+.tabcontent h4:first-of-type {
+  margin-top: 5px !important;
+}
+
+/* 确保内容框之间有间距 */
+.box {
+  margin-bottom: 10px !important;
+}
+
+/* 解答框内部内容增加间距提高可读性 */
+.problem-box, .solution-box, .parsed-answer-box, .response-box {
+  padding: 15px !important;
+}
+
+/* 内容框底部间距增加 */
+.problem-box, .solution-box, .parsed-answer-box, .response-box {
+  margin-bottom: 40px !important;
+}
+
+/* 确保最后一个内容框不需要底部间距 */
+.model-answer-section:last-child .box {
+  margin-bottom: 0 !important;
+}
+
+/* Parsed Answer标题上方间距 */
+.tabcontent .model-answer-section:first-child h4 {
+  margin-top: 15px !important;
+}
+
+/* 模型答案详情标题样式 */
+#answer-title {
+  font-weight: bold !important;
+  font-size: 20px !important;
+  text-align: center !important;
+  width: 100% !important;
+  color: #276dff !important;
+  margin: 0 auto 20px auto !important;
+  display: block !important;
+}
+
+/* 标题样式 - 匹配matharena */
+#detail-panel .tracesHeading {
+  font-weight: bold !important;
+  font-size: 20px !important;
+  text-align: center !important;
+  margin: auto !important;
+  color: #276dff !important;
+  margin-bottom: 20px !important;
+  display: block !important;
+}
+
+/* 通用盒子样式 - 确保紧凑布局同时满足matharena风格 */
+.box {
+  width: 100%;
+  margin: 0;
+  padding: 2rem 2rem 1.5rem 2rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  max-height: none;
+  position: relative;
+  overflow-y: visible;
+  box-sizing: border-box;
+}
+
+/* 确保相邻元素之间没有间隔 */
+h4 + .box {
+  margin-top: 0 !important;
+}
+
+.box + h4 {
+  margin-top: 10px !important;
+}
+
+/* 问题框样式 - 精确匹配matharena蓝色背景 */
+.problem-box {
+  background-color: #c7d9ff;
+  white-space: pre-wrap;
+  tab-size: 4;
+  overflow: visible !important;
+}
+
+/* 加强solution-box的matharena风格 */
+.solution-box {
+  background-color: rgb(255, 215, 0); /* 金色背景 */
+  white-space: pre-wrap;
+  tab-size: 4;
+  overflow: visible !important;
+  max-height: none !important;
+}
+
+/* 解析答案容器 */
+.parsed-answer-box {
+  white-space: pre-wrap;
+  tab-size: 4;
+  overflow: visible !important;
+}
+
+.parsed-answer-box.correct {
+  background-color: rgb(232, 245, 233); /* 浅绿色背景 */
+}
+
+.parsed-answer-box.incorrect {
+  background-color: rgb(253, 236, 234); /* 浅红色背景 */
+}
+
+/* 完整解答容器 */
+.response-box {
+  background-color: #ffe4c8; /* 浅橙色背景 */
+  white-space: pre-wrap;
+  tab-size: 4;
+  border: 1px solid #e0e0e0;
+  overflow: visible !important;
+}
+
+/* 标签区域包装容器 - 添加灰色边框 */
+.tab-wrapper {
+  border: 2px solid #cccccc;
+  border-radius: 4px;
+  padding: 10px 10px 10px 0; /* 减少左侧内边距为0 */
+  margin: 15px 0;
+  background-color: #f9f9f9;
+}
+
+/* 调整标签容器上边距，因为现在它在包装容器内 */
+.tab {
+  margin-top: 0 !important;
+  margin-left: 0 !important; /* 确保没有左边距 */
+  padding-left: 0 !important; /* 确保没有左内边距 */
+}
+
+/* 标签内容区域调整，确保与包装容器配合良好 */
+.tabcontent {
+  padding: 10px 10px 10px 10px; /* 保持内容区域的内边距 */
+  margin-left: 0;
+}
+
+/* 改进页面模块间距 */
+.model-answer-section {
+  margin-bottom: 15px !important; /* 模块之间的间隔 */
 }
 
 /* 消除标题和内容之间的空白 */
@@ -825,7 +1000,7 @@ h4 + .box {
 .tab-wrapper {
   border: 2px solid #cccccc;
   border-radius: 4px;
-  padding: 10px;
+  padding: 10px 10px 10px 0; /* 减少左侧内边距为0 */
   margin: 15px 0;
   background-color: #f9f9f9;
 }
@@ -833,11 +1008,14 @@ h4 + .box {
 /* 调整标签容器上边距，因为现在它在包装容器内 */
 .tab {
   margin-top: 0 !important;
+  margin-left: 0 !important; /* 确保没有左边距 */
+  padding-left: 0 !important; /* 确保没有左内边距 */
 }
 
 /* 标签内容区域调整，确保与包装容器配合良好 */
 .tabcontent {
-  padding: 10px 0;
+  padding: 10px 10px 10px 10px; /* 保持内容区域的内边距 */
+  margin-left: 0;
 }
 
 /* 改进页面模块间距 */
@@ -845,69 +1023,19 @@ h4 + .box {
   margin-bottom: 15px !important; /* 模块之间的间隔 */
 }
 
-/* 模块内的标题与内容保持紧凑 */
-.model-answer-section h4 {
-  margin-bottom: 5px !important;
-}
-
-/* 标签容器上下间距 */
-.tab-wrapper {
-  margin: 15px 0 !important;
-}
-
-/* 标签内容之间的间距 */
-.tabcontent h4 {
-  margin-top: 10px !important;
-}
-
-/* 第一个标题不需要上边距 */
-.tabcontent h4:first-of-type {
-  margin-top: 5px !important;
-}
-
-/* 确保内容框之间有间距 */
+/* 消除标题和内容之间的空白 */
 .box {
-  margin-bottom: 10px !important;
+  margin-top: 0 !important;
 }
 
-/* 解答框内部内容增加间距提高可读性 */
-.problem-box, .solution-box, .parsed-answer-box, .response-box {
-  padding: 15px !important;
+/* 强制移除任何默认边距和内边距 */
+#traces * {
+  margin-top: 0;
+  padding-top: 0;
 }
 
-/* 内容框底部间距增加 */
-.problem-box, .solution-box, .parsed-answer-box, .response-box {
-  margin-bottom: 40px !important;
-}
-
-/* 确保最后一个内容框不需要底部间距 */
-.model-answer-section:last-child .box {
-  margin-bottom: 0 !important;
-}
-
-/* Parsed Answer标题上方间距 */
-.tabcontent .model-answer-section:first-child h4 {
-  margin-top: 15px !important;
-}
-
-/* 模型答案详情标题样式 */
-#answer-title {
-  font-weight: bold !important;
-  font-size: 20px !important;
-  text-align: center !important;
-  width: 100% !important;
-  color: #276dff !important;
-  margin: 0 auto 20px auto !important;
-  display: block !important;
-}
-
-/* 标题样式 - 匹配matharena */
-#detail-panel .tracesHeading {
-  font-weight: bold !important;
-  font-size: 20px !important;
-  text-align: center !important;
-  margin: auto !important;
-  color: #276dff !important;
-  margin-bottom: 20px !important;
-  display: block !important;
+/* 特别为内容区域添加左边距 */
+.tabcontent .model-answer-section {
+  padding-left: 10px !important;
+  margin-bottom: 15px !important;
 }
