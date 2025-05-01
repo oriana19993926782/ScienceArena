@@ -350,10 +350,10 @@ table.dataTable tbody tr:nth-child(even) {
 #traces {
   width: 100%;
   padding: 20px;
-  background-color: #f9f9f9;
+  background-color: #ffffff;
   border-radius: 5px;
   margin-top: 20px;
-  border: 1px solid #ddd;
+  border: 1px solid #fff;
   white-space: pre-wrap;
   font-family: monospace;
   display: none;
@@ -718,7 +718,8 @@ table.dataTable td[data-dt-column="1"] {
   cursor: pointer;
   padding: 10px 16px;
   transition: 0.3s;
-  font-size: 14px;
+  font-size: 26px !important; /* 增加字体大小，与标题一致 */
+  font-weight: normal !important; /* 取消加粗 */
   box-sizing: inherit;
 }
 

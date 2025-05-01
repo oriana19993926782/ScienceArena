@@ -465,13 +465,13 @@ function displayModelAnswerDetail(data) {
     <div id="traces" style="display: inline-block; margin:0; padding:0;">
       <h1 id="model-answer-header-title" style="font-size:30px !important; font-weight:bold !important; color:#276dff !important; text-align:center !important; margin-bottom:20px !important;">Solution: Model ${data.modelName} for Problem #${data.questionId}</h1>
       <div class="model-answer-section">
-        <h4 style="font-weight: bold; margin:0; padding:0;">Problem</h4>
+        <h4 style="font-weight: bold; font-size: 26px;">Problem</h4>
         <div style="position: relative; margin:0; padding:0;">
           <div class="marked box problem-box" style="white-space: pre-wrap; tab-size: 4;">${processContent(data.originalQuestion)}</div>
         </div>
       </div>
       <div class="model-answer-section">
-        <h4 style="font-weight: bold; margin:0; padding:0;">Correct Answer</h4>
+        <h4 style="font-weight: bold; font-size: 26px;">Correct Answer</h4>
         <div class="marked box solution-box">${processContent(data.correctAnswer)}</div>
       </div>
   `;
@@ -493,11 +493,11 @@ function displayModelAnswerDetail(data) {
     html += `
       <div class="tabcontent" id="tab${index}" style="display:${index === 0 ? 'block' : 'none'};">
         <div class="model-answer-section">
-          <h4 style="font-weight: bold;">Parsed Answer</h4>
+          <h4 style="font-weight: bold; font-size: 26px;">Parsed Answer</h4>
           <div class="marked box parsed-answer-box ${isCorrect ? 'correct' : 'incorrect'}" style="white-space: pre-wrap; tab-size: 4;">${processContent(detail.parsedAnswer)}</div>
         </div>
         <div class="model-answer-section">
-          <h4 style="font-weight: bold;">Full Model Solution</h4>
+          <h4 style="font-weight: bold; font-size: 26px;">Full Model Solution</h4>
           <div class="marked box response-box" style="white-space: pre-wrap; tab-size: 4;">${processContent(detail.fullSolution)}</div>
         </div>
       </div>
