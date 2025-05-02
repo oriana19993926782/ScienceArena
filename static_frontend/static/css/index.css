@@ -567,6 +567,14 @@ table.dataTable td[data-dt-column="1"] {
   box-sizing: border-box !important;
 }
 
+/* 全局强制设置Model列宽度 */
+table.dataTable th.model-names,
+table.dataTable td.model-names {
+  width: 300px !important;
+  min-width: 300px !important;
+  max-width: 300px !important;
+}
+
 /* 全局表格奇偶行样式 - 使用最高优先级 */
 .overall-table table.dataTable > tbody > tr:nth-of-type(odd) {
   background-color: #ffffff !important;

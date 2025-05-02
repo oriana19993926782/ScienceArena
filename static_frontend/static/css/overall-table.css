@@ -68,13 +68,18 @@
 }
 
 /* Model列左对齐，其他列居中 */
-.overall-table .model-names {
+.overall-table .model-names,
+.overall-table th.model-names,
+.overall-table td.model-names,
+.non-overall-table .model-names,
+.non-overall-table th.model-names,
+.non-overall-table td.model-names {
   text-align: left;
   font-weight: 500;
   padding-left: 15px;
-  width: 200px !important;
-  min-width: 200px !important;
-  max-width: 200px !important;
+  width: 300px !important;
+  min-width: 300px !important;
+  max-width: 300px !important;
 }
 
 /* Model列的表头特殊处理 - 保持左对齐但加粗 */

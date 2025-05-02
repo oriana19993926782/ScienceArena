@@ -192,11 +192,11 @@ function reloadTableData(competitionId) {
       title: "<span class='th-text'>Model</span>", 
       data: "model",
       className: competitionId === 'overall' ? "model-names" : "dt-left model-names",
-      width: competitionId === 'overall' ? null : "180px", 
+      width: "210px", // 固定模型列宽度为210px
       render: function(data, type, row) {
         // 检查模型是否在比赛后发布，如果是则添加警告标记
         if (row.is_published_after_competition) {
-          return data + ' ';
+          return data + ' ⚠️';
         }
         return data;
       }
@@ -284,13 +284,13 @@ function reloadTableData(competitionId) {
     scrollX: true,
     scrollCollapse: true,
     stripeClasses: competitionId === 'overall' ? ['odd', 'even'] : [], // 为Overall视图启用条带化
-    columnDefs: []
+    columnDefs: [
+      { targets: 0, width: "210px" } // 为模型列设置固定宽度
+    ]
   };
   
   // 根据competition ID设置列定义
   if (competitionId === 'overall') {
-    // 为Model列设置宽度
-    tableConfig.columnDefs.push({ targets: 0, width: "200px" });
     // 为Avg列设置宽度
     tableConfig.columnDefs.push({ targets: 1, width: "80px" });
     // 为每个比赛列单独设置相同宽度
@@ -302,7 +302,7 @@ function reloadTableData(competitionId) {
   } else {
     // 非Overall视图的列定义
     tableConfig.columnDefs = [
-      { targets: 0, width: "180px" }, // Model列宽度
+      { targets: 0, width: "210px" }, // Model列宽度
       { targets: 1, width: "80px" },  // Avg列宽度
       { targets: 2, width: "80px" }   // Cost列宽度（如果存在）
     ];
@@ -332,8 +332,31 @@ function reloadTableData(competitionId) {
   
   // 初始化表格
   const table = $('#myTopTable').DataTable(tableConfig);
-  
-  // 如果不是Overall视图，添加单元格点击事件处理
+
+  // 强制设置Model列宽度 - 更强力的方法
+  setTimeout(function() {
+    // 直接应用更强力的CSS
+    let styleElement = document.createElement('style');
+    styleElement.textContent = `
+      .model-names, 
+      table.dataTable thead th.model-names, 
+      table.dataTable tbody td.model-names {
+        width: 210px !important;
+        min-width: 210px !important;
+        max-width: 210px !important;
+        box-sizing: border-box !important;
+      }
+    `;
+    document.head.appendChild(styleElement);
+    
+    // jQuery方法直接修改DOM
+    $('.model-names').attr('style', 'width: 210px !important; min-width: 210px !important; max-width: 210px !important');
+    
+    // 重新调整列大小
+    table.columns.adjust().draw();
+  }, 100);
+
+  // 添加点击事件监听器 - 显示模型输出
   if (competitionId !== 'overall') {
     $('#myTopTable tbody').on('click', 'td', function() {
       handleCellClick(this, table, competitionId);
