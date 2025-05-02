@@ -394,7 +394,12 @@ table.dataTable tbody tr:nth-child(even) {
 }
 
 .selector-container {
+  margin-top: 25px;
   display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+  width: 100%;
   border-bottom: 1px solid #dee2e6;
 }
 

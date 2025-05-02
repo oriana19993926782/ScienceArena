@@ -189,7 +189,7 @@ function reloadTableData(competitionId) {
   // 准备列定义
   const columns = [
     { 
-      title: "Model", 
+      title: "<span class='th-text'>Model</span>", 
       data: "model",
       className: competitionId === 'overall' ? "model-names" : "dt-left model-names",
       width: competitionId === 'overall' ? null : "180px", 
@@ -202,7 +202,7 @@ function reloadTableData(competitionId) {
       }
     },
     { 
-      title: "Avg", 
+      title: "<span class='th-text'>Avg</span>", 
       data: "avg",
       className: competitionId === 'overall' ? "avg-column" : "dt-center",
       render: function(data) {
@@ -214,10 +214,16 @@ function reloadTableData(competitionId) {
   // 如果是overall视图，添加每个比赛列
   if (competitionId === 'overall' && data.competitions && data.competitions.length > 0) {
     data.competitions.forEach(competition => {
+      // 处理列名显示 - 移除末尾的"_exam"
+      const displayTitle = competition.endsWith('_exam') 
+        ? competition.substring(0, competition.length - 5) 
+        : competition;
+        
       columns.push({
-        title: competition,
+        title: "<span class='th-text'>" + displayTitle + "</span>",
         data: competition,
         className: "competition-column",
+        width: "170px", // 为所有比赛列设置固定宽度
         render: function(data) {
           if (data === undefined || data === null) {
             return "N/A";
@@ -234,7 +240,7 @@ function reloadTableData(competitionId) {
   else if (competitionId !== 'overall' && data.models.length > 0 && data.models[0].problems) {
     // 添加Cost列
     columns.push({
-      title: "Cost",
+      title: "<span class='th-text'>Cost</span>",
       data: "cost",
       className: "dt-center avg-cost",
       width: "100px", // 设置固定宽度
@@ -246,7 +252,7 @@ function reloadTableData(competitionId) {
     
     data.models[0].problems.forEach((problem, index) => {
       columns.push({
-        title: problem.id,
+        title: "<span class='th-text'>" + problem.id + "</span>",
         data: null,
         className: "dt-center problem-column",
         render: function(rowData) {
@@ -274,16 +280,33 @@ function reloadTableData(competitionId) {
     ordering: true,
     order: [[1, 'desc']], // 默认按准确率排序
     responsive: false, // 禁用响应式功能以获得更好的固定列体验
-    autoWidth: false,
+    autoWidth: false, // 禁用自动宽度
     scrollX: true,
     scrollCollapse: true,
     stripeClasses: competitionId === 'overall' ? ['odd', 'even'] : [], // 为Overall视图启用条带化
-    columnDefs: [
+    columnDefs: []
+  };
+  
+  // 根据competition ID设置列定义
+  if (competitionId === 'overall') {
+    // 为Model列设置宽度
+    tableConfig.columnDefs.push({ targets: 0, width: "200px" });
+    // 为Avg列设置宽度
+    tableConfig.columnDefs.push({ targets: 1, width: "80px" });
+    // 为每个比赛列单独设置相同宽度
+    if (data.competitions && data.competitions.length > 0) {
+      for (let i = 0; i < data.competitions.length; i++) {
+        tableConfig.columnDefs.push({ targets: i + 2, width: "170px" });
+      }
+    }
+  } else {
+    // 非Overall视图的列定义
+    tableConfig.columnDefs = [
       { targets: 0, width: "180px" }, // Model列宽度
       { targets: 1, width: "80px" },  // Avg列宽度
       { targets: 2, width: "80px" }   // Cost列宽度（如果存在）
-    ]
-  };
+    ];
+  }
   
   // 如果不是Overall视图，添加固定列配置
   if (competitionId !== 'overall') {
