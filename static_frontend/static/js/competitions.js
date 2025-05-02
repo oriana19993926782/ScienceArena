@@ -49,6 +49,7 @@ function fetchCompetitions() {
     })
     .catch(error => {
       console.error('获取比赛名称失败:', error);
+      
       // 如果API调用失败，使用默认的选择器选项
       const defaultCompetitions = ['overall', 'IChO 2025', 'IPhO 2025', 'IBO 2025', 'IGeO 2025'];
       initializeCompetitionSelector(defaultCompetitions);
@@ -453,6 +454,21 @@ function fetchModelAnswer(competitionId, modelName, questionId) {
       $('.close-detail').on('click', function() {
         hideModelAnswerDetail();
       });
+      
+      // 渲染数学公式
+      if (window.MathJax) {
+        try {
+          window.MathJax.typesetPromise && window.MathJax.typesetPromise()
+            .then(() => {
+              console.log("错误面板MathJax渲染完成");
+            })
+            .catch((err) => {
+              console.error("错误面板MathJax渲染错误:", err);
+            });
+        } catch (e) {
+          console.error("错误面板MathJax处理错误:", e);
+        }
+      }
     });
 }
 
@@ -464,18 +480,18 @@ function displayModelAnswerDetail(data) {
   // 创建HTML结构 - 精确匹配matharena风格并添加适当间距
   let html = `
     <div class="detail-panel-wrapper" style="position:relative; width:100%;">
-      <button class="close-detail" style="position:absolute; top:10px; right:10px; background: #bdc3c7; color: white; border: none; border-radius: 50%; width: 30px; height: 30px; font-size: 18px; cursor: pointer; z-index: 1000; display: flex; align-items: center; justify-content: center;">✕</button>
+      <button class="close-detail" style="position:absolute; top:-15px; right:-15px; background: #bdc3c7; color: white; border: none; border-radius: 50%; width: 30px; height: 30px; font-size: 18px; cursor: pointer; z-index: 1000; display: flex; align-items: center; justify-content: center;">✕</button>
       <div id="traces" style="display: inline-block; margin:0; padding:0;">
         <h1 id="model-answer-header-title" style="font-size:30px !important; font-weight:bold !important; color:#276dff !important; text-align:center !important; margin-bottom:20px !important;">Solution: Model ${data.modelName} for Problem #${data.questionId}</h1>
         <div class="model-answer-section">
           <h4 style="font-weight: bold; font-size: 26px;">Problem</h4>
           <div style="position: relative; margin:0; padding:0;">
-            <div class="marked box problem-box" style="white-space: pre-wrap; tab-size: 4;">${processContent(data.originalQuestion)}</div>
+            <div class="marked box problem-box" style="white-space: pre-wrap; tab-size: 4;">${formatScientificContent(data.originalQuestion)}</div>
           </div>
         </div>
         <div class="model-answer-section">
           <h4 style="font-weight: bold; font-size: 26px;">Correct Answer</h4>
-          <div class="marked box solution-box">${processContent(data.correctAnswer)}</div>
+          <div class="marked box solution-box">${formatScientificContent(data.correctAnswer)}</div>
         </div>
   `;
   
@@ -497,11 +513,11 @@ function displayModelAnswerDetail(data) {
       <div class="tabcontent" id="tab${index}" style="display:${index === 0 ? 'block' : 'none'};">
         <div class="model-answer-section">
           <h4 style="font-weight: bold; font-size: 26px;">Parsed Answer</h4>
-          <div class="marked box parsed-answer-box ${isCorrect ? 'correct' : 'incorrect'}" style="white-space: pre-wrap; tab-size: 4;">${processContent(detail.parsedAnswer)}</div>
+          <div class="marked box parsed-answer-box ${isCorrect ? 'correct' : 'incorrect'}" style="white-space: pre-wrap; tab-size: 4;">${formatScientificContent(detail.parsedAnswer)}</div>
         </div>
         <div class="model-answer-section">
           <h4 style="font-weight: bold; font-size: 26px;">Full Model Solution</h4>
-          <div class="marked box response-box" style="white-space: pre-wrap; tab-size: 4;">${processContent(detail.fullSolution)}</div>
+          <div class="marked box response-box" style="white-space: pre-wrap; tab-size: 4;">${formatScientificContent(detail.fullSolution)}</div>
         </div>
       </div>
     `;
@@ -621,6 +637,71 @@ function displayModelAnswerDetail(data) {
       $(this).hide();
     }
   });
+  
+  // 在内容加载后重新渲染数学公式
+  if (window.MathJax) {
+    try {
+      // 使用MathJax API重新处理页面上的公式
+      window.MathJax.typesetPromise && window.MathJax.typesetPromise()
+        .then(() => {
+          console.log("MathJax渲染完成");
+        })
+        .catch((err) => {
+          console.error("MathJax渲染错误:", err);
+        });
+    } catch (e) {
+      console.error("MathJax处理错误:", e);
+    }
+  }
+}
+
+// 处理文本格式，优化显示科学内容
+function formatScientificContent(text) {
+  if (!text) return '';
+  
+  // 1. 修复LaTeX公式中的双反斜杠问题
+  let formattedText = text.replace(/\\\\/g, '\\');
+  
+  // 2. 处理特殊格式的选项分析 (如 **A. 内容 (T)**)
+  formattedText = formattedText.replace(/\*\*\s*([A-D])\.\s*([^(]*)\s*\(([TF])\)\s*\*\*/g, 
+    '<div class="special-option-item"><span class="letter-marker">$1.</span> <span class="option-content">$2</span> <span class="$3-marker">($3)</span></div>');
+  
+  // 3. 将剩余的加粗文本处理为HTML加粗
+  formattedText = formattedText.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+  
+  // 4. 处理单星号斜体
+  formattedText = formattedText.replace(/\*([^*]+)\*/g, '<em>$1</em>');
+  
+  // 5. 处理换行符为HTML换行
+  formattedText = formattedText.replace(/\n/g, '<br>');
+  
+  // 6. 处理图表引用
+  formattedText = formattedText.replace(/\[figure(\d+)\]/g, '<div class="figure-placeholder">Figure $1 (图表位置)</div>');
+  
+  // 7. 处理数字列表项 (如 "1. Item")
+  formattedText = formattedText.replace(/(\d+)\.\s+([^<\n]+)(?:<br>|$)/g, '<div class="list-item"><span class="list-number">$1.</span> $2</div>');
+  
+  // 8. 处理字母列表项 (如 "A. Item") - 但不匹配已经处理过的特殊选项
+  formattedText = formattedText.replace(/(?<!class="letter-marker">)([A-D])\.\s+([^<\n]+)(?:<br>|$)/g, 
+    '<div class="letter-item"><span class="letter-marker">$1.</span> $2</div>');
+  
+  // 9. 标记Figure标题
+  formattedText = formattedText.replace(/(Figure [I|V|X]+\.)/g, '<strong class="figure-title">$1</strong>');
+  
+  // 10. 识别并格式化"Option Analysis:"标记
+  formattedText = formattedText.replace(/\*\*(Option Analysis:)\*\*/g, '<h3 class="option-analysis-title">$1</h3>');
+  
+  // 11. 识别并格式化"Step-by-Step Explanation:"标记
+  formattedText = formattedText.replace(/\*\*(Step-by-Step Explanation:)\*\*/g, '<h3 class="step-explanation-title">$1</h3>');
+  
+  // 12. 识别并格式化Markdown标题
+  formattedText = formattedText.replace(/#{1,2}\s+([^<\n]+)(?:<br>|$)/g, '<h3 class="markdown-heading">$1</h3>');
+  
+  // 13. 识别并处理true/false标记
+  formattedText = formattedText.replace(/\(T\)/g, '<span class="true-marker">(T)</span>');
+  formattedText = formattedText.replace(/\(F\)/g, '<span class="false-marker">(F)</span>');
+  
+  return formattedText;
 }
 
 // 获取或创建详情面板
@@ -645,9 +726,9 @@ function getOrCreateModalOverlay() {
   $('body').append(overlay);
   
   // 点击遮罩层关闭面板
-  overlay.on('click', function(e) {
+  overlay.on('click', function(event) {
     // 确保点击的是遮罩层本身，而不是内部元素
-    if (e.target === this) {
+    if (event.target === this) {
       hideModelAnswerDetail();
     }
   });
@@ -1131,12 +1212,27 @@ function viewModelAnswerDetail(data) {
         detailPanel.show();
         
         // 添加关闭按钮
-        detailPanel.append('<button class="close-detail" style="position:absolute; top:10px; right:10px; background: #bdc3c7; color: white; border: none; border-radius: 50%; width: 30px; height: 30px; font-size: 18px; cursor: pointer; z-index: 1000; display: flex; align-items: center; justify-content: center;">✕</button>');
+        detailPanel.append('<button class="close-detail" style="position:absolute; top:-15px; right:-15px; background: #bdc3c7; color: white; border: none; border-radius: 50%; width: 30px; height: 30px; font-size: 18px; cursor: pointer; z-index: 1000; display: flex; align-items: center; justify-content: center;">✕</button>');
         
         // 添加关闭按钮事件
         $('.close-detail').on('click', function() {
           hideModelAnswerDetail();
         });
+        
+        // 渲染数学公式
+        if (window.MathJax) {
+          try {
+            window.MathJax.typesetPromise && window.MathJax.typesetPromise()
+              .then(() => {
+                console.log("错误面板MathJax渲染完成");
+              })
+              .catch((err) => {
+                console.error("错误面板MathJax渲染错误:", err);
+              });
+          } catch (e) {
+            console.error("错误面板MathJax处理错误:", e);
+          }
+        }
       });
   } else {
     console.error("模型ID或问题ID缺失", data);

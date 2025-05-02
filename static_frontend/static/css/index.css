@@ -933,109 +933,246 @@ h4 + .box {
   padding-top: 0;
 }
 
-/* 通用盒子样式 - 确保紧凑布局同时满足matharena风格 */
-.box {
-  width: 100%;
-  margin: 0;
-  padding: 2rem 2rem 1.5rem 2rem;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  max-height: none;
-  position: relative;
-  overflow-y: visible;
-  box-sizing: border-box;
-}
-
-/* 确保相邻元素之间没有间隔 */
-h4 + .box {
-  margin-top: 0 !important;
-}
-
-.box + h4 {
-  margin-top: 10px !important;
-}
-
-/* 问题框样式 - 精确匹配matharena蓝色背景 */
-.problem-box {
-  background-color: #c7d9ff;
-  white-space: pre-wrap;
-  tab-size: 4;
-  overflow: visible !important;
-}
-
-/* 加强solution-box的matharena风格 */
-.solution-box {
-  background-color: rgb(255, 215, 0); /* 金色背景 */
-  white-space: pre-wrap;
-  tab-size: 4;
-  overflow: visible !important;
-  max-height: none !important;
-}
-
-/* 解析答案容器 */
-.parsed-answer-box {
-  white-space: pre-wrap;
-  tab-size: 4;
-  overflow: visible !important;
-}
-
-.parsed-answer-box.correct {
-  background-color: rgb(232, 245, 233); /* 浅绿色背景 */
-}
-
-.parsed-answer-box.incorrect {
-  background-color: rgb(253, 236, 234); /* 浅红色背景 */
-}
-
-/* 完整解答容器 */
-.response-box {
-  background-color: #ffe4c8; /* 浅橙色背景 */
-  white-space: pre-wrap;
-  tab-size: 4;
-  border: 1px solid #e0e0e0;
-  overflow: visible !important;
-}
-
-/* 标签区域包装容器 - 添加灰色边框 */
-.tab-wrapper {
-  border: 2px solid #cccccc;
-  border-radius: 4px;
-  padding: 10px 10px 10px 0; /* 减少左侧内边距为0 */
-  margin: 15px 0;
-  background-color: #f9f9f9;
-}
-
-/* 调整标签容器上边距，因为现在它在包装容器内 */
-.tab {
-  margin-top: 0 !important;
-  margin-left: 0 !important; /* 确保没有左边距 */
-  padding-left: 0 !important; /* 确保没有左内边距 */
-}
-
-/* 标签内容区域调整，确保与包装容器配合良好 */
-.tabcontent {
-  padding: 10px 10px 10px 10px; /* 保持内容区域的内边距 */
-  margin-left: 0;
-}
-
-/* 改进页面模块间距 */
-.model-answer-section {
-  margin-bottom: 15px !important; /* 模块之间的间隔 */
-}
-
-/* 消除标题和内容之间的空白 */
-.box {
-  margin-top: 0 !important;
-}
-
-/* 强制移除任何默认边距和内边距 */
-#traces * {
-  margin-top: 0;
-  padding-top: 0;
-}
-
 /* 特别为内容区域添加左边距 */
 .tabcontent .model-answer-section {
   padding-left: 10px !important;
   margin-bottom: 15px !important;
+}
+
+/* 限制内容栏中的文字大小 */
+.problem-box, .solution-box, .parsed-answer-box, .response-box {
+  font-size: 16px;
+}
+
+/* 限制内容栏中的markdown标题大小 */
+.problem-box h1, .solution-box h1, .parsed-answer-box h1, .response-box h1 {
+  font-size: 22px !important;
+}
+
+.problem-box h2, .solution-box h2, .parsed-answer-box h2, .response-box h2 {
+  font-size: 20px !important;
+}
+
+.problem-box h3, .solution-box h3, .parsed-answer-box h3, .response-box h3 {
+  font-size: 18px !important;
+}
+
+/* 限制内容栏中的所有元素字体大小 */
+.problem-box *, .solution-box *, .parsed-answer-box *, .response-box * {
+  font-size: 16px !important;
+}
+
+/* 具体覆盖常见的大字体元素 */
+.problem-box p, .solution-box p, .parsed-answer-box p, .response-box p,
+.problem-box span, .solution-box span, .parsed-answer-box span, .response-box span,
+.problem-box div, .solution-box div, .parsed-answer-box div, .response-box div,
+.problem-box li, .solution-box li, .parsed-answer-box li, .response-box li {
+  font-size: 16px !important;
+}
+
+/* 特别处理Markdown渲染后常见的大字体元素 */
+.problem-box strong, .solution-box strong, .parsed-answer-box strong, .response-box strong,
+.problem-box em, .solution-box em, .parsed-answer-box em, .response-box em,
+.problem-box b, .solution-box b, .parsed-answer-box b, .response-box b {
+  font-size: 16px !important;
+}
+
+/* 科学公式样式优化 - 改进LaTeX数学公式的显示 */
+.problem-box p, .solution-box p, .parsed-answer-box p, .response-box p {
+  line-height: 1.6;
+  margin-bottom: 0.8em;
+}
+
+/* 确保选项之间有足够间距 */
+.problem-box p + p, .solution-box p + p, .parsed-answer-box p + p, .response-box p + p {
+  margin-top: 0.8em;
+}
+
+/* 增强选项标记的显示效果 */
+.problem-box p strong:first-child, .solution-box p strong:first-child, 
+.parsed-answer-box p strong:first-child, .response-box p strong:first-child,
+.problem-box p:first-letter, .solution-box p:first-letter, 
+.parsed-answer-box p:first-letter, .response-box p:first-letter {
+  font-weight: bold;
+  color: #276dff;
+}
+
+/* 选项样式美化 - 针对常见的(A)(B)(C)(D)格式 */
+.problem-box p:has(b:first-child), .solution-box p:has(b:first-child),
+.parsed-answer-box p:has(b:first-child), .response-box p:has(b:first-child) {
+  padding-left: 1.5em;
+  text-indent: -1.5em;
+}
+
+/* 确保MathJax公式与普通文本垂直对齐 */
+mjx-container {
+  display: inline-block;
+  vertical-align: middle !important;
+  margin: 0 0.1em !important;
+}
+
+/* 防止LaTeX公式过大导致行间距不一 */
+.problem-box mjx-container, .solution-box mjx-container,
+.parsed-answer-box mjx-container, .response-box mjx-container {
+  font-size: 100% !important;
+  max-width: 100%;
+}
+
+/* 确保复杂公式不会导致水平滚动 */
+.problem-box, .solution-box, .parsed-answer-box, .response-box {
+  overflow-x: auto;
+  word-wrap: break-word;
+}
+
+/* 科学内容特殊展示样式 */
+.figure-placeholder {
+  background-color: #f3f3f3;
+  border: 1px dashed #aaa;
+  border-radius: 5px;
+  padding: 10px;
+  margin: 15px 0;
+  text-align: center;
+  font-style: italic;
+  color: #666;
+}
+
+.list-item, .letter-item {
+  margin: 5px 0;
+  display: flex;
+  align-items: flex-start;
+}
+
+.list-number, .letter-marker {
+  font-weight: bold;
+  color: #276dff;
+  margin-right: 8px;
+  min-width: 20px;
+  display: inline-block;
+  text-align: right;
+}
+
+.letter-marker {
+  color: #276dff; /* 选项标记颜色与其他蓝色元素保持一致 */
+}
+
+.figure-title {
+  display: block;
+  margin: 15px 0 10px 0;
+  font-weight: bold;
+  color: #276dff;
+  text-decoration: underline;
+}
+
+/* 修复双反斜杠导致的MathJax渲染问题 */
+mjx-container[jax="CHTML"] {
+  display: inline-block !important;
+}
+
+/* 优化多行公式的显示 */
+mjx-container[jax="CHTML"][display="true"] {
+  margin: 12px 0 !important;
+  padding: 5px 0;
+  background-color: rgba(255,255,255,0.5);
+  border-radius: 4px;
+}
+
+/* 处理在高密度列表中的公式定位 */
+.list-item mjx-container, .letter-item mjx-container {
+  vertical-align: middle;
+  margin-bottom: 2px !important;
+}
+
+/* 长行处理，确保不会溢出 */
+.problem-box, .solution-box, .parsed-answer-box, .response-box {
+  overflow-wrap: break-word;
+  word-break: break-word;
+  hyphens: auto;
+}
+
+/* Markdown标题和选项分析样式 */
+.option-analysis-title, .step-explanation-title {
+  font-size: 20px !important;
+  font-weight: bold;
+  color: #276dff;
+  margin: 15px 0 10px 0;
+  padding: 5px 0;
+  border-bottom: 1px solid #ddd;
+}
+
+.markdown-heading {
+  font-size: 20px !important;
+  font-weight: bold;
+  color: #276dff;
+  margin: 15px 0 10px 0;
+  padding: 5px 0;
+}
+
+.true-marker {
+  color: #276dff;
+  font-weight: bold;
+  padding: 0 3px;
+}
+
+.false-marker {
+  color: #276dff;
+  font-weight: bold;
+  padding: 0 3px;
+}
+
+/* 强制覆盖任何可能的冲突样式 */
+.option-analysis-title, .step-explanation-title, .markdown-heading {
+  display: block !important;
+  line-height: 1.4 !important;
+  font-size: 20px !important;
+}
+
+/* 特殊选项项目样式 */
+.special-option-item {
+  margin: 12px 0;
+  padding: 10px;
+  background-color: #f8f9fa;
+  border-left: 3px solid #276dff;
+  border-radius: 4px;
+}
+
+.special-option-item .letter-marker {
+  font-weight: bold;
+  color: #276dff;
+  font-size: 18px !important;
+  margin-right: 5px;
+}
+
+.special-option-item .option-content {
+  font-weight: normal;
+  display: inline;
+}
+
+.special-option-item .T-marker,
+.special-option-item .F-marker {
+  font-weight: bold;
+  color: #276dff;
+  margin-left: 5px;
+}
+
+/* 确保选项内部的加粗文本也是蓝色 */
+.option-content strong {
+  color: #276dff;
+}
+
+/* 响应框中的标记颜色 - 使用橙色与背景保持和谐 */
+.response-box .letter-marker,
+.response-box .list-number,
+.response-box .true-marker,
+.response-box .false-marker,
+.response-box .special-option-item .letter-marker,
+.response-box .special-option-item .T-marker,
+.response-box .special-option-item .F-marker,
+.response-box .figure-title,
+.response-box strong {
+  color: #e67e22 !important; /* 橙色，与浅橙色背景(#ffe4c8)和谐 */
+}
+
+/* 响应框中的特殊选项左边框 */
+.response-box .special-option-item {
+  border-left-color: #e67e22 !important;
 }
