@@ -1,6 +1,6 @@
 # Science Arena
 
-这是一个基于Spring Boot的前后端分离项目，后端运行在8090端口。
+这是一个基于Spring Boot的前后端分离项目，用于展示和比较不同AI模型在科学考试中的表现。后端运行在8090端口。
 
 ## 项目结构
 
@@ -11,17 +11,24 @@ ScienceArena/
 │   │   ├── main/
 │   │   │   ├── java/com/sciencearena/backend/
 │   │   │   │   ├── controller/    # 控制器
+│   │   │   │   ├── service/       # 服务层
 │   │   │   │   ├── BackendApplication.java  # 主应用类
 │   │   │   ├── resources/
+│   │   │   │   ├── data/          # 数据文件目录
+│   │   │   │   │   ├── overallPerformance.json         # 总体表现数据
+│   │   │   │   │   ├── com_models_score_perQuestion.json  # 每题得分数据
+│   │   │   │   │   ├── com_models_pubTime_cost_info.json  # 模型发布和成本信息
+│   │   │   │   │   ├── com_models_questions_modelAnswer_perRun_details.json # 模型回答详情
 │   │   │   │   ├── application.properties   # 配置文件
 │   ├── pom.xml                # Maven 依赖配置
-├── frontend-simple/           # 纯HTML/CSS/JS前端项目
-│   ├── css/                   # CSS样式文件
-│   │   ├── styles.css         # 主样式文件
-│   ├── js/                    # JavaScript文件
-│   │   ├── main.js            # 主脚本文件
+├── static_frontend/          # 静态前端项目
 │   ├── index.html             # 首页HTML文件
-│   ├── about.html             # 关于页面HTML文件
+│   ├── static/                # 静态资源目录
+│   │   ├── css/               # CSS样式文件
+│   │   │   ├── index.css      # 主样式文件
+│   │   │   ├── overall-table.css # 总体表格样式
+│   │   ├── js/                # JavaScript文件
+│   │   │   ├── competitions.js # 竞赛数据处理脚本
 ```
 
 ## 运行项目
@@ -35,10 +42,6 @@ ScienceArena/
 
 2. 使用Maven编译并运行：
    ```
-   ./mvnw spring-boot:run
-   ```
-   或者使用Maven：
-   ```
    mvn spring-boot:run
    ```
 
@@ -47,12 +50,22 @@ ScienceArena/
 ### 前端 (HTML/CSS/JS)
 
 1. 前端为纯静态文件，无需构建
-2. 可以直接在浏览器中打开frontend-simple/index.html文件，或者使用任何静态文件服务器提供服务
+2. 使用任何静态文件服务器提供服务，或直接通过后端访问（后端已配置为提供静态文件）
 
-## API测试
+## API接口
 
-后端提供了一个简单的测试API：
+后端提供以下API：
 
-- GET `http://localhost:8090/api/hello` - 返回一个简单的问候消息
+- GET `/api/competitions` - 获取所有比赛名称
+- GET `/api/competition/{competitionId}` - 获取特定比赛的数据
+- GET `/api/overall` - 获取所有模型的总体表现数据
+- GET `/api/model-answer/{competitionId}/{modelName}/{questionId}` - 获取特定模型对特定问题的回答详情
 
-前端主页上有一个按钮，点击可以测试与后端的连接。
+## 数据结构
+
+项目使用JSON文件存储数据，主要包括：
+
+- `overallPerformance.json` - 包含各模型在不同比赛中的总体表现
+- `com_models_score_perQuestion.json` - 包含各模型在每个问题上的得分
+- `com_models_pubTime_cost_info.json` - 包含模型的发布时间和成本信息
+- `com_models_questions_modelAnswer_perRun_details.json` - 包含模型回答的详细信息
