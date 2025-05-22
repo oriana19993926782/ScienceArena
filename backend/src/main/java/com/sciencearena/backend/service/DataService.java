@@ -29,7 +29,7 @@ public class DataService {
 
             // 遍历所有模型
             for (JsonNode modelNode : rootNode) {
-                String modelName = modelNode.get("模型名称").asText();
+                String modelName = modelNode.get("model_name").asText();
                 JsonNode performanceNode = modelNode.get("performance");
                 
                 Map<String, Object> modelData = new HashMap<>();
@@ -46,8 +46,8 @@ public class DataService {
                     competitionsSet.add(competition); // 收集所有比赛名称
                     
                     JsonNode compData = performanceNode.get(competition);
-                    double score = compData.get("得分").asDouble();
-                    double maxScore = compData.get("总分").asDouble();
+                    double score = compData.get("model_score").asDouble();
+                    double maxScore = compData.get("full_score").asDouble();
                     
                     // 计算比赛准确率并存储
                     double accuracy = maxScore > 0 ? score / maxScore : 0;
