@@ -245,8 +245,10 @@ function reloadTableData(competitionId) {
       className: "dt-center avg-cost",
       width: "100px", // 设置固定宽度
       render: function(data) {
+        // 将成本数值格式化为一位小数
+        const formattedCost = parseFloat(data).toFixed(1);
         // 使用自定义渲染确保数据居中显示
-        return '<div class="centered">' + data + '</div>';
+        return '<div class="centered">' + formattedCost + '</div>';
       }
     });
     

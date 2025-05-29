@@ -1,132 +1,132 @@
 {
     "IBO 2021": {
+        "claude-3.5-sonnet": {
+            "cost": 62.6515638,
+            "is_published_after_competition": true
+        },
+        "claude-sonnet-4": {
+            "cost": 94.41083429999999,
+            "is_published_after_competition": true
+        },
         "deepseek-r1": {
-            "is_published_after_competition": "false",
-            "cost": "23"
+            "cost": 54.011952,
+            "is_published_after_competition": true
+        },
+        "gemini-2.5-pro-preview": {
+            "cost": 1100.373159,
+            "is_published_after_competition": true
         },
         "gpt-4o": {
-            "is_published_after_competition": "true",
-            "cost": "0"
+            "cost": 99.066294,
+            "is_published_after_competition": true
         },
-        "o1": {
-            "is_published_after_competition": "false",
-            "cost": "57"
-        },
-        "o3-mini": {
-            "is_published_after_competition": "false",
-            "cost": "0"
-        },
-        "qwen-vl-max": {
-            "is_published_after_competition": "false",
-            "cost": "0"
-        },
-        "qwq-32b": {
-            "is_published_after_competition": "true",
-            "cost": "0"
+        "qwen-vl-max-latest": {
+            "cost": 4.3405905,
+            "is_published_after_competition": true
         }
     },
     "2024_F-ma": {
+        "claude-3.5-sonnet": {
+            "cost": 62.6515638,
+            "is_published_after_competition": true
+        },
+        "claude-sonnet-4": {
+            "cost": 94.41083429999999,
+            "is_published_after_competition": true
+        },
         "deepseek-r1": {
-            "is_published_after_competition": "true",
-            "cost": "0"
+            "cost": 54.011952,
+            "is_published_after_competition": true
+        },
+        "gemini-2.5-pro-preview": {
+            "cost": 1100.373159,
+            "is_published_after_competition": true
         },
         "gpt-4o": {
-            "is_published_after_competition": "true",
-            "cost": "0"
+            "cost": 99.066294,
+            "is_published_after_competition": true
         },
-        "o1": {
-            "is_published_after_competition": "true",
-            "cost": "0"
-        },
-        "o3-mini": {
-            "is_published_after_competition": "true",
-            "cost": "0"
-        },
-        "qwen-vl-max": {
-            "is_published_after_competition": "true",
-            "cost": "0"
-        },
-        "qwq-32b": {
-            "is_published_after_competition": "true",
-            "cost": "0"
+        "qwen-vl-max-latest": {
+            "cost": 4.3405905,
+            "is_published_after_competition": false
         }
     },
     "2024_USNCO_exam": {
+        "claude-3.5-sonnet": {
+            "cost": 62.6515638,
+            "is_published_after_competition": true
+        },
+        "claude-sonnet-4": {
+            "cost": 94.41083429999999,
+            "is_published_after_competition": true
+        },
         "deepseek-r1": {
-            "is_published_after_competition": "true",
-            "cost": "0"
+            "cost": 54.011952,
+            "is_published_after_competition": true
+        },
+        "gemini-2.5-pro-preview": {
+            "cost": 1100.373159,
+            "is_published_after_competition": true
         },
         "gpt-4o": {
-            "is_published_after_competition": "true",
-            "cost": "0"
+            "cost": 99.066294,
+            "is_published_after_competition": true
         },
-        "o1": {
-            "is_published_after_competition": "true",
-            "cost": "0"
-        },
-        "o3-mini": {
-            "is_published_after_competition": "true",
-            "cost": "0"
-        },
-        "qwen-vl-max": {
-            "is_published_after_competition": "true",
-            "cost": "0"
-        },
-        "qwq-32b": {
-            "is_published_after_competition": "true",
-            "cost": "0"
+        "qwen-vl-max-latest": {
+            "cost": 4.3405905,
+            "is_published_after_competition": false
         }
     },
     "2024_PhysicalBowl_exam": {
+        "claude-3.5-sonnet": {
+            "cost": 62.6515638,
+            "is_published_after_competition": true
+        },
+        "claude-sonnet-4": {
+            "cost": 94.41083429999999,
+            "is_published_after_competition": true
+        },
         "deepseek-r1": {
-            "is_published_after_competition": "true",
-            "cost": "0"
+            "cost": 54.011952,
+            "is_published_after_competition": true
+        },
+        "gemini-2.5-pro-preview": {
+            "cost": 1100.373159,
+            "is_published_after_competition": true
         },
         "gpt-4o": {
-            "is_published_after_competition": "true",
-            "cost": "0"
+            "cost": 99.066294,
+            "is_published_after_competition": true
         },
-        "o1": {
-            "is_published_after_competition": "true",
-            "cost": "0"
-        },
-        "o3-mini": {
-            "is_published_after_competition": "true",
-            "cost": "0"
-        },
-        "qwen-vl-max": {
-            "is_published_after_competition": "true",
-            "cost": "0"
-        },
-        "qwq-32b": {
-            "is_published_after_competition": "true",
-            "cost": "0"
+        "qwen-vl-max-latest": {
+            "cost": 4.3405905,
+            "is_published_after_competition": false
         }
     },
     "2025_USAAAO_exam": {
+        "claude-3.5-sonnet": {
+            "cost": 62.6515638,
+            "is_published_after_competition": false
+        },
+        "claude-sonnet-4": {
+            "cost": 94.41083429999999,
+            "is_published_after_competition": true
+        },
         "deepseek-r1": {
-            "is_published_after_competition": "true",
-            "cost": "0"
+            "cost": 54.011952,
+            "is_published_after_competition": false
+        },
+        "gemini-2.5-pro-preview": {
+            "cost": 1100.373159,
+            "is_published_after_competition": true
         },
         "gpt-4o": {
-            "is_published_after_competition": "true",
-            "cost": "0"
+            "cost": 99.066294,
+            "is_published_after_competition": false
         },
-        "o1": {
-            "is_published_after_competition": "true",
-            "cost": "0"
-        },
-        "o3-mini": {
-            "is_published_after_competition": "true",
-            "cost": "0"
-        },
-        "qwen-vl-max": {
-            "is_published_after_competition": "true",
-            "cost": "0"
-        },
-        "qwq-32b": {
-            "is_published_after_competition": "true",
-            "cost": "0"
+        "qwen-vl-max-latest": {
+            "cost": 4.3405905,
+            "is_published_after_competition": false
         }
     }
 }

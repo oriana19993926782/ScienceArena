@@ -1,36 +1,141 @@
 [
   {
+    "model_name": "claude-3.5-sonnet",
+    "performance": {
+      "IBO 2021": {
+        "full_score": 249,
+        "model_score": 210.25,
+        "num_of_question": 57,
+        "num_of_right_question": 127
+      },
+      "2024_F-ma": {
+        "full_score": 25,
+        "model_score": 11.75,
+        "num_of_question": 25,
+        "num_of_right_question": 47
+      },
+      "2024_USNCO_exam": {
+        "full_score": 60,
+        "model_score": 43.25,
+        "num_of_question": 60,
+        "num_of_right_question": 173
+      },
+      "2024_PhysicalBowl_exam": {
+        "full_score": 50,
+        "model_score": 40.25,
+        "num_of_question": 50,
+        "num_of_right_question": 161
+      },
+      "2025_USAAAO_exam": {
+        "full_score": 27,
+        "model_score": 11.25,
+        "num_of_question": 28,
+        "num_of_right_question": 45
+      }
+    }
+  },
+  {
+    "model_name": "claude-sonnet-4",
+    "performance": {
+      "IBO 2021": {
+        "full_score": 249,
+        "model_score": 223.0,
+        "num_of_question": 57,
+        "num_of_right_question": 154
+      },
+      "2024_F-ma": {
+        "full_score": 25,
+        "model_score": 16.0,
+        "num_of_question": 25,
+        "num_of_right_question": 64
+      },
+      "2024_USNCO_exam": {
+        "full_score": 60,
+        "model_score": 46.25,
+        "num_of_question": 60,
+        "num_of_right_question": 185
+      },
+      "2024_PhysicalBowl_exam": {
+        "full_score": 46,
+        "model_score": 42.5,
+        "num_of_question": 50,
+        "num_of_right_question": 170
+      },
+      "2025_USAAAO_exam": {
+        "full_score": 27,
+        "model_score": 18.25,
+        "num_of_question": 28,
+        "num_of_right_question": 73
+      }
+    }
+  },
+  {
     "model_name": "deepseek-r1",
     "performance": {
       "IBO 2021": {
         "full_score": 249,
-        "model_score": 199,
+        "model_score": 196.25,
         "num_of_question": 57,
-        "num_of_right_question": 31
+        "num_of_right_question": 112
       },
       "2024_F-ma": {
-        "full_score": 24,
-        "model_score": 18,
+        "full_score": 25,
+        "model_score": 19.0,
         "num_of_question": 25,
-        "num_of_right_question": 18
+        "num_of_right_question": 76
       },
       "2024_USNCO_exam": {
-        "full_score": 59,
-        "model_score": 43,
+        "full_score": 60,
+        "model_score": 44.5,
         "num_of_question": 60,
-        "num_of_right_question": 43
+        "num_of_right_question": 178
       },
       "2024_PhysicalBowl_exam": {
         "full_score": 50,
-        "model_score": 44,
+        "model_score": 43.75,
         "num_of_question": 50,
-        "num_of_right_question": 44
+        "num_of_right_question": 175
       },
       "2025_USAAAO_exam": {
-        "full_score": 26,
-        "model_score": 22,
+        "full_score": 27,
+        "model_score": 22.25,
         "num_of_question": 28,
-        "num_of_right_question": 22
+        "num_of_right_question": 89
+      }
+    }
+  },
+  {
+    "model_name": "gemini-2.5-pro-preview",
+    "performance": {
+      "IBO 2021": {
+        "full_score": 240,
+        "model_score": 219.0,
+        "num_of_question": 57,
+        "num_of_right_question": 143
+      },
+      "2024_F-ma": {
+        "full_score": 24,
+        "model_score": 21.25,
+        "num_of_question": 25,
+        "num_of_right_question": 85
+      },
+      "2024_USNCO_exam": {
+        "full_score": 60,
+        "model_score": 56.0,
+        "num_of_question": 60,
+        "num_of_right_question": 224
+      },
+      "2024_PhysicalBowl_exam": {
+        "full_score": 50,
+        "model_score": 44.0,
+        "num_of_question": 50,
+        "num_of_right_question": 176
+      },
+      "2025_USAAAO_exam": {
+        "full_score": 28,
+        "model_score": 23.5,
+        "num_of_question": 28,
+        "num_of_right_question": 94
       }
     }
   },
@@ -38,174 +143,69 @@
     "model_name": "gpt-4o",
     "performance": {
       "IBO 2021": {
-        "full_score": 223,
-        "model_score": 174,
-        "num_of_question": 57,
-        "num_of_right_question": 24
-      },
-      "2024_F-ma": {
-        "full_score": 24,
-        "model_score": 13,
-        "num_of_question": 25,
-        "num_of_right_question": 13
-      },
-      "2024_USNCO_exam": {
-        "full_score": 60,
-        "model_score": 36,
-        "num_of_question": 60,
-        "num_of_right_question": 36
-      },
-      "2024_PhysicalBowl_exam": {
-        "full_score": 50,
-        "model_score": 39,
-        "num_of_question": 50,
-        "num_of_right_question": 39
-      },
-      "2025_USAAAO_exam": {
-        "full_score": 28,
-        "model_score": 13,
-        "num_of_question": 28,
-        "num_of_right_question": 13
-      }
-    }
-  },
-  {
-    "model_name": "o1",
-    "performance": {
-      "IBO 2021": {
         "full_score": 245,
-        "model_score": 198,
+        "model_score": 204.0,
         "num_of_question": 57,
-        "num_of_right_question": 34
+        "num_of_right_question": 119
       },
       "2024_F-ma": {
-        "full_score": 24,
-        "model_score": 19,
+        "full_score": 22,
+        "model_score": 9.75,
         "num_of_question": 25,
-        "num_of_right_question": 19
+        "num_of_right_question": 39
       },
       "2024_USNCO_exam": {
         "full_score": 58,
-        "model_score": 44,
+        "model_score": 35.25,
         "num_of_question": 60,
-        "num_of_right_question": 44
+        "num_of_right_question": 141
       },
       "2024_PhysicalBowl_exam": {
-        "full_score": 49,
-        "model_score": 41,
+        "full_score": 47,
+        "model_score": 39.25,
         "num_of_question": 50,
-        "num_of_right_question": 41
+        "num_of_right_question": 157
       },
       "2025_USAAAO_exam": {
         "full_score": 26,
-        "model_score": 19,
+        "model_score": 13.25,
         "num_of_question": 28,
-        "num_of_right_question": 19
+        "num_of_right_question": 53
       }
     }
   },
   {
-    "model_name": "o3-mini",
+    "model_name": "qwen-vl-max-latest",
     "performance": {
       "IBO 2021": {
-        "full_score": 249,
-        "model_score": 198,
+        "full_score": 229,
+        "model_score": 185.5,
         "num_of_question": 57,
-        "num_of_right_question": 32
+        "num_of_right_question": 110
       },
       "2024_F-ma": {
         "full_score": 25,
-        "model_score": 16,
+        "model_score": 12.75,
         "num_of_question": 25,
-        "num_of_right_question": 16
+        "num_of_right_question": 51
       },
       "2024_USNCO_exam": {
         "full_score": 60,
-        "model_score": 45,
+        "model_score": 33.75,
         "num_of_question": 60,
-        "num_of_right_question": 45
+        "num_of_right_question": 135
       },
       "2024_PhysicalBowl_exam": {
         "full_score": 50,
-        "model_score": 42,
+        "model_score": 40.25,
         "num_of_question": 50,
-        "num_of_right_question": 42
-      },
-      "2025_USAAAO_exam": {
-        "full_score": 27,
-        "model_score": 23,
-        "num_of_question": 28,
-        "num_of_right_question": 23
-      }
-    }
-  },
-  {
-    "model_name": "qwen-vl-max",
-    "performance": {
-      "IBO 2021": {
-        "full_score": 249,
-        "model_score": 207,
-        "num_of_question": 57,
-        "num_of_right_question": 30
-      },
-      "2024_F-ma": {
-        "full_score": 25,
-        "model_score": 12,
-        "num_of_question": 25,
-        "num_of_right_question": 12
-      },
-      "2024_USNCO_exam": {
-        "full_score": 59,
-        "model_score": 28,
-        "num_of_question": 60,
-        "num_of_right_question": 28
-      },
-      "2024_PhysicalBowl_exam": {
-        "full_score": 50,
-        "model_score": 42,
-        "num_of_question": 50,
-        "num_of_right_question": 42
+        "num_of_right_question": 161
       },
       "2025_USAAAO_exam": {
         "full_score": 28,
-        "model_score": 11,
+        "model_score": 12.5,
         "num_of_question": 28,
-        "num_of_right_question": 11
-      }
-    }
-  },
-  {
-    "model_name": "qwq-32b",
-    "performance": {
-      "IBO 2021": {
-        "full_score": 224,
-        "model_score": 175,
-        "num_of_question": 57,
-        "num_of_right_question": 24
-      },
-      "2024_F-ma": {
-        "full_score": 25,
-        "model_score": 18,
-        "num_of_question": 25,
-        "num_of_right_question": 18
-      },
-      "2024_USNCO_exam": {
-        "full_score": 59,
-        "model_score": 37,
-        "num_of_question": 60,
-        "num_of_right_question": 37
-      },
-      "2024_PhysicalBowl_exam": {
-        "full_score": 50,
-        "model_score": 43,
-        "num_of_question": 50,
-        "num_of_right_question": 43
-      },
-      "2025_USAAAO_exam": {
-        "full_score": 27,
-        "model_score": 16,
-        "num_of_question": 28,
-        "num_of_right_question": 16
+        "num_of_right_question": 50
       }
     }
   }
